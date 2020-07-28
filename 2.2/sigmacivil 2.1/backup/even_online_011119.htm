@@ -1,0 +1,1358 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+    <link rel="stylesheet" href="css/custom.css" />
+    <link rel="stylesheet" href="css/custom-mobile.css" />
+    <link rel="stylesheet" href="css/custom-even.css" />
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script src="https://kit.fontawesome.com/c202879e33.js" crossorigin="anonymous"></script>
+    <title>Even_onlline</title>
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" src="js/mc.js"></script>
+    <style>
+        .menu .ui-mini.ui-btn-icon-left:after,
+        .ui-mini .ui-btn-icon-left:after,
+        .ui-header .ui-btn-icon-left:after,
+        .ui-footer .ui-btn-icon-left:after {
+            display: none;
+        }
+
+        .ui-btn-icon-left {
+            position: relative;
+            padding-left: 12px !important;
+            bottom: 8px;
+        }
+    </style>
+    <script>
+
+        var id_prog_manut = getquerystring("ipm");
+        var dia_ev = getquerystring("dia_ev");
+        var mes_ev = getquerystring("mes_ev");
+        var ano_ev = getquerystring("ano_ev");
+
+        var id_cliente;
+        var id_empree = "";
+        var data_de_hoje = new Date();
+        var e_construtora;
+
+        window.onerror = function (message, url, lineNumber) {
+            alert("Error: " + message + " in " + url + " at line " + lineNumber);
+        }
+
+        document.addEventListener("deviceready", onDeviceReady, false);
+
+        function onDeviceReady() {
+
+            pictureSource = navigator.camera.PictureSourceType;
+            destinationType = navigator.camera.DestinationType;
+
+            if (tem_conexao()) {
+                iniciar()
+            } else {
+                window.location.assign('even.htm')
+            }
+        }
+
+        function iniciar() {
+
+            var rrr_id_prog_manut = id_prog_manut
+
+            var menu_sup_offline = [
+                '<form name="form_sup" action="" method="get">',
+                '<div data-role="header" data-position="fixed" data-theme="a">',
+                '<div class="ui-corner-all custom-corners">',
+                '<div class="ui-bar ui-bar-a" style="height:38;text-align:center">',
+                '<div class="barra1" align="left"><i style="position: absolute; left: 70px; top: 19px; color: red;" class="fas fa-wifi" width="25" height="25"></i></div>',
+                '<div align="center">',
+                '<a href="#"><button style="background: #e4e4e4 !important; border: none;" onclick="atualizar_texto_empree(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
+                '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
+                '<tr>',
+                '<td width="30" ><img src="images/logoSC.gif" width="112" height="35"> </td>',
+                '</tr>',
+                '</table>',
+                '</div>',
+                '</div>',
+                '</div>',
+                '</div>',
+                '</form>'
+            ].join('');
+
+            var menu_sup_online = [
+                '<form name="form_sup" action="" method="get">',
+                '<div data-role="header" data-position="fixed" data-theme="a">',
+                '<div class="ui-corner-all custom-corners">',
+                '<div class="ui-bar ui-bar-a" style="height:38;text-align:center">',
+                '<div class="barra1" align="left"><i style="position: absolute; left: 70px; top: 19px; color: green;" class="fas fa-wifi" width="25" height="25"></i></div>',
+                '<div align="center">',
+                '<a href="#"><button style="background: #e4e4e4 !important; border: none;" onclick="atualizar_texto_empree(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
+                '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
+                '<tr>',
+                '<td width="30" ><img src="images/logoSC.gif" width="112" height="35"> </td>',
+                '</tr>',
+                '</table>',
+                '</div>',
+                '</div>',
+                '</div>',
+                '</div>',
+                '</form>'
+            ].join('');
+
+            document.getElementById('menu_opc2').innerHTML = menu_sup_online;
+
+            setInterval(function () {
+                if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+                    document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
+                    return false;
+                }
+                else {
+                    document.getElementById('menu_opc2').innerHTML = menu_sup_online;
+                    return true;
+                }
+            }, 5000);
+
+            //fazer ajax aqui
+
+            var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it				
+
+            db.transaction(function (tx) {
+                tx.executeSql('SELECT * FROM mtab_cliente', [], function (tx, results) {
+                    var len = results.rows.length;
+                    var row = results.rows.item(0);
+                    id_cliente = row['id_cliente'];
+                    e_construtora = row['e_construtora'];
+
+                    var nome_empree = "";
+                    db.transaction(function (tx) {
+                        tx.executeSql('SELECT * FROM mtab_empree', [], function (tx, results) {
+                            var len = results.rows.length;
+                            var i;
+                            for (i = 0; i < len; i++) {
+                                var row = results.rows.item(i)
+                                nome_empree = row['nome_empree']
+                                id_empree = row['id_empree']
+                                // document.getElementById('nome_emp').innerHTML = nome_empree;
+                            }
+
+                            db.transaction(function (tx) {
+                                tx.executeSql('SELECT * FROM mtab_prog_manut WHERE mtab_prog_manut.id_prog_manut="' + id_prog_manut + '" ', [], function (tx, results) {
+                                    var len = results.rows.length;
+                                    var i;
+                                    for (i = 0; i < len; i++) {
+                                        var row = results.rows.item(i)
+                                        var nome_sistema = row['nome_sistema']
+                                        var nome_atividade = row['nome_atividade']
+                                    }
+
+                                    db.transaction(function (tx) {
+                                        tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '" ', [], function (tx, results) {
+                                            var len = results.rows.length;
+                                            var i;
+                                            var meio_empree = "";
+                                            var final_empree = "";
+                                            var tam_ti;
+                                            var aux_image_upload;
+
+                                            if (len == 0) {
+                                                var rrr_caminho_imagens = ""
+                                                var rrr_caminho_texto = ""
+                                                var rrr_caminho_audio = ""
+                                                var rrr_caminho_video = ""
+                                                var rrr_id_prog_manut = id_prog_manut
+                                                var rrr_status_caminho_imagens = ""
+                                                var rrr_status_caminho_video = ""
+                                                var rrr_status_caminho_audio = ""
+                                                var rrr_status_caminho_texto = ""
+                                            }
+                                            else {
+                                                var row = results.rows.item(0)
+                                                var rrr_caminho_imagens = row['caminho_imagens'];
+                                                var rrr_caminho_texto = row['caminho_texto'];
+                                                var rrr_caminho_audio = row['caminho_audio'];
+                                                var rrr_caminho_video = row['caminho_video'];
+                                                var rrr_id_prog_manut = row['id_prog_manut']
+                                                var rrr_status_caminho_imagens = row['status_imagens_upl']
+                                                var rrr_status_caminho_video = row['status_video_upl']
+                                                var rrr_status_caminho_audio = row['status_audio_upl']
+                                                var rrr_status_caminho_texto = row['status_texto_upl']
+                                            }
+
+                                            var todas_imagens = ""
+                                            var todas_status_imagens = ""
+                                            if (rrr_caminho_imagens == null || rrr_caminho_imagens == "") {
+                                                tam_ti = 0;
+                                            }
+                                            else {
+                                                todas_imagens = rrr_caminho_imagens.split("**")
+                                                todas_status_imagens = rrr_status_caminho_imagens.split("**")
+                                                tam_ti = todas_imagens.length;
+                                            }
+
+                                            var selec_imagens_thumb = ""
+                                            var selec_imagens = ""
+
+                                            for (k = 0; k < tam_ti; k++) {
+
+                                                if (todas_status_imagens[k] == '0') {
+                                                    aux_image_upload = 'fas fa-upload';
+                                                }
+                                                else {
+                                                    aux_image_upload = 'fas fa-upload is-green';
+                                                }
+                                                //imagens da seta, preta ou verde
+
+                                                selec_imagens_thumb = selec_imagens_thumb + "<div style='float:left;'><table cellpadding='0' cellspacing='0'><img src='" + todas_imagens[k] + "'  onclick='abrir_popup(" + String.fromCharCode(34) + rrr_id_prog_manut + String.fromCharCode(34) + "," + String.fromCharCode(34) + k + String.fromCharCode(34) + " )'  width='106' height='70' hspace='2' vspace='2'/><div align='center'><i style='float: left; padding: 0.5rem; position: relative; left: 5px' class='fas fa-trash is-red top-9px icon-size' width='25' height='25' onclick='deletar_imagem(" + String.fromCharCode(34) + k + String.fromCharCode(34) + ")'></i></div><div align='center'><i style='float: right; padding: 0.5rem; position: relative; right: 5px;' class='top-9px icon-size " + aux_image_upload + "' width='25' height='25' onclick='upload_imagem(" + String.fromCharCode(34) + k + String.fromCharCode(34) + ")'></i></div></table></div>"
+                                                selec_imagens = selec_imagens + "<div data-role='popup' id='idpopup_" + rrr_id_prog_manut + "_" + k + "'><a href='#' data-rel='back' class='ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right'>Close</a> <img class='popphoto' src='" + todas_imagens[k] + "' style='max-height:512px;'> </div>"
+
+                                                //Poup
+                                            }
+
+
+                                            if (rrr_status_caminho_audio == '0') {
+                                                aux_image_upload = "fas fa-upload";
+                                            }
+                                            else {
+                                                aux_image_upload = "fas fa-upload is-green";
+                                            }
+                                            //se ta preta ou verde do áudio
+
+                                            var selec_audio;
+                                            if (rrr_caminho_audio == "") {
+                                                selec_audio = "<div style='position: relative; left: 15px; top: 17px;'><table cellpadding='0' cellspacing='0'><div id='latesq_" + rrr_id_prog_manut + "'width='40' height='30' style='display:none'></div><i class='fas fa-play button-play top-9px' id='player_" + rrr_id_prog_manut + "'onclick='abrir_audio(" + String.fromCharCode(34) + rrr_caminho_audio + String.fromCharCode(34) + ")'  width='40' height='30' style='display:none'></i><i class='fas fa-pause button-pause top-9px position-icons' id='pause_" + rrr_id_prog_manut + "'onclick='pause_audio()' width='40' height='30' style='display:none'></i><i class='fas fa-stop button-stop top-9px position-icons' id='stop_" + rrr_id_prog_manut + "'onclick='stop_audio()' width='40' height='30' style='display:none'></i><i class='fas fa-microphone button-microfone top-9px position-icons' id='rec_" + rrr_id_prog_manut + "'onclick='captureAudio(" + String.fromCharCode(34) + rrr_id_prog_manut + String.fromCharCode(34) + ")' width='40' height='30' style='display:none'></i><div id='latdir_" + rrr_id_prog_manut + "'width='40' height='30' style='display:none'></div><div align='center'><i class='fas fa-trash top-9px is-red icon-size' width='25' height='25' onclick='deletar_audio()' style='display:none'></i></div><div align='center'><i class='top-9px icon-size " + aux_image_upload + "' width='25' height='25' onclick='upload_audio()' style='display:none'></i></div></table></div>"
+                                            }
+                                            else {
+                                                selec_audio = "<div class='icon-size' style='position: relative; left: 15px; top: 17px;'><table cellpadding='0' cellspacing='0'><div id='latesq_" + rrr_id_prog_manut + "'width='40' height='30'></div><i class='fas fa-play top-9px' id='player_" + rrr_id_prog_manut + "'onclick='abrir_audio(" + String.fromCharCode(34) + rrr_caminho_audio + String.fromCharCode(34) + ")'  width='40' height='30'></i><i class='fas fa-pause top-9px position-icons' id='pause_" + rrr_id_prog_manut + "' onclick='pause_audio()' width='40' height='30'></i><i class='fas fa-stop top-9px position-icons' id='stop_" + rrr_id_prog_manut + "'onclick='stop_audio()' width='40' height='30'></i><i class='fas fa-microphone top-9px position-icons' id='rec_" + rrr_id_prog_manut + "'onclick='captureAudio(" + String.fromCharCode(34) + rrr_id_prog_manut + String.fromCharCode(34) + ")' width='40' height='30'></i><div id='latdir_" + rrr_id_prog_manut + "'width='40' height='30'></div><div align='center'><i style='position: relative; bottom: 18px; left: 20px;' class='fas fa-trash top-9px is-red icon-size' width='25' height='25' onclick='deletar_audio()'></i></div><div align='center'><i style='position: relative; bottom: 36px; left: 65px;' class='top-9px icon-size " + aux_image_upload + "' width='25' height='25' onclick='upload_audio()'></i></div></table></div>"
+                                            }
+                                            //barra do áudio
+
+
+                                            if (rrr_status_caminho_video == '0') {
+                                                aux_image_upload = 'fas fa-upload';
+                                            }
+                                            else {
+                                                aux_image_upload = 'fas fa-upload is-green';
+                                            }
+                                            //setinha do vídeo
+
+                                            var selec_video;
+                                            if (rrr_caminho_video == "") {
+                                                selec_video = "<div id='video_invis_" + rrr_id_prog_manut + "' style='display:none; margin-left: 5px;'><table cellpadding='0' cellspacing='0'><video id='qvideo_" + rrr_id_prog_manut + "' controls width='150' height='150'>   <source id='qsource_" + rrr_id_prog_manut + "' src='" + rrr_caminho_video + "' type='video/mp4'></video><div align='center'><i style='float: left; padding: 0.5rem; position: relative; left: 55px;' class='fas fa-trash top-9px is-red icon-size' width='25' height='25' onclick='deletar_video()'></i></div><div align='center'><i style='padding: 0.5rem;' class='top-9px icon-size " + aux_image_upload + "' width='25' height='25' onclick='upload_video()'></i></div></table></div>"
+                                            }
+                                            else {
+                                                selec_video = "<div id='video_invis_" + rrr_id_prog_manut + "' style='display:inline; margin-left: 5px;'><table cellpadding='0' cellspacing='0'><video id='qvideo_" + rrr_id_prog_manut + "' controls width='150' height='150'>   <source id='qsource_" + rrr_id_prog_manut + "' src='" + rrr_caminho_video + "' type='video/mp4'></video><div align='center'><i style='float: left; padding: 0.5rem; position: relative; left: 55px;' class='fas fa-trash top-9px is-red icon-size' width='25' height='25' onclick='deletar_video()'></i></div><div align='center'><i style='padding: 0.5rem; position: relative; right: 5px;' class='top-9px icon-size " + aux_image_upload + "' width='25' height='25' onclick='upload_video()'/></div></table></div>"
+                                            }
+                                            //barrinha do vídeo
+
+                                            if (rrr_status_caminho_texto == '0') {
+                                                aux_image_upload = 'fas fa-upload';
+                                            }
+                                            else {
+                                                aux_image_upload = 'fas fa-upload is-green';
+                                            }
+                                            //seta do texto
+
+                                            var selec_texto;
+                                            selec_texto = rrr_caminho_texto;
+
+                                            var bot_up
+                                            if (rrr_caminho_texto == "") {
+                                                bot_up = "<div style='display:none'><i class='top-9px icon-size " + aux_image_upload + "' width='25' height='25' onclick='upload_texto()'></i></div>"
+                                            }
+                                            else {
+                                                bot_up = "<i style='float: left; position: relative; left: 90px; top: 3px;' class='top-9px icon-size " + aux_image_upload + "' width='25' height='25' onclick='upload_texto()'></i>"
+                                            }
+
+
+
+                                            var item_opc = [
+                                                '<div align="center">',
+                                                '<br>',
+                                                '<table width="90%" height="30" border="1" cellpadding="0" cellspacing="0" bordercolor="">',
+                                                '<tr>',
+                                                '<td height="30" bgcolor="#E5E5E5"  > <div align="center">' + nome_sistema + '</div>',
+                                                '<div align="center" ></div></td>',
+                                                '</tr>',
+                                                '</table>',
+                                                '<table width="90%" height="30" border="1" cellpadding="0" cellspacing="0" bordercolor="#DCDCDC">',
+                                                '<tr>',
+                                                '<td width="90%" bgcolor="#FFFFFF" >',
+                                                '<div align="left" class="menu_3">' + nome_atividade + '</div></td>',
+                                                '</tr>',
+                                                '</table>',
+
+                                                // '<table width="90%" height="40" border="1" cellpadding="0" cellspacing="0" bordercolor="#DCDCDC">',
+                                                // '<tr>',
+                                                // '<td width="50" height="40">',
+                                                // '<div align="center"><img src="images/texto.gif"  width="38" height="28" ></div>',
+                                                // '</td>',
+                                                // '<td width="10"></td>',
+                                                // '<td width="220" style="float:left">',
+                                                // '<div class="ui-field-contain"><textarea style="width:97%" rows="4"  id="textarea_' + rrr_id_prog_manut + '" maxlength="700">' + selec_texto + '</textarea></div>',
+                                                // '<table width="200" height="35" border="0" cellpadding="0" cellspacing="0" >',
+                                                // '<tr>',
+                                                // '<td width="200" ><div align="center">',
+                                                // '<img src="images/but_save.gif"  width="73" height="27" onclick="atualizar_texto(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" style="cursor:pointer">',
+                                                // '</div></td>',
+                                                // '<td width="100"><div align="center">' + bot_up + '</div></td>',
+                                                // '</tr>',
+                                                // '</table>',
+                                                // '</td>',
+                                                // '</tr>',
+                                                // '</table>',
+                                                // '<br>',
+                                                // '</div>'
+
+                                            ].join('');
+
+                                            var item_camera = [
+                                                '<i class="fas fa-camera fa-2x top-9px" style="margin-top: 10px; float: left;" onclick="getPhoto(pictureSource.CAMERA,' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" width="38" height="28" style="cursor:pointer"></i><img id="foto_' + rrr_id_prog_manut + '" src=""  onclick="abrir_popup_new(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')"  width="106" height="70" hspace="2" vspace="2"  style="display:none"/>   <div data-role="popup" id="idpopup_new_' + rrr_id_prog_manut + '"> <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a> <img id="foto_big_' + rrr_id_prog_manut + '"  class="popphoto" src="" style="max-height:512px;"> </div> ' + selec_imagens_thumb + selec_imagens
+                                            ]
+
+                                            var item_video = [
+                                                '<i id="campo3" class="fas fa-video fa-2x top-9px" style="margin-top: 10px; float: left;" onclick="captureVideo(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')"></i><div style="display: inline">' + selec_video + '</div>'
+                                            ]
+
+                                            var item_audio = [
+                                                '<i class="fas fa-volume-up fa-2x top-9px" style="margin-top: 10px; float: left;" onclick="captureAudio(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" width="38" height="28" style="cursor:pointer"></i>' + selec_audio
+                                            ]
+
+                                            var item_texto = [
+                                                '<div style="display: flex"><i class="fas fa-file-alt fa-2x top-9px" style="margin-top: 10px; margin-right: 10px; float: left; display: inline;" width="38" height="28"></i><textarea style="display: flex; border-color: #e4e4e4; border-radius: 3px; width: 100%;" class="size-14" rows="3" cols="32" name="textarea-1" id="textarea_' + rrr_id_prog_manut + '" data-placeholder="true" placeholder="Digite suas observações aqui..." maxlength="700">' + selec_texto + '</textarea></div><i style="position: relative; right: 70px; top: 3px; float: right;" class="fas fa-save top-9px icon-size" width="73" height="27" onclick="atualizar_texto(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" style="cursor:pointer"></i><div align="center">' + bot_up + '</div>'
+                                            ]
+
+                                            // <button id="btn-voltar" type="button" class="ui-btn block btn-radius btn-voltar">Voltar</button>
+
+                                            var item_voltar = [
+                                                '<button onclick="atualizar_texto_empree(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" type="button" class="ui-btn block btn-radius btn-voltar">Voltar</button>'
+                                            ]
+
+                                            //toda a aba contendo a descrição, imagens, videos, audio e texto								
+
+                                            // document.getElementById('vistoria').innerHTML = item_opc;
+                                            // document.getElementById('atividade_title').innerHTML = nome_sistema;
+                                            // document.getElementById('atividade_content').innerHTML = nome_atividade;
+                                            document.getElementById('capturar_foto').innerHTML = item_camera;
+                                            document.getElementById('capturar_video').innerHTML = item_video;
+                                            document.getElementById('capturar_audio').innerHTML = item_audio;
+                                            document.getElementById('capturar_texto').innerHTML = item_texto;
+                                            document.getElementById('btn-voltar').innerHTML = item_voltar;
+
+                                            ///////////////////  Acionar .popup para imagens iniciarem escondidas  //////////////
+                                            tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '" ', [], function (tx, results) {
+                                                var len2 = results.rows.length;
+                                                var i2;
+                                                var tam_ti2;
+
+                                                if (len2 == 0) {
+                                                    var rrr2_caminho_imagens = ""
+                                                    var rrr2_id_prog_manut = id_prog_manut
+                                                }
+                                                else {
+                                                    var row2 = results.rows.item(0)
+
+                                                    var rrr2_caminho_imagens = row2['caminho_imagens'];
+                                                    var rrr2_id_prog_manut = row2['id_prog_manut']
+                                                }
+
+
+                                                var todas_imagens2 = ""
+                                                var tam_ti2
+                                                if (rrr2_caminho_imagens == null || rrr2_caminho_imagens == "") {
+                                                    tam_ti2 = 0;
+                                                }
+                                                else {
+                                                    todas_imagens2 = rrr2_caminho_imagens.split("**")
+                                                    tam_ti2 = todas_imagens2.length;
+                                                }
+
+
+                                                for (k = 0; k < tam_ti2; k++) {
+                                                    $("#idpopup_" + rrr2_id_prog_manut + "_" + k).popup();
+                                                }
+
+                                                $("#idpopup_new_" + rrr2_id_prog_manut).popup();
+
+                                            }, null);
+                                            /////////////////// FIM - Acionar .popup para imagens iniciarem escondidas  //////////////
+
+
+                                        }, null);
+                                    });
+                                }, null);
+                            });
+
+                        }, null);
+                    });
+
+                }, null);
+            });
+        }
+
+        var aux_caminho_imagens = ""
+        var aux_status_imagens_upl = ""
+
+        function getPhoto(source, qual) {
+
+            qual_id_prog_manut = qual;
+
+            var r = confirm("Para tirar uma foto com a CÂMERA selecione OK.");
+            if (r == true) {
+                source = pictureSource.CAMERA;
+            } else {
+                source = pictureSource.PHOTOLIBRARY;
+            }
+
+            navigator.camera.getPicture(onPhotoURISuccess, onFail, {
+                quality: 50,
+                destinationType: destinationType.FILE_URI,
+                encodingType: Camera.EncodingType.JPEG,
+                popoverOptions: CameraPopoverOptions,
+                //	saveToPhotoAlbum: true,
+                sourceType: source
+            });
+
+        }
+
+        function onFail(message) {
+            alert('Failed because: ' + message);
+        }
+
+        var qual_id_prog_manut;
+
+        function onPhotoURISuccess(imageURI) {
+            document.getElementById('foto_' + qual_id_prog_manut).src = imageURI;
+            alert(imageURI)
+            document.getElementById('foto_' + qual_id_prog_manut).style.display = "inline";
+
+            // document.getElementById('foto_big_' + qual_id_prog_manut).src = imageURI;
+
+            var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+            db2.transaction(function (tx) {
+
+                tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"  ', [], function (tx, results) {
+                    var len = results.rows.length;
+                    var i;
+
+                    if (len == 0) {
+                        aux_caminho_imagens = ""
+                        tx.executeSql('INSERT INTO mtab_prog_manut_evento(id_prog_manut,dia_evento,mes_evento,ano_evento,caminho_imagens,caminho_audio, caminho_video, caminho_texto, status_imagens_upl,status_video_upl,status_audio_upl,status_texto_upl) VALUES (?,?,?,?,?,"","","","0","","","")', [qual_id_prog_manut, dia_ev, mes_ev, ano_ev, imageURI]);
+                    }
+                    else {
+                        var row = results.rows.item(0)
+                        aux_caminho_imagens = row['caminho_imagens'];
+                        aux_caminho_imagens = aux_caminho_imagens + '**';
+
+                        aux_status_imagens_upl = row['status_imagens_upl'];
+                        aux_status_imagens_upl = aux_status_imagens_upl + '**';
+                        aux_status_imagens_upl = aux_status_imagens_upl + '0';
+
+
+                        tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_imagens="' + aux_caminho_imagens + imageURI + '" , status_imagens_upl="' + aux_status_imagens_upl + '" WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
+                    }
+
+                    reload_page();
+                    // terminou de tirar a foto, aqui é a seleção da seta
+
+                }, null);
+
+            });
+
+        }
+
+        // DELETAR IMAGEM
+        function deletar_imagem(q_id) {
+            var q_id;
+            var all_images;
+            var all_status_images;
+            var taman;
+            var aux_1 = "";
+            var aux_1_status = "";
+
+            var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+            db.transaction(function (tx) {
+
+                tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '" ', [], function (tx, results) {
+                    var k;
+
+                    var row = results.rows.item(0)
+                    aux_caminho_imagens = row['caminho_imagens'];
+                    aux_status_imagens_upl = row['status_imagens_upl'];
+
+                    all_images = aux_caminho_imagens.split("**")
+                    all_status_images = aux_status_imagens_upl.split("**")
+                    taman = all_images.length;
+
+                    for (k = 0; k < taman; k++) {
+                        if (q_id != k) {
+                            aux_1 = aux_1 + all_images[k] + "**"
+                            aux_1_status = aux_1_status + all_status_images[k] + "**"
+                        }
+                    }
+                    var aux_2 = aux_1.substring(0, aux_1.length - 2)
+                    var aux_2_status = aux_1_status.substring(0, aux_1_status.length - 2)
+
+                    tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_imagens="' + aux_2 + '" , status_imagens_upl="' + aux_2_status + '"  WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
+
+                    reload_page();
+
+                }, null);
+            });
+
+        }
+        // FIM DELETAR IMAGEM
+
+        // UPLOAD IMAGEM
+        var aux_1_status = "";
+
+        function upload_imagem(q_id) {
+
+            if (tem_conexao()) {
+
+                var q_id;
+                var all_images;
+                var all_status_images;
+                var taman;
+                var aux_1 = "";
+
+                var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+                db.transaction(function (tx) {
+
+                    tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '" ', [], function (tx, results) {
+                        var k;
+
+                        var row = results.rows.item(0)
+                        aux_caminho_imagens = row['caminho_imagens'];
+
+                        all_images = aux_caminho_imagens.split("**")
+
+                        aux_1 = aux_1 + all_images[q_id] + "**"
+                        var aux_2 = aux_1.substring(0, aux_1.length - 2)
+
+                        // marcar que foi feito upload para esta imagem
+
+                        aux_status_imagens_upl = row['status_imagens_upl'];
+
+                        all_status_images = aux_status_imagens_upl.split("**");
+                        taman = all_status_images.length;
+
+                        for (k = 0; k < taman; k++) {
+                            if (q_id != k) {
+                                aux_1_status = aux_1_status + all_status_images[k] + "**"
+                            }
+                            else {
+                                aux_1_status = aux_1_status + "1" + "**"
+                                var ja_fez_upload = all_status_images[k]
+                            }
+                        }
+
+                        aux_1_status = aux_1_status.substring(0, aux_1_status.length - 2)
+                        // fim  marcar que foi feito upload para esta imagem
+                        if (ja_fez_upload != '1') {
+
+
+                            up_loadPhoto(aux_2, q_id, aux_1_status);
+                        }
+                        else {
+
+
+                            up_loadPhoto(aux_2, q_id, aux_status_imagens_upl);
+                        }
+
+                    }, null);
+                });
+
+            }
+        }
+
+        function up_loadPhoto(imageURI, q_k) {
+
+            document.getElementById("parte_load").style.display = "block";
+            window.location.href = "#ancora123"
+
+            var q_k;
+            var options = new FileUploadOptions();
+            options.fileKey = "file";
+            options.fileName = imageURI.substr(imageURI.lastIndexOf('/') + 1);
+            options.mimeType = "image/jpeg";
+
+            var params = new Object();
+            params.value1 = "test";
+            params.value2 = "param";
+
+            options.params = params;
+            options.chunkedMode = false;
+
+            var ft = new FileTransfer();
+            ft.upload(imageURI, "http://www.newdot.com.br/phonegap/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up, fail_up, options);
+
+        }
+
+        var win_up = function (r) {
+
+            var db3 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000);
+            db3.transaction(function (tx) {
+
+                tx.executeSql('UPDATE mtab_prog_manut_evento SET status_imagens_upl="' + aux_1_status + '" WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
+
+                reload_page();
+
+            });
+
+        }
+
+        var fail_up = function (error) {
+            alert(" Houve uma falha ao carregar a imagem. Erro: " + error.code);
+        }
+        // FIM UPLOAD IMAGEM
+
+        ///////////////////////////////////////fim para a camera //////////////////////
+
+        // CAPTURAR VIDEO
+        function captureVideo(qual) {
+            qual_id_prog_manut = qual;
+            navigator.device.capture.captureVideo(videocaptureSuccess, videocaptureError, { limit: 1, duration: 15 });
+        }
+
+        function videocaptureSuccess(mediaFiles) {
+            var i, len;
+            var m_path;
+
+
+            for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+                m_path = mediaFiles[i].fullPath;
+
+                document.getElementById('video_invis_' + qual_id_prog_manut).style.display = "inline";
+
+                var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+                db2.transaction(function (tx) {
+
+                    tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"  ', [], function (tx, results) {
+                        var len2 = results.rows.length;
+
+                        if (len2 == 0) {
+                            tx.executeSql('INSERT INTO mtab_prog_manut_evento(id_prog_manut,dia_evento,mes_evento,ano_evento,caminho_video,caminho_imagens,caminho_audio, caminho_texto, status_imagens_upl,status_video_upl,status_audio_upl,status_texto_upl) VALUES (?,?,?,?,?,"","","","","0","","")', [qual_id_prog_manut, dia_ev, mes_ev, ano_ev, m_path]);
+                        }
+                        else {
+                            var row = results.rows.item(0)
+                            tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_video="' + m_path + '" , status_video_upl="0" WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
+                        }
+
+                        reload_page();
+
+                    }, null);
+
+                });
+
+            }
+        }
+
+        // FIM CAPTURAR VIDEO
+
+        function videocaptureError(error) {
+            var msg = 'An error occurred during capture: ' + error.code;
+            alert(msg);
+        }
+
+        // DELETAR VIDEO
+        function deletar_video() {
+
+            var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+            db.transaction(function (tx) {
+
+                tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_video="" , status_video_upl="0"  WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
+                reload_page();
+            });
+
+        }
+        // FIM DELETAR VIDEO
+
+        function upload_video() {
+
+            if (tem_conexao()) {
+
+                var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+                db.transaction(function (tx) {
+
+                    tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '" ', [], function (tx, results) {
+
+                        var row = results.rows.item(0)
+
+                        if (row['status_video_upl'] != '1') {
+                            var aux_caminho_video = row['caminho_video'];
+                            //tx.executeSql('UPDATE mtab_prog_manut_evento SET status_video_upl="1" WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"' );
+                            up_loadVideo(aux_caminho_video);
+                        }
+                        else {
+                            var aux_caminho_video = row['caminho_video'];
+                            up_loadVideo(aux_caminho_video);
+                        }
+
+                    }, null);
+                });
+
+            }
+        }
+
+        // UPLOAD VIDEO
+        function up_loadVideo(videoURL) {
+
+            document.getElementById("parte_load").style.display = "block";
+            window.location.href = "#ancora123"
+
+            var options = new FileUploadOptions();
+            options.fileKey = "file";
+            options.fileName = videoURL.substr(videoURL.lastIndexOf('/') + 1);
+            options.mimeType = "video/mp4";
+            options.chunkedMode = false;
+
+            var ft = new FileTransfer();
+            ft.upload(videoURL, "http://www.newdot.com.br/phonegap/app_sc/rec_video_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente, win_up_v, fail_up_v, options);
+
+        }
+
+
+        var win_up_v = function (r) {
+            var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+            db.transaction(function (tx) {
+                tx.executeSql('UPDATE mtab_prog_manut_evento SET status_video_upl="1" WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
+
+                reload_page();
+                alert("Vídeo upado com sucesso");
+
+            });
+        }
+
+        var fail_up_v = function (error) {
+            alert("An error has occurred: Code = " + error.code);
+            alert("Erro ao upar o vídeo")
+        }
+        // FIM UPLOAD VIDEO
+
+        // CAPTURAR AUDIO
+        var myMedia3 = null;
+        var esta_pausado = 0;
+
+        function captureAudio(qual) {
+            qual_id_prog_manut = qual;
+            navigator.device.capture.captureAudio(captureSuccess, captureError, { limit: 1 });
+        }
+
+        function captureSuccess(mediaFiles) {
+            var i, len;
+            var m_path;
+
+            for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+                m_path = mediaFiles[i].fullPath;
+
+                if ((m_path.substring(0, 6) == "file:/") && (m_path.substring(6, 7) != "/")) {
+                    m_path = m_path.replace("file:/", "file:///");
+                }
+                else {
+                    m_path = m_path;
+                }
+
+                document.getElementById('player_' + qual_id_prog_manut).onclick = function () {
+                    abrir_audio(m_path);
+                };
+                document.getElementById('latesq_' + qual_id_prog_manut).style.display = "inline";
+                document.getElementById('player_' + qual_id_prog_manut).style.display = "inline";
+                document.getElementById('pause_' + qual_id_prog_manut).style.display = "inline";
+                document.getElementById('stop_' + qual_id_prog_manut).style.display = "inline";
+                document.getElementById('rec_' + qual_id_prog_manut).style.display = "inline";
+                document.getElementById('latdir_' + qual_id_prog_manut).style.display = "inline";
+
+                var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+                db2.transaction(function (tx) {
+
+                    tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"  ', [], function (tx, results) {
+                        var len2 = results.rows.length;
+
+                        if (len2 == 0) {
+                            tx.executeSql('INSERT INTO mtab_prog_manut_evento(id_prog_manut,dia_evento,mes_evento,ano_evento,caminho_video,caminho_imagens,caminho_audio, caminho_texto, status_imagens_upl,status_video_upl,status_audio_upl,status_texto_upl) VALUES (?,?,?,?,"","",?,"","","","0","")', [qual_id_prog_manut, dia_ev, mes_ev, ano_ev, m_path]);
+                        }
+                        else {
+                            var row = results.rows.item(0)
+                            tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_audio="' + m_path + '" , status_audio_upl="0" WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
+                        }
+
+                        reload_page();
+
+                    }, null);
+
+                });
+
+            }
+        }
+
+        function captureError(error) {
+            var msg = 'An error occurred during capture: ' + error.code;
+            alert(msg);
+        }
+
+        function abrir_audio(qual) {
+            if (esta_pausado == 0) {
+                myMedia3 = new Media(qual);
+                myMedia3.play();
+            }
+            if (esta_pausado == 1) {
+                myMedia3.play();
+                esta_pausado = 0;
+            }
+
+        }
+
+        function pause_audio() {
+            if (myMedia3) {
+                myMedia3.pause();
+                esta_pausado = 1;
+            }
+        }
+
+        function stop_audio() {
+            if (myMedia3) {
+                myMedia3.stop();
+                esta_pausado = 0;
+            }
+        }
+        // FIM CAPTURAR AUDIO
+
+        // DELETAR AUDIO
+        function deletar_audio() {
+            var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+            db.transaction(function (tx) {
+
+                tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_audio="" , status_audio_upl="0"  WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
+                reload_page();
+            });
+        }
+        // FIM DELETAR AUDIO
+
+        // UPLOAD AUDIO
+        function upload_audio() {
+
+            if (tem_conexao()) {
+
+                var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+                db.transaction(function (tx) {
+
+                    tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '" ', [], function (tx, results) {
+
+                        var row = results.rows.item(0)
+
+                        if (row['status_audio_upl'] != '1') {
+                            var aux_caminho_audio = row['caminho_audio'];
+                            //tx.executeSql('UPDATE mtab_prog_manut_evento SET status_audio_upl="1" WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"' );
+                            up_loadAudio(aux_caminho_audio);
+                        }
+                        else {
+                            var aux_caminho_audio = row['caminho_audio'];
+                            up_loadAudio(aux_caminho_audio);
+                        }
+
+
+                    }, null);
+                });
+
+            }
+        }
+
+        function up_loadAudio(audioURL) {
+
+            document.getElementById("parte_load").style.display = "block";
+            window.location.href = "#ancora123"
+
+            var options = new FileUploadOptions();
+            options.fileKey = "file";
+            options.fileName = audioURL.substr(audioURL.lastIndexOf('/') + 1);
+            options.mimeType = "audio/amr";
+            options.chunkedMode = false;
+
+            var ft = new FileTransfer();
+            ft.upload(audioURL, "http://www.newdot.com.br/phonegap/app_sc/rec_audio_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente, win_up_a, fail_up_a, options);
+
+        }
+
+        var win_up_a = function (r) {
+            var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+            db.transaction(function (tx) {
+                tx.executeSql('UPDATE mtab_prog_manut_evento SET status_audio_upl="1" WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
+
+                reload_page();
+
+            });
+        }
+
+        var fail_up_a = function (error) {
+            alert("An error has occurred: Code = " + error.code);
+        }
+        // FIM UPLOAD AUDIO
+
+        // UPLOAD TEXTO
+        function upload_texto() {
+
+            if (tem_conexao()) {
+
+                var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+                db.transaction(function (tx) {
+
+                    tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '" ', [], function (tx, results) {
+
+                        var row = results.rows.item(0)
+
+                        if (row['status_texto_upl'] != '1') {
+                            var aux_caminho_texto = row['caminho_texto'];
+                            //tx.executeSql('UPDATE mtab_prog_manut_evento SET status_texto_upl="1" WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"' );
+                            up_loadTexto(aux_caminho_texto);
+                        }
+                        else {
+                            var aux_caminho_texto = row['caminho_texto'];
+                            up_loadTexto(aux_caminho_texto);
+                        }
+
+
+                    }, null);
+                });
+
+            }
+        }
+
+        function up_loadTexto(textoURL) {
+
+            document.getElementById("parte_load").style.display = "block";
+            window.location.href = "#ancora123"
+
+            var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
+            var ajax = new XMLHttpRequest();
+            ajax.open("POST", "http://www.newdot.com.br/phonegap/app_sc/rec_texto_uploaded.asp", true);
+            ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            ajax.onreadystatechange = function () {
+                if (ajax.readyState == 4) {//Request complete !!
+                    if (ajax.status == 200 || ajax.status == 0) { // OK response
+
+                        var resposta_total = ajax.responseText;
+                        if (resposta_total == "grav_ok") {
+                            var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+                            db.transaction(function (tx) {
+                                tx.executeSql('UPDATE mtab_prog_manut_evento SET status_texto_upl="1" WHERE mtab_prog_manut_evento.id_prog_manut="' + id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
+                                reload_page(); // adicionar aqui a estrutura para certiifcar que foi upado
+                                alert("Texto upado com suceddo");
+
+                            });
+                        }
+                        else {
+                            alert("Problemas com a gravação do texto. Tentar novamente.");
+                        }
+
+                    }
+                    else {
+                        alert("Problemas com sua conexao internet. Erro: 01");
+                    }
+                }
+
+            }
+
+            data = data.split(":").join("%3A")
+            data = data.split("{").join("%7B")
+            data = data.split("}").join("%7D")
+            data = data.split(",").join("%2C")
+            data = data.split("[").join("%5B")
+            data = data.split("]").join("%5D")
+            data = data.split(String.fromCharCode(34)).join("%22")
+
+            ajax.send(data);
+
+        }
+        // FIM UPLOAD TEXTO
+
+    </script>
+</head>
+
+<body>
+    <span id="menu_opc2"></span>
+
+    <span id="nome_emp"></span>
+
+    <div id="parte_load" align="center" style="display:none">
+        <table width="224" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <td width="42" height="49">
+                    <div align="center"><img src="images/loader_blue.gif" width="35" height="35"></div>
+                </td>
+                <td width="182"><strong>
+                        <font color="#990000">AGUARDE O ENVIO...</font>
+                    </strong></td>
+            </tr>
+        </table>
+    </div>
+
+    <span id="vistoria"></span>
+    <!-- <br><br><br><br><br><br><br><br><br><br><br><br><br><br> -->
+
+    <div class="btn-bars">
+        <div data-role="collapsible" data-collapsed="true" class="ui-btn-left menu" data-mini="true">
+            <h4 style="display: flex;">
+                <span class="fas fa-bars"></span>
+            </h4>
+            <ul style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
+                <li style="z-index: 10;"><a href="#" onClick="enviar_sync()">Novo Login</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="screen-over is-disabled">
+        <div class="screen-over-content ui-responsive">
+            <i class="fa fa-times"></i>
+            <div class="title-content">
+                <span class="size-14">Lorem ipsum dolor, sit amet consectetur</span>
+                <span class="size-14" style="display: block;">Lorem ipsum dolor, sit amet consectetur</span>
+            </div>
+            <div class="image-content">
+                <img src="images/disabled.jpg" alt="" />
+            </div>
+            <div class="title-content" style="margin-top: 15px;">
+                <span class="size-14">Lorem ipsum dolor, sit amet consectetur</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="title" style="padding: 1px;">
+        <h4 style="display: inline; position: relative; bottom: 2px;">Green Design</h4>
+    </div>
+
+    <ul class="list-content" data-mini="true" data-role="listview" data-filter="true"
+        data-filter-placeholder="Buscar..." data-inset="true">
+        <li class="shadow_box" style="border-radius: 0;">
+            <div class="text-center-title">
+                <font id="atividade_title" size='4' face='Arial'>Titulo da atividade</font>
+            </div>
+            <div class="text-center-paragraph">
+                <p id="atividade_content" class="text-size-content" size='2' face='Arial' color='#0000FF'>Lorem ipsum
+                    dolor sit amet consectetur adipisicing elit. Animi culpa tempora temporibus officia mollitia, sunt
+                    ad labore reprehenderit debitis, voluptate necessitatibus magnam omnis, incidunt facilis praesentium
+                    voluptates eos dolore nulla.</p>
+            </div>
+            <div class="mensalmente-paragraph">
+                <strong class="mensalmente">Mensalmente</strong><span> - Equipe de manutenção local / empresa
+                    capacitada</span>
+            </div>
+            <div class="data_periodicidade_paragraph">
+                <font class="atividade_title" size='3' face='Arial'>26/10/2019</font>
+            </div>
+        </li>
+        <li class="shadow_box box__content__funcoes" style="border-radius: 0;">
+            <div class="ui-grid-a">
+                <div class="ui-block-a">
+                    <tbody>
+                        <tr>
+                            <th style="padding: 0">
+                                <div class="input-responsive">
+                                    <input
+                                        style="background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 15px !important;"
+                                        placeholder="Data realização"
+                                        class="textbox-n date-size text-date ui-btn ui-icon-calendar ui-btn-icon-right"
+                                        type="text" onmouseenter="(this.type='date')" onchange="(this.type='date')"
+                                        id="date">
+                                    <!-- <span style="position: absolute; left: 38%; top: 28px; color: #fff; text-shadow: none !important;" class="far fa-calendar-alt"></span> -->
+                                </div>
+                            </th>
+                        </tr>
+                    </tbody>
+                </div>
+                <div style="position: relative; top: 8px;" class="ui-block-b">
+                    <select name="select-native-2" id="select-native-2" data-mini="true">
+                        <option class="size_option" value="valor1">Fornecedor</option>
+                    </select>
+                </div>
+            </div>
+            <table>
+                <div class="ui-grid-a">
+                    <div class="ui-block-a custo-estimado">
+                        <input class="custo-estimado-input" type="number" name="text-basic" id="text-basic"
+                            data-placeholder="true" placeholder="Custo estimado" value="" />
+                    </div>
+                    <div class="ui-block-b custo-real">
+                        <input class="custo-real-input" type="number" name="text-basic" id="text-basic"
+                            data-placeholder="true" placeholder="Custo real" value="" />
+                    </div>
+                </div><!-- /grid-a -->
+            </table>
+        </li>
+        <li class="shadow_box" style="border-radius: 0;">
+            <table>
+                <div class="ui-grid ui-responsive">
+                    <div class="ui-block-a ui-grid-full">
+                        <table data-role="table" id="table-column-toggle" data-mode=""
+                            class="ui-responsive table-stroke">
+                            <!-- AQUI A GRID DE FOTOS/ARQUIVOS -->
+                            <tbody>
+                                <tr>
+                                    <th style="border-bottom: 1px solid #dddddd">
+                                        <a id="capturar_foto"></a>
+                                        <img class="foto_small_" style="display: none;" id="foto_" src="" alt=""
+                                            width="50" height="50">
+                                        <a style="float: right" href="#transitionExample" data-transition="pop"
+                                            class="ui-btn-inline" data-rel="popup">
+                                            <i style="position: relative; bottom: 10px; left: 16px;" class="far fa-question-circle"></i>
+                                        </a>
+                                        <div data-role="popup" id="transitionExample" class="ui-content" data-theme="a">
+                                            <p>I'm a simple popup.</p>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </tbody>
+                            <tbody style="margin-top: 5px">
+                                <tr>
+                                    <th style="border-bottom: 1px solid #dddddd">
+                                        <a id="capturar_audio"></a>
+                                    </th>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <th style="border-bottom: 1px solid #dddddd">
+                                        <a id="capturar_video"></a>
+                                    </th>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <th style="border-bottom: 1px solid transparent">
+                                        <a id="capturar_texto"></a>
+                                    </th>
+                                </tr>
+                            </tbody>
+                            <!-- AQUI ACABA A GRID DE DOCUMENTOS/ARQUIVOS -->
+                        </table>
+                    </div>
+                </div><!-- /grid-a -->
+            </table>
+        </li>
+        <li class="shadow_box" style="border-radius: 0;">
+            <table>
+                <div class="ui-grid ui-responsive">
+                    <div class="ui-block-a ui-grid-full">
+                        <table data-role="table" id="table-column-toggle" class="ui-responsive table-stroke">
+                            <tbody>
+                                <label class="label-center" for="textarea-1">Observações:</label>
+                                <textarea class="size-14 condominio" name="textarea-1" id="textarea-1"
+                                    data-placeholder="true" placeholder="Condomínio"></textarea>
+                                <label class="input-check">
+                                    <input type="checkbox" name="ch_env_obs"><span
+                                        style="position: relative; left: 20px">Check me</span>
+                                </label>
+                            </tbody>
+                            <tbody>
+                                <textarea class="size-14 construtora" name="textarea-1" id="textarea-1"
+                                    data-placeholder="true" placeholder="Construtora"></textarea>
+                                <label class="input-check">
+                                        <input type="checkbox" name="ch_env_obs"><span
+                                        style="position: relative; left: 10px">Check me</span>
+                                </label>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </table>
+        </li>
+        <li class="shadow_box" style="border-radius: 0;">
+            <table>
+                <div style="text-align: center;" class="ui-grid-a">
+                    <i style="font-size: 3.5em; color: #000;" class="far fa-images"></i>
+                    <span class="gallery-images-text">Galeria de imagens</span>
+                </div><!-- /grid-a -->
+            </table>
+        </li>
+        <li class="shadow_box" style="border-radius: 0;">
+            <table>
+                <fieldset class="ui-grid-a">
+                    <div class="ui-block-a ui-responsive">
+                        <button type="button" class="ui-btn block btn-radius btn-salvar" disabled>Salvar</button>
+                    </div>
+                    <div class="ui-block-b ui-responsive">
+                        <div id="btn-voltar"></div>
+                    </div>
+                </fieldset>
+            </table>
+        </li>
+    </ul>
+</body>
+
+</html>
+
+<script>
+    $(document).ready(function () {
+        $('.circle-question').mouseover(function () {
+            $('.screen-over').fadeIn(400)
+        })
+
+        $('.fa-times').click(function () {
+            $('.screen-over').hide()
+        })
+
+        $('.btn-bars .ui-btn').click(function () {
+            $('.menu .fa-bars').toggleClass('fa-times')
+        })
+
+        $(document).keyup(function () {
+            if ($('.condominio').val().length > 0 || $('.construtora').val().length > 0) {
+                $('.btn-salvar').removeAttr('disabled')
+            } else {
+                $('.btn-salvar').attr('disabled', '')
+            }
+        })
+
+    })
+
+    $(document).keyup(function () {
+        if ($('.condominio').val().length > 0) {
+            $('.construtora').attr('disabled', '')
+        } else {
+            $('.construtora').removeAttr('disabled')
+        }
+
+        if ($('.construtora').val().length > 0) {
+            $('.condominio').attr('disabled', '')
+        } else {
+            $('.condominio').removeAttr('disabled')
+        }
+    })
+</script>
+
+<script>
+
+    function abrir_popup(id1, id2) {
+        var id1;
+        var id2;
+
+        $("#idpopup_" + id1 + "_" + id2).popup();
+        $("#idpopup_" + id1 + "_" + id2).popup('open');
+    }
+
+    function abrir_popup_new(id) {
+        var id;
+        $("#idpopup_new_" + id).popup();
+        $("#idpopup_new_" + id).popup('open');
+    }
+
+    var qual_id_prog_manut;
+
+    // ATUALIZAR O TEXTO
+    function atualizar_texto(qual) {
+        var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000);
+        var quale;
+
+        qual_id_prog_manut = qual;
+        quale = document.getElementById('textarea_' + qual).value;
+
+        var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+        db2.transaction(function (tx) {
+
+            tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"  ', [], function (tx, results) {
+                var len2 = results.rows.length;
+
+                if (len2 == 0) {
+                    tx.executeSql('INSERT INTO mtab_prog_manut_evento(id_prog_manut,dia_evento,mes_evento,ano_evento,caminho_texto,caminho_video,caminho_audio, caminho_imagens, status_imagens_upl,status_video_upl,status_audio_upl,status_texto_upl) VALUES (?,?,?,?,?,"","","","","","","0")', [qual_id_prog_manut, dia_ev, mes_ev, ano_ev, quale]);
+                }
+                else {
+                    var row = results.rows.item(0)
+                    tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_texto="' + quale + '" , status_texto_upl="0" WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
+                }
+
+                reload_page();
+
+            }, null);
+
+        });
+    }
+    // FIM ATUALIZAR O TEXTO
+
+    function atualizar_texto_empree(qual) {
+        var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000);
+        var quale;
+
+        qual_id_prog_manut = qual;
+        quale = document.getElementById('textarea_' + qual).value;
+
+        var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); //will create database Dummy_DB or open it
+        db2.transaction(function (tx) {
+
+            tx.executeSql('SELECT * FROM mtab_prog_manut_evento WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"  ', [], function (tx, results) {
+                var len2 = results.rows.length;
+
+                if (len2 == 0) {
+                    tx.executeSql('INSERT INTO mtab_prog_manut_evento(id_prog_manut,dia_evento,mes_evento,ano_evento,caminho_texto,caminho_video,caminho_audio, caminho_imagens, status_imagens_upl,status_video_upl,status_audio_upl,status_texto_upl) VALUES (?,?,?,?,?,"","","","","","","0")', [qual_id_prog_manut, dia_ev, mes_ev, ano_ev, quale]);
+                }
+                else {
+                    var row = results.rows.item(0)
+                    tx.executeSql('UPDATE mtab_prog_manut_evento SET caminho_texto="' + quale + '" , status_texto_upl="0" WHERE mtab_prog_manut_evento.id_prog_manut="' + qual_id_prog_manut + '"  AND dia_evento="' + dia_ev + '"  AND mes_evento="' + mes_ev + '" AND ano_evento="' + ano_ev + '"');
+                }
+
+                reload_page_empree();
+
+            }, null);
+
+        });
+    }
+
+    function reload_page() {
+        window.location.assign("even_online.htm?ipm=" + id_prog_manut + "&dia_ev=" + dia_ev + "&mes_ev=" + mes_ev + "&ano_ev=" + ano_ev)
+    }
+
+    function reload_page_empree() {
+        if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+            // alert('Está offline');
+            window.location.assign("empree.htm?e=" + 1)
+        }
+        else {
+            // alert('Está onlline');
+            window.location.assign("empree_online.htm?e=" + 1);
+        }
+    }
+
+    function volta_uni() {
+
+        if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+            // alert('Está offline');
+            window.location.assign("empree.htm?e=" + 1)
+        }
+        else {
+            // alert('Está onlline');
+            window.location.assign("empree_online.htm?e=" + 1);
+        }
+
+
+    }
+
+    function tem_conexao() {
+
+        if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+            // alert('Sem conexão com internet. Favor se conectar.');
+            return false;
+        }
+        else {
+            return true;
+        }
+
+    }
+
+    function enviar_sync() {
+
+        decisao = confirm("Confirma efetuar novo LOGIN ? Ser� poss�vel se logar novamente em qualquer empreendimento atualizando o Plano de Manuten��o");
+
+        if (decisao) {
+            document.form_sup.action = "del.htm";
+            document.form_sup.submit();
+
+        } else {
+        }
+
+    }
+
+</script>

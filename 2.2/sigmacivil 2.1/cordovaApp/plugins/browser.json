@@ -1,0 +1,61 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-media": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-media-capture": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-file-transfer": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-network-information": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "phonegap-plugin-image-capture": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-compat": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-camera": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-device-motion": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-geolocation": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-globalization": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    }
+  },
+  "dependent_plugins": {
+    "es6-promise-plugin": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "phonegap-plugin-media-stream": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    }
+  }
+}
