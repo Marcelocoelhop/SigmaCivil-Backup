@@ -294,15 +294,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "cordova-plugin-inappbrowser.inappbrowser",
-      "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
-      "pluginId": "cordova-plugin-inappbrowser",
-      "clobbers": [
-        "cordova.InAppBrowser.open",
-        "window.open"
-      ]
-    },
-    {
       "id": "cordova-plugin-media.MediaError",
       "file": "plugins/cordova-plugin-media/www/MediaError.js",
       "pluginId": "cordova-plugin-media",
@@ -437,7 +428,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-file-transfer": "1.7.1",
     "cordova-plugin-geolocation": "4.0.2",
     "cordova-plugin-globalization": "1.11.0",
-    "cordova-plugin-inappbrowser": "3.1.0",
     "cordova-plugin-media": "5.0.2",
     "cordova-plugin-media-capture": "3.0.2",
     "cordova-plugin-network-information": "2.0.2",

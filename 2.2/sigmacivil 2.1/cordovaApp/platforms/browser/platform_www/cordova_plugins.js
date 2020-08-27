@@ -347,21 +347,6 @@ module.exports = [
         "runs": true
     },
     {
-        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
-        "id": "cordova-plugin-inappbrowser.inappbrowser",
-        "pluginId": "cordova-plugin-inappbrowser",
-        "clobbers": [
-            "cordova.InAppBrowser.open",
-            "window.open"
-        ]
-    },
-    {
-        "file": "plugins/cordova-plugin-inappbrowser/src/browser/InAppBrowserProxy.js",
-        "id": "cordova-plugin-inappbrowser.InAppBrowserProxy",
-        "pluginId": "cordova-plugin-inappbrowser",
-        "runs": true
-    },
-    {
         "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
         "id": "cordova-plugin-camera.Camera",
         "pluginId": "cordova-plugin-camera",
@@ -456,7 +441,6 @@ module.exports.metadata =
     "phonegap-plugin-media-stream": "1.2.1",
     "phonegap-plugin-image-capture": "1.1.2",
     "cordova-plugin-device": "2.0.3",
-    "cordova-plugin-inappbrowser": "3.1.0",
     "cordova-plugin-camera": "4.1.0",
     "cordova-plugin-device-motion": "2.0.1",
     "cordova-plugin-geolocation": "4.0.2",

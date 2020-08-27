@@ -41,18 +41,6 @@
     <feature name="Globalization">
         <param name="ios-package" value="CDVGlobalization" />
     </feature>
-    <feature name="InAppBrowser">
-        <param name="ios-package" value="CDVInAppBrowser" />
-        <param name="onload" value="true" />
-    </feature>
-    <feature name="UIInAppBrowser">
-        <param name="ios-package" value="CDVUIInAppBrowser" />
-        <param name="onload" value="true" />
-    </feature>
-    <feature name="WKInAppBrowser">
-        <param name="ios-package" value="CDVWKInAppBrowser" />
-        <param name="onload" value="true" />
-    </feature>
     <feature name="Media">
         <param name="ios-package" value="CDVSound" />
     </feature>

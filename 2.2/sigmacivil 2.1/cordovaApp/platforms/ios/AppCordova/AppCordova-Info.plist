@@ -5,11 +5,11 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en_US</string>
 	<key>CFBundleDisplayName</key>
-	<string>SigmaCivil</string>
+	<string>AppCordova</string>
 	<key>CFBundleExecutable</key>
-	<string>SigmaCivil</string>
+	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>br.com.sigmacivil.sc</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -32,19 +32,17 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>need camera access to take pictures</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>need location access to find things nearby</string>
+	<string>need your permission to access camera</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>need location access to find things nearby</string>
+	<string>need your permission to access location</string>
 	<key>NSMainNibFile</key>
 	<string></string>
 	<key>NSMainNibFile~ipad</key>
 	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>need microphone access for uploading videos and audios</string>
+	<string>need your permission to access microphone</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>need photo library access to get pictures from there</string>
+	<string>need your permission to access photolibrary</string>
 	<key>UIRequiresFullScreen</key>
 	<true/>
 	<key>UISupportedInterfaceOrientations</key>

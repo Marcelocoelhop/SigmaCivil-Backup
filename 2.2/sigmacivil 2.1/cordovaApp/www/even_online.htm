@@ -96,11 +96,6 @@
 
         // EXECUTA CASO TENHA INTERNET
         function iniciar() {
-
-            document.addEventListener('click', function(event) {
-                alert(event.target.className);
-            });
-
             window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
             window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
             window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
@@ -143,7 +138,7 @@
                 '<a href="#"><button style="box-shadow: none !important; background: #ebebeb !important; border: none;" onclick="atualizar_texto_empree(' + String.fromCharCode(39) + rrr_id_prog_manut + String.fromCharCode(39) + ')" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right ui-icon-carat-l">Voltar</button></a>',
                 '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
                 '<tr>',
-                '<td width="30" ><img src="images/logo4.png" onclick="dispareAlert()" width="142"> </td>',
+                '<td width="30" ><img src="images/logo4.png" width="142"> </td>',
                 '</tr>',
                 '</table>',
                 '</div>',
@@ -152,10 +147,6 @@
                 '</div>',
                 '</form>'
             ].join('');
-            
-            function dispareAlert() {
-                return alert('logo sigmacivil');
-            }
                                   
             document.getElementById('menu_opc2').innerHTML = menu_sup_online;
 
@@ -1965,7 +1956,7 @@
                                         <label style="text-shadow: none; font-weight: 600;" class="label_center_"
                                             for="textarea-1">Galeria
                                             de imagens do
-                                            aparelho 2.1</label>
+                                            aparelho</label>
                                         <a style="float: right; position: relative; bottom: 28px; left: 16px;"
                                             href="#transitionExample" data-transition="pop" class="ui-btn-inline"
                                             data-rel="popup">

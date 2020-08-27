@@ -34,9 +34,6 @@
     "cordova-plugin-compat": {
       "PACKAGE_NAME": "br.com.cordovaapp"
     },
-    "cordova-plugin-inappbrowser": {
-      "PACKAGE_NAME": "br.com.cordovaapp"
-    },
     "cordova-plugin-camera": {
       "PACKAGE_NAME": "br.com.cordovaapp"
     },
