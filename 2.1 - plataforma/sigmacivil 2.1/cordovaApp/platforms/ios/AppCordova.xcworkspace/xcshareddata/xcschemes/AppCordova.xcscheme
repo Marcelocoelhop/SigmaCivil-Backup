@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
-               BuildableName = "AppCordova.app"
-               BlueprintName = "AppCordova"
-               ReferencedContainer = "container:AppCordova.xcodeproj">
+               BuildableName = "SigmaCivil.app"
+               BlueprintName = "SigmaCivil"
+               ReferencedContainer = "container:SigmaCivil.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -31,9 +31,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
-            BuildableName = "AppCordova.app"
-            BlueprintName = "AppCordova"
-            ReferencedContainer = "container:AppCordova.xcodeproj">
+            BuildableName = "SigmaCivil.app"
+            BlueprintName = "SigmaCivil"
+            ReferencedContainer = "container:SigmaCivil.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -54,9 +54,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
-            BuildableName = "AppCordova.app"
-            BlueprintName = "AppCordova"
-            ReferencedContainer = "container:AppCordova.xcodeproj">
+            BuildableName = "SigmaCivil.app"
+            BlueprintName = "SigmaCivil"
+            ReferencedContainer = "container:SigmaCivil.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
-            BuildableName = "AppCordova.app"
-            BlueprintName = "AppCordova"
-            ReferencedContainer = "container:AppCordova.xcodeproj">
+            BuildableName = "SigmaCivil.app"
+            BlueprintName = "SigmaCivil"
+            ReferencedContainer = "container:SigmaCivil.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

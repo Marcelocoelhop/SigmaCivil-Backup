@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:AppCordova.xcodeproj">
+      location = "group:/Users/lucas/Desktop/SigmaCivil-Backup/2.1 - plataforma/sigmacivil 2.1/cordovaApp/platforms/ios/AppCordova.xcodeproj">
    </FileRef>
 </Workspace>

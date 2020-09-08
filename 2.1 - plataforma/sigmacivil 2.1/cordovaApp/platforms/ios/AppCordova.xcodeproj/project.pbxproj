@@ -78,7 +78,7 @@
 		1AA66AD8077A4779A3C38565 /* CDVDevice.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CDVDevice.h; path = "cordova-plugin-device/CDVDevice.h"; sourceTree = "<group>"; };
 		1D3623240D0F684500981E51 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		1D6058910D05DD3D006BFB54 /* AppCordova.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppCordova.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D6058910D05DD3D006BFB54 /* SigmaCivil.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SigmaCivil.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E1E731B408C4A26A6B395B8 /* CDVConnection.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CDVConnection.m; path = "cordova-plugin-network-information/CDVConnection.m"; sourceTree = "<group>"; };
 		231B5ABF5F93470F980CFC29 /* CDVAccelerometer.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CDVAccelerometer.h; path = "cordova-plugin-device-motion/CDVAccelerometer.h"; sourceTree = "<group>"; };
 		276D897ED7B44280A0022E8C /* CoreTelephony.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -176,7 +176,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1D6058910D05DD3D006BFB54 /* AppCordova.app */,
+				1D6058910D05DD3D006BFB54 /* SigmaCivil.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -333,7 +333,7 @@
 			);
 			name = AppCordova;
 			productName = AppCordova;
-			productReference = 1D6058910D05DD3D006BFB54 /* AppCordova.app */;
+			productReference = 1D6058910D05DD3D006BFB54 /* SigmaCivil.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -479,7 +479,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2.1.88;
+				CURRENT_PROJECT_VERSION = 2.1.89;
 				DEVELOPMENT_TEAM = 44KL8CL2L9;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -490,9 +490,9 @@
 				INFOPLIST_FILE = "AppCordova/AppCordova-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				MARKETING_VERSION = 2.1.88;
+				MARKETING_VERSION = 2.1.89;
 				PRODUCT_BUNDLE_IDENTIFIER = br.com.sigmacivil.sc;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SigmaCivil;
 				PROVISIONING_PROFILE_SPECIFIER = XcodeProd;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -509,7 +509,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 2.1.88;
+				CURRENT_PROJECT_VERSION = 2.1.89;
 				DEVELOPMENT_TEAM = 44KL8CL2L9;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AppCordova/AppCordova-Prefix.pch";
@@ -518,9 +518,9 @@
 				INFOPLIST_FILE = "AppCordova/AppCordova-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				MARKETING_VERSION = 2.1.88;
+				MARKETING_VERSION = 2.1.89;
 				PRODUCT_BUNDLE_IDENTIFIER = br.com.sigmacivil.sc;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SigmaCivil;
 				PROVISIONING_PROFILE_SPECIFIER = XcodeProd;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
