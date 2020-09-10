@@ -7,6 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<link rel="stylesheet" href="css/custom.css" />
+	<link rel="stylesheet" href="css/custom-mobile.css" />
 	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
 	<script type="text/javascript" src="js/mc.js"></script>
 	<script type="text/javascript" src="cordova.js"></script>
@@ -165,31 +166,17 @@
 
 							if (!cursor2) {
 								var botao_sincro = [
-									'<table width="95%" height="51" border="0" cellpadding="0" cellspacing="0">',
-									'<tr>',
-									'<td width="100%" height="51">',
-									'<a href="#" class="is-not-decoration">',
-									'<button style="width: 100%;" class="ui-btn ui-shadow ui-corner-all">',
-									'<table width="100%" height="51" border="0" cellpadding="0" cellspacing="0"><tr>',
-									'<td width="10%" height="51"><div align="left"><img src="images/check-circle.png" width="25" /></div></td>',
-									'<td width="90%"><div align="center"><span style="text-decoration: none;">CheckPoints Sincronizados</span></div></td></tr>',
-									'</table>',
-									'</button>',
-									'</a></td></tr></table>'
+									'<div style="margin-top: 16px;">',
+									'<img src="images/check-circle.png" width="25" />',
+									'<div style="margin-top: 8px;" align="center"><span style="text-decoration: none;">CheckPoints Sincronizados</span></div>',
+									'</div>'
 								].join('');
 							} else {
 								var botao_sincro = [
-									'<table width="95%" height="51" border="0" cellpadding="0" cellspacing="0">',
-									'<tr>',
-									'<td width="100%" height="51">',
-									'<a href="#" class="is-not-decoration" onClick="sincronizar()">',
-									'<button style="width: 100%;" class="ui-btn ui-shadow ui-corner-all" data-theme="b">',
-									'<table width="100%" height="51" border="0" cellpadding="0" cellspacing="0"><tr>',
-									'<td width="10%" height="51"><div align="left"><img src="images/exclamation-circle.png" width="25" /></div></td>',
-									'<td width="90%"><div align="center"><span style="text-decoration: none;">Sincronizar CheckPoints</span></div></td></tr>',
-									'</table>',
-									'</button>',
-									'</a></td></tr></table>'
+									'<div>',
+									'<img src="images/exclamation-circle.png" width="25" />',
+									'<div align="center"><span style="text-decoration: none;">Sincronizar CheckPoints</span></div>',
+									'</div>'
 								].join('');
 							}
 
@@ -312,16 +299,19 @@
 					<img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
 					<img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
 				</h4>
-				<ul style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
-					<li><a class="click" href="#" onClick="enviar_sync()">Novo Login</a></li>
-					<li><a class="ui-btn ui-icon-clock ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-							onClick="go_page_check()">Checkpoint</a></li>
+				<ul class="menu-tablet-responsive" style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
+					<li>
+						<a class="ui-btn ui-icon-back ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+						onClick="volta_uni()">Manutenções</a>
+					</li>
+					<li>
+						<a class="click" href="#" onClick="enviar_sync()">Logout</a>
+					</li>
 				</ul>
 			</div>
 		</div>
 
-		<h3 style="border-radius: 0; background: transparent; border: 0; margin: 0; padding: 5px 20px;"
-			class="ui-bar ui-bar-a ui-corner-all">
+		<div style="border-radius: 0; background: #c00c13; border: 0; margin: 0; padding: 5px 0;">
 			<div align="center">
 				<table width="100%" height="27" border="0" cellpadding="0" cellspacing="0">
 					<tr>
@@ -329,19 +319,21 @@
 							<div align="center"></div>
 						</td>
 						<td width="130" height="27">
-							<div align="center"><strong>Check Point</strong></div>
+							<div align="center">
+								<strong class="title-check-white">Check Point</strong>
+							</div>
 						</td>
 						<td width="20" class="menu_2">
-							<div align="right">
+							<div style="position: relative; right: 12px;" align="right">
 								<a href="#transitionExample" data-transition="pop" data-rel="popup">
-									<img src="images/question-circle.png" width="15" alt="">
+									<img src="images/question-circle2.png" width="15" alt="">
 								</a>
 							</div>
 						</td>
 					</tr>
 				</table>
 			</div>
-		</h3>
+		</div>
 
 		<div data-role="popup" id="transitionExample" class="ui-content" data-theme="a">
 			<h2>Como funciona?</h2>
@@ -356,8 +348,6 @@
 			</ol>
 		</div>
 
-		<span id="bot_sincro"></span>
-
 		<table width="95%" height="51" border="0" cellpadding="0" cellspacing="0">
 			<tr>
 				<td width="85%" height="51">
@@ -366,10 +356,10 @@
 						<button class="ui-btn ui-shadow ui-corner-all">
 							<table width="100%" height="51" border="0" cellpadding="0" cellspacing="0">
 								<tr>
-									<td width="10%" height="51">
-										<div align="left"><img src="images/qrcode.svg" width="25" alt=""></div>
+									<td height="51">
+										<div align="left"><img style="position: absolute; bottom: 24px;" src="images/qrcode.svg" width="25" alt=""></div>
 									</td>
-									<td width="90%">
+									<td width="100%">
 										<div align="center">
 											<span>Ler QR Code</span>
 										</div>
@@ -383,7 +373,6 @@
 			</tr>
 		</table>
 
-
 		<table width="95%" height="51" border="0" cellpadding="0" cellspacing="0">
 			<tr>
 				<td width="100%" height="51">
@@ -391,10 +380,10 @@
 						<button style="width: 100%;" class="ui-btn ui-shadow ui-corner-all">
 							<table width="100%" height="51" border="0" cellpadding="0" cellspacing="0">
 								<tr>
-									<td width="10%" height="51">
-										<div align="left"><img src="images/chart.svg" width="25" alt=""></div>
+									<td height="51">
+										<div align="left"><img style="position: absolute; bottom: 24px;" src="images/chart.svg" width="25" alt=""></div>
 									</td>
-									<td width="90%">
+									<td width="100%">
 										<div align="center">
 											<span style="text-decoration: none;">Relatório de CheckPoints</span>
 										</div>
@@ -406,6 +395,8 @@
 				</td>
 			</tr>
 		</table>
+
+		<span id="bot_sincro"></span>
 
 	</div>
 

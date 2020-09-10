@@ -67,12 +67,12 @@
                 <img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
                 <img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
             </h4>
-            <ul style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
+            <ul class="menu-tablet-responsive" style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
                 <li><a class="ui-btn ui-icon-back ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-                        onClick="volta_uni()">Página Inicial</a></li>
-                <li><a class="click" href="#" onClick="enviar_sync()">Novo Login</a></li>
+                        onClick="volta_uni()">Manutenções</a></li>
                 <li><a class="ui-btn ui-icon-clock ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-                        onClick="go_page_check()">Checkpoint</a></li>
+                    onClick="go_page_check()">Checkpoint</a></li>
+                <li><a class="click" href="#" onClick="enviar_sync()">Logout</a></li>
             </ul>
         </div>
     </div>
@@ -518,12 +518,6 @@
                     var result = "var data = google.visualization.arrayToDataTable([" + dadosGrafico + "]);"
                     var sequencia_dados = eval(result);
 
-                    // var data = google.visualization.arrayToDataTable([
-                    //     ['Datas', 'Ancoragem (ganchos de ancoragem da fachada)', 'Área de recreação  infantil', 'CFTV / Segurança perimetral', 'Elevadores', 'Instalações hidráulicas - água não potável', 'Instalações hidráulicas - água potável', 'Instalações hidráulicas - sistema de combate a incêndio', 'Piscinas, fontes, cascatas e espelhos de água', 'Sistema de Cobertura - Sistema de Captação de Água Pluvial e Prumadas', 'Sistemas Hidrossanitários - Bombas', 'Telefonia e sistema de interfones'],
-                    //     ['01/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    //     ['31/01/2020', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                    // ]);
-
                     var options = {
                         title: 'Quantidade de check points x Dia do mês',
                         titleTextStyle: { width: '100%' },
@@ -583,11 +577,8 @@
 
         function volta_uni() {
             if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
-                // alert('Está offline');
                 window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
-            }
-            else {
-                // alert('Está onlline');
+            } else {
                 window.location.assign("empree_online.htm?l=" + login + "&s=" + senha + "&e=" + num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
             }
         }
