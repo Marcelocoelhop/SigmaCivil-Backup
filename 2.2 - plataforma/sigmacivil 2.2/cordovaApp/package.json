@@ -45,7 +45,8 @@
             },
             "cordova-plugin-device-motion": {},
             "cordova-plugin-geolocation": {},
-            "cordova-plugin-globalization": {}
+            "cordova-plugin-globalization": {},
+            "cordova-plugin-barcodescanner": {}
         },
         "platforms": [
             "browser",
@@ -54,6 +55,7 @@
         ]
     },
     "devDependencies": {
-        "cordova-ios": "^5.1.0"
+        "cordova-ios": "^5.1.0",
+        "cordova-plugin-barcodescanner": "^0.7.4"
     }
 }

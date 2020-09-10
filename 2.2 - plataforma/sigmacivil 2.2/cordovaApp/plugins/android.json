@@ -43,6 +43,9 @@
     },
     "phonegap-plugin-image-capture": {
       "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-barcodescanner": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
     }
   },
   "dependent_plugins": {

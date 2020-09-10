@@ -276,15 +276,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "cordova-plugin-inappbrowser.inappbrowser",
-      "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
-      "pluginId": "cordova-plugin-inappbrowser",
-      "clobbers": [
-        "cordova.InAppBrowser.open",
-        "window.open"
-      ]
-    },
-    {
       "id": "cordova-plugin-media.MediaError",
       "file": "plugins/cordova-plugin-media/www/MediaError.js",
       "pluginId": "cordova-plugin-media",
@@ -400,11 +391,11 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "cordova-image-picker.ImagePicker",
-      "file": "plugins/cordova-image-picker/www/imagepicker.js",
-      "pluginId": "cordova-image-picker",
+      "id": "cordova-plugin-barcodescanner.BarcodeScanner",
+      "file": "plugins/cordova-plugin-barcodescanner/www/barcodescanner.js",
+      "pluginId": "cordova-plugin-barcodescanner",
       "clobbers": [
-        "plugins.imagePicker"
+        "cordova.plugins.barcodeScanner"
       ]
     }
   ];
@@ -416,7 +407,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-file-transfer": "1.7.1",
     "cordova-plugin-geolocation": "4.0.2",
     "cordova-plugin-globalization": "1.11.0",
-    "cordova-plugin-inappbrowser": "3.1.0",
     "cordova-plugin-media": "5.0.2",
     "cordova-plugin-media-capture": "3.0.2",
     "cordova-plugin-network-information": "2.0.2",
@@ -424,7 +414,6 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "es6-promise-plugin": "4.2.2",
     "phonegap-plugin-media-stream": "1.2.1",
     "phonegap-plugin-image-capture": "1.1.2",
-    "cordova-image-picker": "2.2.5",
-    "cordova-android-support-gradle-release": "3.0.1"
+    "cordova-plugin-barcodescanner": "0.7.4"
   };
 });
