@@ -710,7 +710,7 @@
             ajax2.send();
             ////  capturando dados do evento
 
-            // if (getMobileOperatingSystem() == "iOS") {
+            if (getMobileOperatingSystem() == "iOS") {
                 document.querySelector('.date_ios').addEventListener('click', function() {
                     // var options = {
                     //     date: new Date(),
@@ -734,7 +734,7 @@
                         endYear: 2040
                     })
                 });
-            // }
+            }
 
             var db;
             var request = window.indexedDB.open("db_sigmacivil", "1");
