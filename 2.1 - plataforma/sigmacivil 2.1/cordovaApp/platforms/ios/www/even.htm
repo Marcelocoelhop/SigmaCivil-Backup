@@ -121,6 +121,8 @@
 			document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
 
 			setInterval(function () {
+				// window.StatusBar.hide();
+				
 				if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
 					document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
 					return false;
@@ -635,7 +637,7 @@
 			destinationType: destinationType.FILE_URI,
 			encodingType: Camera.EncodingType.JPEG,
 			popoverOptions: CameraPopoverOptions,
-			saveToPhotoAlbum: true,
+			// saveToPhotoAlbum: true,
 			sourceType: source
 		});
 
@@ -1602,13 +1604,8 @@
 
 		var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
 		var ajax = new XMLHttpRequest();
-		ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.1", true);
-		ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		ajax.onreadystatechange = function () {
-			if (ajax.readyState == 4) {//Request complete !!
-				if (ajax.status == 200 || ajax.status == 0) { // OK response
-
-					var resposta_total = ajax.responseText;
+		ajax.addEventListener("loadend", function(evt) {
+			var resposta_total = ajax.responseText;
 					if (resposta_total == "grav_ok") {
 						var db;
 						var request = window.indexedDB.open("db_sigmacivil", "1");
@@ -1650,13 +1647,10 @@
 					} else {
 						alert("Problemas com a gravação do texto. Tentar novamente.");
 					}
+		});
 
-				} else {
-					alert("Problemas com sua conexao internet. Erro: 0148");
-				}
-			}
-
-		}
+		ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.1", true);
+		ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
 		data = data.split(":").join("%3A")
 		data = data.split("{").join("%7B")
@@ -1667,6 +1661,7 @@
 		data = data.split(String.fromCharCode(34)).join("%22")
 
 		ajax.send(data);
+
 
 	}
 

@@ -1,5 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="br.com.cordovaapp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <feature name="CDVWebViewEngine">
+        <param name="ios-package" value="CDVWebViewEngine" />
+    </feature>
+    <feature name="LaunchScreen">
+        <param name="ios-package" value="CDVLaunchScreen" />
+    </feature>
     <feature name="LocalStorage">
         <param name="ios-package" value="CDVLocalStorage" />
     </feature>
@@ -21,6 +27,9 @@
     </feature>
     <feature name="Camera">
         <param name="ios-package" value="CDVCamera" />
+    </feature>
+    <feature name="DatePicker">
+        <param name="ios-package" value="DatePicker" />
     </feature>
     <feature name="Device">
         <param name="ios-package" value="CDVDevice" />
@@ -50,6 +59,14 @@
     <feature name="NetworkStatus">
         <param name="ios-package" value="CDVConnection" />
     </feature>
+    <feature name="StatusBar">
+        <param name="ios-package" value="CDVStatusBar" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="CDVWKWebViewFileXhr">
+        <param name="ios-package" value="CDVWKWebViewFileXhr" />
+        <param name="onload" value="true" />
+    </feature>
     <feature name="Stream">
         <param name="ios-package" value="CDVMediaStream" />
     </feature>
@@ -78,7 +95,7 @@
     <preference name="DisallowOverscroll" value="false" />
     <preference name="EnableViewportScale" value="false" />
     <preference name="KeyboardDisplayRequiresUserAction" value="true" />
-    <preference name="MediaPlaybackRequiresUserAction" value="false" />
+    <preference name="MediaTypesRequiringUserActionForPlayback" value="none" />
     <preference name="SuppressesIncrementalRendering" value="false" />
     <preference name="SuppressesLongPressGesture" value="false" />
     <preference name="Suppresses3DTouchGesture" value="false" />
@@ -88,4 +105,6 @@
     <preference name="PaginationMode" value="unpaginated" />
     <preference name="CameraUsesGeolocation" value="false" />
     <preference name="KeepAVAudioSessionAlwaysActive" value="NO" />
+    <preference name="StatusBarOverlaysWebView" value="true" />
+    <preference name="StatusBarStyle" value="lightcontent" />
 </widget>

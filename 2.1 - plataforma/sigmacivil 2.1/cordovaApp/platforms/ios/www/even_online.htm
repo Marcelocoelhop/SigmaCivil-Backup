@@ -12,6 +12,7 @@
     <script type="text/javascript" src="js/mc.js"></script>
     <script src="js/jquery.js"></script>
     <script src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script src="js/rolldate.js"></script>
     <style>
         .menu .ui-mini.ui-btn-icon-left:after,
         .ui-mini .ui-btn-icon-left:after,
@@ -152,6 +153,8 @@
 
             // FUNÇÃO QUE VERIFICA SE TEM INTERNET A CADA 5 SEGUNDOS
             setInterval(function () {
+                // window.StatusBar.hide();
+                
                 if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
                     document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
                     return false;
@@ -163,12 +166,8 @@
 
             // CAPTURANDO DADOS DO EVENTO
             var ajax2 = new XMLHttpRequest();
-            ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_dados_evento_online.asp?l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&versao=2.1&t=" + Math.random(), false);
-            ajax2.onreadystatechange = function () {
-                if (ajax2.readyState == 4) { //Request complete !!
-                    if (ajax2.status == 200 || ajax2.status == 0) { // OK response
-
-                        var resposta_total = ajax2.responseText;
+		    ajax2.addEventListener("loadend", function(evt) {
+                var resposta_total = this.responseText;
                         var jsontext = resposta_total.split("#")
 
                         var getLogin = JSON.parse(jsontext[0]);
@@ -326,7 +325,11 @@
                             var aux_obsConstr_preench;
 
                             if (input_data_realiz == "") {
-                                aux_data_preench = dateToEN2(data_manut_realizada)
+                                if (getMobileOperatingSystem() == "iOS") {
+                                    aux_data_preench = data_manut_realizada
+                                } else {
+                                    aux_data_preench = dateToEN2(data_manut_realizada)
+                                }
                             } else {
                                 aux_data_preench = input_data_realiz
                             }
@@ -366,118 +369,235 @@
                             }
 
                             if (e_construtora == '0') {
-                                dados_manutencao = [
-                                    '<li class="shadow_box">',
-                                    '<div class="text-center-title">',
-                                    '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
-                                    '</div>',
-                                    '<div class="text-center-paragraph">',
-                                    '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
-                                    '</div>',
-                                    '<div class="mensalmente-paragraph">',
-                                    '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
-                                    '</div>',
-                                    '<div class="data_periodicidade_paragraph">',
-                                    '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
-                                    '</div>',
-                                    '</li>',
+                                if (getMobileOperatingSystem() == "iOS") {
+                                    dados_manutencao = [
+                                        '<li class="shadow_box">',
+                                        '<div class="text-center-title">',
+                                        '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
+                                        '</div>',
+                                        '<div class="text-center-paragraph">',
+                                        '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
+                                        '</div>',
+                                        '<div class="mensalmente-paragraph">',
+                                        '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
+                                        '</div>',
+                                        '<div class="data_periodicidade_paragraph">',
+                                        '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
+                                        '</div>',
+                                        '</li>',
 
-                                    '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
-                                    '<div class="ui-grid-a">',
-                                    '<div class="ui-block-a">',
-                                    '<tbody>',
-                                    '<tr>',
-                                    '<th style="padding: 0">',
-                                    '<div class="input-responsive">',
-                                    '<label for="">Data realização:</label>',
-                                    '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" type="date" onkeypress="mascara(this, sonumeros_data)" id="in_data_realizacao" required="" value="' + aux_data_preench + '" />',
-                                    '</div>',
-                                    '</th>',
-                                    '</tr>',
-                                    '</tbody>',
-                                    '</div>',
-                                    '<div style="position: relative;" class="ui-block-b">',
-                                    '<label for="">Empresa:</label>',
-                                    '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">',
-                                    '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
-                                    '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
-                                    '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
-                                    '</select>',
-                                    '</div>',
-                                    '</div>',
-                                    '<table>',
-                                    '<div class="ui-grid-a">',
-                                    '<div class="ui-block-a custo-estimado">',
-                                    '<label for="">Custo estimado:</label>',
-                                    '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" value="' + aux_custoEstim_preench + '" />',
-                                    '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
-                                    '</div>',
-                                    '<div class="ui-block-b custo-real">',
-                                    '<label for="">Custo real:</label>',
-                                    '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" value="' + aux_custoReal_preench + '" />',
-                                    '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
-                                    '</div>',
-                                    '</div>',
-                                    '</table>',
-                                    '</li>'
-                                ].join('');
+                                        '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a">',
+                                        '<tbody>',
+                                        '<tr>',
+                                        '<th style="padding: 0">',
+                                        '<div class="input-responsive">',
+                                        '<label for="">Data realização:</label>',
+                                        '<input maxlength="10" style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao date_ios" onclick="scrollDate()" id="in_data_realizacao" readonly="readonly" required="" value="' + aux_data_preench + '" />',
+                                        '<img src="images/calendar-alt.png" width="16" style="position: relative; float: right; bottom: 35px; right: 10px;" />',
+                                        '</div>',
+                                        '</th>',
+                                        '</tr>',
+                                        '</tbody>',
+                                        '</div>',
+                                        '<div style="position: relative;" class="ui-block-b">',
+                                        '<label for="">Empresa:</label>',
+                                        '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">',
+                                        '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
+                                        '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
+                                        '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
+                                        '</select>',
+                                        '</div>',
+                                        '</div>',
+                                        '<table>',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a custo-estimado">',
+                                        '<label for="">Custo estimado:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" value="' + aux_custoEstim_preench + '" />',
+                                        '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '<div class="ui-block-b custo-real">',
+                                        '<label for="">Custo real:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" value="' + aux_custoReal_preench + '" />',
+                                        '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '</div>',
+                                        '</table>',
+                                        '</li>'
+                                    ].join('');
+                                } else {
+                                    dados_manutencao = [
+                                        '<li class="shadow_box">',
+                                        '<div class="text-center-title">',
+                                        '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
+                                        '</div>',
+                                        '<div class="text-center-paragraph">',
+                                        '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
+                                        '</div>',
+                                        '<div class="mensalmente-paragraph">',
+                                        '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
+                                        '</div>',
+                                        '<div class="data_periodicidade_paragraph">',
+                                        '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
+                                        '</div>',
+                                        '</li>',
+
+                                        '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a">',
+                                        '<tbody>',
+                                        '<tr>',
+                                        '<th style="padding: 0">',
+                                        '<div class="input-responsive">',
+                                        '<label for="">Data realização:</label>',
+                                        '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" id="in_data_realizacao" type="date" onkeypress="mascara(this, sonumeros_data)" required="" value="' + aux_data_preench + '" />',
+                                        '</div>',
+                                        '</th>',
+                                        '</tr>',
+                                        '</tbody>',
+                                        '</div>',
+                                        '<div style="position: relative;" class="ui-block-b">',
+                                        '<label for="">Empresa:</label>',
+                                        '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)">',
+                                        '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
+                                        '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
+                                        '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
+                                        '</select>',
+                                        '</div>',
+                                        '</div>',
+                                        '<table>',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a custo-estimado">',
+                                        '<label for="">Custo estimado:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" value="' + aux_custoEstim_preench + '" />',
+                                        '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '<div class="ui-block-b custo-real">',
+                                        '<label for="">Custo real:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" value="' + aux_custoReal_preench + '" />',
+                                        '<img src="images/money-bill-alt-verde.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '</div>',
+                                        '</table>',
+                                        '</li>'
+                                    ].join('');
+                                }
                             } else {
+                                if (getMobileOperatingSystem() == "iOS") {
+                                    dados_manutencao = [
+                                        '<li class="shadow_box">',
+                                        '<div class="text-center-title">',
+                                        '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
+                                        '</div>',
+                                        '<div class="text-center-paragraph">',
+                                        '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
+                                        '</div>',
+                                        '<div class="mensalmente-paragraph">',
+                                        '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
+                                        '</div>',
+                                        '<div class="data_periodicidade_paragraph">',
+                                        '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
+                                        '</div>',
+                                        '</li>',
 
-                                dados_manutencao = [
-                                    '<li class="shadow_box">',
-                                    '<div class="text-center-title">',
-                                    '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
-                                    '</div>',
-                                    '<div class="text-center-paragraph">',
-                                    '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
-                                    '</div>',
-                                    '<div class="mensalmente-paragraph">',
-                                    '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
-                                    '</div>',
-                                    '<div class="data_periodicidade_paragraph">',
-                                    '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
-                                    '</div>',
-                                    '</li>',
+                                        '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a">',
+                                        '<tbody>',
+                                        '<tr>',
+                                        '<th style="padding: 0">',
+                                        '<div class="input-responsive">',
+                                        '<label for="">Data realização:</label>',
+                                        '<input maxlength="10" style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao date_ios" onclick="scrollDate()" id="in_data_realizacao" disabled="" readonly="readonly" required="" value="' + aux_data_preench + '" />',
+                                        '<img src="images/calendar-alt.png" width="16" style="position: relative; float: right; bottom: 35px; right: 10px;" />',
+                                        '</div>',
+                                        '</th>',
+                                        '</tr>',
+                                        '</tbody>',
+                                        '</div>',
+                                        '<div style="position: relative;" class="ui-block-b">',
+                                        '<label for="">Empresa:</label>',
+                                        '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" disabled="">',
+                                        '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
+                                        '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
+                                        '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
+                                        '</select>',
+                                        '</div>',
+                                        '</div>',
+                                        '<table>',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a custo-estimado">',
+                                        '<label for="">Custo estimado:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" disabled="" value="' + aux_custoEstim_preench + '" />',
+                                        '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '<div class="ui-block-b custo-real">',
+                                        '<label for="">Custo real:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" disabled="" value="' + aux_custoReal_preench + '" />',
+                                        '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '</div>',
+                                        '</table>',
+                                        '</li>'
+                                    ].join('');
+                                } else {
+                                    dados_manutencao = [
+                                        '<li class="shadow_box">',
+                                        '<div class="text-center-title">',
+                                        '<font style="font-weight: bold; text-shadow: none;" id="atividade_title" size="4" face="Arial">' + nome_sistema + '</font>',
+                                        '</div>',
+                                        '<div class="text-center-paragraph">',
+                                        '<p id="atividade_content" class="text-size-content" size="2" face="Arial" color="#0000FF">' + nome_atividade + '</p>',
+                                        '</div>',
+                                        '<div class="mensalmente-paragraph">',
+                                        '<strong class="mensalmente">' + periodicidade + '</strong> - <span>' + nome_emp_resp + '</span>',
+                                        '</div>',
+                                        '<div class="data_periodicidade_paragraph">',
+                                        '<font class="atividade_title" size="3" face="Arial">' + dateToEN(aux_data) + '</font>',
+                                        '</div>',
+                                        '</li>',
 
-                                    '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
-                                    '<div class="ui-grid-a">',
-                                    '<div class="ui-block-a">',
-                                    '<tbody>',
-                                    '<tr>',
-                                    '<th style="padding: 0">',
-                                    '<div class="input-responsive">',
-                                    '<label for="">Data realização:</label>',
-                                    '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" type="date" onkeypress="mascara(this, sonumeros_data)" id="in_data_realizacao" disabled="" required="" value="' + aux_data_preench + '" />',
-                                    '</div>',
-                                    '</th>',
-                                    '</tr>',
-                                    '</tbody>',
-                                    '</div>',
-                                    '<div style="position: relative;" class="ui-block-b">',
-                                    '<label for="">Empresa:</label>',
-                                    '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" disabled="">',
-                                    '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
-                                    '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
-                                    '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
-                                    '</select>',
-                                    '</div>',
-                                    '</div>',
-                                    '<table>',
-                                    '<div class="ui-grid-a">',
-                                    '<div class="ui-block-a custo-estimado">',
-                                    '<label for="">Custo estimado:</label>',
-                                    '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" disabled="" value="' + aux_custoEstim_preench + '" />',
-                                    '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
-                                    '</div>',
-                                    '<div class="ui-block-b custo-real">',
-                                    '<label for="">Custo real:</label>',
-                                    '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" disabled="" value="' + aux_custoReal_preench + '" />',
-                                    '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
-                                    '</div>',
-                                    '</div>',
-                                    '</table>',
-                                    '</li>'
-                                ].join('');
+                                        '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a">',
+                                        '<tbody>',
+                                        '<tr>',
+                                        '<th style="padding: 0">',
+                                        '<div class="input-responsive">',
+                                        '<label for="">Data realização:</label>',
+                                        '<input style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" type="date" onkeypress="mascara(this, sonumeros_data)" id="in_data_realizacao" disabled="" required="" value="' + aux_data_preench + '" />',
+                                        '</div>',
+                                        '</th>',
+                                        '</tr>',
+                                        '</tbody>',
+                                        '</div>',
+                                        '<div style="position: relative;" class="ui-block-b">',
+                                        '<label for="">Empresa:</label>',
+                                        '<select style="height: 35px; background: #f6f6f6; border-color: #dddddd; font-size: 13px; outline: none; width: 100%; border-radius: 4px; padding-left: 5px;" id="valores" name="select-native-2" data-mini="true" onfocus="ChangeColorBlue(this)" onblur="BackColorBlue(this)" disabled="">',
+                                        '<option class="size_option" value="1" ' + seleciona1 + '>Equipe Local</option>',
+                                        '<option class="size_option" value="2" ' + seleciona2 + '>Empresa Capacitada</option>',
+                                        '<option class="size_option" value="3" ' + seleciona3 + '>Empresa Especializada</option>',
+                                        '</select>',
+                                        '</div>',
+                                        '</div>',
+                                        '<table>',
+                                        '<div class="ui-grid-a">',
+                                        '<div class="ui-block-a custo-estimado">',
+                                        '<label for="">Custo estimado:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-estimado-input" type="tel" name="text-basic" id="in_dado_custo_estimado" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo estimado" disabled="" value="' + aux_custoEstim_preench + '" />',
+                                        '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '<div class="ui-block-b custo-real">',
+                                        '<label for="">Custo real:</label>',
+                                        '<input maxlength="9" style="height: 35px; background: #f6f6f6; border: 1px solid #dddddd; text-shadow: none; font-size: 13px; outline: none; width: 100%; padding-right: 35px; border-radius: 4px; padding-left: 5px;" class="custo-real-input" type="tel" name="text-basic" id="in_dado_custo_real" data-placeholder="true" onfocus="ChangeColor(this)" onblur="BackColor(this)" onkeyup="mascara(this, mascaraTeste)" placeholder="Custo real" disabled="" value="' + aux_custoReal_preench + '" />',
+                                        '<img src="images/money-bill-alt.png" width="20" style="position: relative; float: right; bottom: 26px; right: 10px;" />',
+                                        '</div>',
+                                        '</div>',
+                                        '</table>',
+                                        '</li>'
+                                    ].join('');
+                                }
                             }
 
                             if (e_construtora == '0') {
@@ -577,13 +697,10 @@
                             eval(variavelx2);
 
                         }
+            });
 
-                    } else {
-                        alert("Problemas com sua conexao internet. Erro: 0167");
-                    }
-                }
-            }
-            ajax2.send();
+            ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_dados_evento_online.asp?l=" + login + "&s=" + senha + "&ipm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&versao=2.1&t=" + Math.random(), false);
+			ajax2.send();
             ////  capturando dados do evento
 
             var db;
@@ -806,7 +923,6 @@
         var aux_status_imagens_upl = ""
 
         function getPhoto(source, qual) {
-
             qual_id_prog_manut = qual;
 
             // RESTRIÇÕES DE DATAS
@@ -830,14 +946,14 @@
                 destinationType: destinationType.FILE_URI,
                 encodingType: Camera.EncodingType.JPEG,
                 popoverOptions: CameraPopoverOptions,
-                saveToPhotoAlbum: true,
+                // saveToPhotoAlbum: true,
                 sourceType: source
             });
 
         }
 
         function onFail(message) {
-            // alert('Failed because: ' + message);
+            alert('Failed because: ' + message);
         }
 
         var qual_id_prog_manut;
@@ -1447,7 +1563,7 @@
         var fail_up_v = function (error) {
             document.getElementById("parte_load_content").style.display = "none";
             document.getElementById("parte_load").style.display = "none";
-            alert("Não foi feito o upload da vídeo!");
+            alert("Não foi feito o upload do vídeo!");
         }
         // FIM UPLOAD VIDEO
 
@@ -1752,7 +1868,7 @@
         var fail_up_a = function (error) {
             document.getElementById("parte_load_content").style.display = "none";
             document.getElementById("parte_load").style.display = "none";
-            alert("Não foi feito o upload da áudio!");
+            alert("Não foi feito o upload do áudio!");
         }
         // FIM UPLOAD AUDIO
 
@@ -1809,13 +1925,8 @@
 
             var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
             var ajax = new XMLHttpRequest();
-            ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.1", true);
-            ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            ajax.onreadystatechange = function () {
-                if (ajax.readyState == 4) {//Request complete !!
-                    if (ajax.status == 200 || ajax.status == 0) { // OK response
-
-                        var resposta_total = ajax.responseText;
+			ajax.addEventListener("loadend", function(evt) {
+                var resposta_total = this.responseText;
                         if (resposta_total == "grav_ok") {
                             var db;
                             var request = window.indexedDB.open("db_sigmacivil", "1");
@@ -1856,16 +1967,13 @@
                         } else {
                             alert("Problemas com a gravação do texto. Tente novamente mais tarde (cod 08).");
                         }
+            });
 
-                    } else {
-                        alert("Problemas com sua conexão internet. Cod: 01");
-                    }
-                }
-
-            }
+            ajax.open("POST", "https://www.sigmacivil.com.br/app_sc/rec_texto_uploaded.asp?versao=2.1", true);
+            ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
             data = data.split(":").join("%3A")
-            data = data.split("{").join(" % 7B")
+            data = data.split("{").join("%7B")
             data = data.split("}").join("%7D")
             data = data.split(",").join("%2C")
             data = data.split("[").join("%5B")
@@ -2589,11 +2697,11 @@
                 alert("Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + "!")
             } else if (datadiff(Date.now(), d_max) < 0) {
                 alert("Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + "!")
-            } else if (datadiff2(transf_data_num(document.getElementById('in_data_realizacao').value), d_min) > 0) {
+            } else if (datadiff2(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), d_min) > 0) {
                 alert("Essa manutenção só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
-            } else if (datadiff(transf_data_num(document.getElementById('in_data_realizacao').value), d_max) < 0) {
+            } else if (datadiff(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), d_max) < 0) {
                 alert("Essa manutenção não pode ser realizada após o dia " + dateToEN(d_max) + "!")
-            } else if (datadiff(transf_data_num(document.getElementById('in_data_realizacao').value), data_hoje_formatada) < 0) {
+            } else if (datadiff(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), data_hoje_formatada) < 0) {
                 alert("Essa manutenção não pode ser realizada após o dia de hoje!")
             } else if (nivel_manut == 2 && qt_docs == 0) {
                 alert('Esta manutenção precisa de pelo menos 1 documento comprovatório anexado!')
@@ -2612,26 +2720,19 @@
                 }
                 if (prosseguir == true || ((nivel_manut == 1 || nivel_manut == 2) && qt_docs > 0)) {
                     var ajax3 = new XMLHttpRequest();
-                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.1&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
-                    ajax3.onreadystatechange = function () {
-                        if (ajax3.readyState == 4) {
-                            if (ajax3.status == 200 || ajax3.status == 0) {
-
-                                var resposta_total = ajax3.responseText;
+			        ajax3.addEventListener("loadend", function(evt) {
+                        var resposta_total = this.responseText;
                                 if (tipo == "alt") {
                                     alert("Alteração realizada com sucesso!")
                                 } else {
                                     alert("Manutenção realizada com sucesso!")
                                 }
 
-                                reload_page_empree();
+                                atualizar_texto_empree(id_prog_manut);
+                    });
 
-                            } else {
-                                alert("Problemas com sua conexão internet. Cod: 0166");
-                            }
-                        }
-                    }
-                    ajax3.send();
+                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + dateToEN2(document.getElementById('in_data_realizacao').value) + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.1&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
+			        ajax3.send();
                 }
             }
 
@@ -2657,22 +2758,15 @@
                     if (continuar == false) { return }
                 }
                 var ajax3 = new XMLHttpRequest();
-                ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.1&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
-                ajax3.onreadystatechange = function () {
-                    if (ajax3.readyState == 4) {
-                        if (ajax3.status == 200 || ajax3.status == 0) {
-
-                            var resposta_total = ajax3.responseText;
+			    ajax3.addEventListener("loadend", function(evt) {
+                    var resposta_total = ajax3.responseText;
                             alert("Alterações realizadas com sucesso!")
 
-                            reload_page_empree();
+                            atualizar_texto_empree(id_prog_manut);
+                });
 
-                        } else {
-                            alert("Problemas com sua conexão internet. Cod: 0137");
-                        }
-                    }
-                }
-                ajax3.send();
+                ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.1&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
+			    ajax3.send();
             }
         }
 
@@ -2705,20 +2799,14 @@
                         var verif_fim = verific1 + "S" + verific2 + "C" + verific3
 
                         var ajax3 = new XMLHttpRequest();
-                        ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.1")
-                        ajax3.onreadystatechange = function () {
-                            if (ajax3.readyState == 4) {
-                                if (ajax3.status == 200 || ajax3.status == 0) {
-
-                                    var resposta_total = ajax3.responseText;
+                        var ajax3 = new XMLHttpRequest();
+			            ajax3.addEventListener("loadend", function(evt) {
+                            var resposta_total = this.responseText;
                                     reload_page_even();
+                        });
 
-                                } else {
-                                    alert("Problemas com sua conexão internet. Cod: 0147");
-                                }
-                            }
-                        }
-                        ajax3.send();
+                        ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.1");
+			            ajax3.send();
 
                     }
 
@@ -2737,21 +2825,13 @@
                     var verif_fim = verific1 + "S" + verific2 + "C" + verific3
 
                     var ajax3 = new XMLHttpRequest();
-                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.1")
-                    ajax3.onreadystatechange = function () {
-                        if (ajax3.readyState == 4) {
-                            if (ajax3.status == 200 || ajax3.status == 0) {
+			            ajax3.addEventListener("loadend", function(evt) {
+                            var resposta_total = this.responseText;
+                                    reload_page_even();
+                    });
 
-                                var resposta_total = ajax3.responseText;
-                                // alert("Arquivo excluido com sucesso!")
-                                reload_page_even();
-
-                            } else {
-                                alert("Problemas com sua conexão internet. Cod: 0157");
-                            }
-                        }
-                    }
-                    ajax3.send();
+                    ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.1");
+			        ajax3.send();
                 }
             }
         }
@@ -2833,6 +2913,37 @@
         return text;
     }
 
+    function scrollDate() {
+        //alert('ponto 11')
+            if (getMobileOperatingSystem() == "iOS") {
+                //alert(document.querySelector('.date_ios'));
+                //document.querySelector('.date_ios').onclick = function() {
+                    //alert('ponto 8')
+                    // var options = {
+                    //     date: new Date(),
+                    //     mode: 'date'
+                    // };
+
+                    // function onSuccess(date) {
+                    //     var mes_atual = date.getMonth() + 1;
+                    //     document.querySelector('.date_ios').value = date.getDate() + '/' + mes_atual + '/' + date.getFullYear();
+                    // }
+
+                    // function onError(error) { // Android only
+                    //     // alert('Error: ' + error);
+                    // }
+
+                    // datePicker.show(options, onSuccess, onError);
+                    new Rolldate({
+                        el: '.date_ios',
+                        format: 'DD/MM/YYYY',
+                        beginYear: 2016,
+                        endYear: 2040
+                    })
+                //};
+            }
+    }
+
     function RestricaoData() {
         // RESTRIÇÕES DE DATAS
         var textarea = document.querySelector('.textarea_obs');
@@ -2875,6 +2986,24 @@
         }
     }
 
+    function getMobileOperatingSystem() {
+		var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
+		// Windows Phone must come first because its UA also contains "Android"
+		if (/windows phone/i.test(userAgent)) {
+			return "Windows Phone";
+		}
+
+		if (/android/i.test(userAgent)) {
+			return "Android";
+		}
+
+		// iOS detection from: http://stackoverflow.com/a/9039885/177710
+		if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+			return "iOS";
+		}
+
+		return "unknown";
+	}
 
 </script>

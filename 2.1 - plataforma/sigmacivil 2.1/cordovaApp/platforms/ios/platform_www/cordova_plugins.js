@@ -33,6 +33,14 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
+      "id": "cordova-plugin-datepicker.DatePicker",
+      "file": "plugins/cordova-plugin-datepicker/www/ios/DatePicker.js",
+      "pluginId": "cordova-plugin-datepicker",
+      "clobbers": [
+        "datePicker"
+      ]
+    },
+    {
       "id": "cordova-plugin-device.device",
       "file": "plugins/cordova-plugin-device/www/device.js",
       "pluginId": "cordova-plugin-device",
@@ -389,6 +397,38 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
+      "id": "cordova-plugin-statusbar.statusbar",
+      "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+      "pluginId": "cordova-plugin-statusbar",
+      "clobbers": [
+        "window.StatusBar"
+      ]
+    },
+    {
+      "id": "cordova-plugin-wkwebview-file-xhr.formdata-polyfill",
+      "file": "plugins/cordova-plugin-wkwebview-file-xhr/src/www/ios/formdata-polyfill.js",
+      "pluginId": "cordova-plugin-wkwebview-file-xhr",
+      "runs": true
+    },
+    {
+      "id": "cordova-plugin-wkwebview-file-xhr.xhr-polyfill",
+      "file": "plugins/cordova-plugin-wkwebview-file-xhr/src/www/ios/xhr-polyfill.js",
+      "pluginId": "cordova-plugin-wkwebview-file-xhr",
+      "runs": true
+    },
+    {
+      "id": "cordova-plugin-wkwebview-file-xhr.fetch-bootstrap",
+      "file": "plugins/cordova-plugin-wkwebview-file-xhr/src/www/ios/fetch-bootstrap.js",
+      "pluginId": "cordova-plugin-wkwebview-file-xhr",
+      "runs": true
+    },
+    {
+      "id": "cordova-plugin-wkwebview-file-xhr.fetch-polyfill",
+      "file": "plugins/cordova-plugin-wkwebview-file-xhr/src/www/ios/whatwg-fetch-2.0.3.js",
+      "pluginId": "cordova-plugin-wkwebview-file-xhr",
+      "runs": true
+    },
+    {
       "id": "es6-promise-plugin.Promise",
       "file": "plugins/es6-promise-plugin/www/promise.js",
       "pluginId": "es6-promise-plugin",
@@ -422,16 +462,19 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
   module.exports.metadata = {
     "cordova-plugin-camera": "4.1.0",
     "cordova-plugin-compat": "1.2.0",
+    "cordova-plugin-datepicker": "0.9.3",
     "cordova-plugin-device": "2.0.3",
     "cordova-plugin-device-motion": "2.0.1",
-    "cordova-plugin-file": "6.0.1",
+    "cordova-plugin-file": "6.0.2",
     "cordova-plugin-file-transfer": "1.7.1",
     "cordova-plugin-geolocation": "4.0.2",
     "cordova-plugin-globalization": "1.11.0",
-    "cordova-plugin-media": "5.0.2",
-    "cordova-plugin-media-capture": "3.0.2",
+    "cordova-plugin-media": "5.0.3",
+    "cordova-plugin-media-capture": "3.0.3",
     "cordova-plugin-network-information": "2.0.2",
+    "cordova-plugin-statusbar": "2.4.3",
     "cordova-plugin-whitelist": "1.3.3",
+    "cordova-plugin-wkwebview-file-xhr": "3.0.0",
     "es6-promise-plugin": "4.2.2",
     "phonegap-plugin-media-stream": "1.2.1",
     "phonegap-plugin-image-capture": "1.1.2"

@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
-               BuildableName = "SigmaCivil.app"
-               BlueprintName = "SigmaCivil"
-               ReferencedContainer = "container:SigmaCivil.xcodeproj">
+               BuildableName = "AppCordova.app"
+               BlueprintName = "AppCordova"
+               ReferencedContainer = "container:AppCordova.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -27,17 +27,19 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
+      <Testables>
+      </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
-            BuildableName = "SigmaCivil.app"
-            BlueprintName = "SigmaCivil"
-            ReferencedContainer = "container:SigmaCivil.xcodeproj">
+            BuildableName = "AppCordova.app"
+            BlueprintName = "AppCordova"
+            ReferencedContainer = "container:AppCordova.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <Testables>
-      </Testables>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -54,11 +56,13 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
-            BuildableName = "SigmaCivil.app"
-            BlueprintName = "SigmaCivil"
-            ReferencedContainer = "container:SigmaCivil.xcodeproj">
+            BuildableName = "AppCordova.app"
+            BlueprintName = "AppCordova"
+            ReferencedContainer = "container:AppCordova.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -71,9 +75,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
-            BuildableName = "SigmaCivil.app"
-            BlueprintName = "SigmaCivil"
-            ReferencedContainer = "container:SigmaCivil.xcodeproj">
+            BuildableName = "AppCordova.app"
+            BlueprintName = "AppCordova"
+            ReferencedContainer = "container:AppCordova.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
@@ -82,7 +86,6 @@
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"
-      customArchiveName = "SigmaCivil"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

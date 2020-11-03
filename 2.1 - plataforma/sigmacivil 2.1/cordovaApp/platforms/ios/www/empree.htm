@@ -249,12 +249,8 @@
 
 				var resposta_total;
 				var ajax = new XMLHttpRequest();
-				ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_status_sync.asp?e=" + num_empree + "&versao=2.1&t=" + Math.random(), true);
-				ajax.onreadystatechange = function () {
-					if (ajax.readyState == 4) {//Request complete !!
-						if (ajax.status == 200 || ajax.status == 0) { // OK response
-
-							var resultado_consulta = ajax.responseText;
+				ajax.addEventListener("loadend", function(evt) {
+					var resultado_consulta = this.responseText;
 							var parte_resultado = resultado_consulta.split('_')
 							var status_sync_serv = parte_resultado[0]
 							var bloqueio = parte_resultado[1]
@@ -312,16 +308,9 @@
 									iniciar();
 								}
 							}
+				});
 
-						}
-
-						else {  // OK response
-							alert("Problemas com sua conexao internet. Cod: 0167");
-							iniciar();
-						}
-
-					}
-				}
+				ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_status_sync.asp?e=" + num_empree + "&versao=2.1&t=" + Math.random(), true);
 				ajax.send();
 			} //checa internet
 
@@ -372,6 +361,8 @@
 			document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
 
 			setInterval(function () {
+				// window.StatusBar.hide();
+				
 				if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
 					document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
 					return false;
