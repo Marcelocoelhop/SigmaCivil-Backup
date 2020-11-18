@@ -453,6 +453,14 @@ module.exports = [
         "id": "cordova-plugin-inappbrowser.InAppBrowserProxy",
         "pluginId": "cordova-plugin-inappbrowser",
         "runs": true
+    },
+    {
+        "file": "plugins/cordova-plugin-barcodescanner/www/barcodescanner.js",
+        "id": "cordova-plugin-barcodescanner.BarcodeScanner",
+        "pluginId": "cordova-plugin-barcodescanner",
+        "clobbers": [
+            "cordova.plugins.barcodeScanner"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -476,7 +484,8 @@ module.exports.metadata =
     "cordova-plugin-media": "5.0.3",
     "cordova-plugin-camera": "4.1.0",
     "cordova-plugin-wkwebview-file-xhr": "3.0.0",
-    "cordova-plugin-inappbrowser": "4.0.0"
+    "cordova-plugin-inappbrowser": "4.0.0",
+    "cordova-plugin-barcodescanner": "0.7.4"
 }
 // BOTTOM OF METADATA
 });

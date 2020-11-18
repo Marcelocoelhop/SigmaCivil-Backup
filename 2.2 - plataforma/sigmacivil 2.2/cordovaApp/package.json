@@ -47,7 +47,8 @@
                 "ANDROID_SUPPORT_V4_VERSION": "27.+"
             },
             "cordova-plugin-wkwebview-file-xhr": {},
-            "cordova-plugin-inappbrowser": {}
+            "cordova-plugin-inappbrowser": {},
+            "cordova-plugin-barcodescanner": {}
         },
         "platforms": [
             "browser",
@@ -57,6 +58,7 @@
     },
     "devDependencies": {
         "cordova-ios": "^6.1.1",
+        "cordova-plugin-barcodescanner": "^0.7.4",
         "cordova-plugin-datepicker": "^0.9.3",
         "cordova-plugin-file": "^6.0.2",
         "cordova-plugin-inappbrowser": "^4.0.0",

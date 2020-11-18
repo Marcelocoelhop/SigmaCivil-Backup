@@ -407,19 +407,19 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       ]
     },
     {
-      "id": "cordova-plugin-barcodescanner.BarcodeScanner",
-      "file": "plugins/cordova-plugin-barcodescanner/www/barcodescanner.js",
-      "pluginId": "cordova-plugin-barcodescanner",
-      "clobbers": [
-        "cordova.plugins.barcodeScanner"
-      ]
-    },
-    {
       "id": "cordova-plugin-inappbrowser.inappbrowser",
       "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
       "pluginId": "cordova-plugin-inappbrowser",
       "clobbers": [
         "cordova.InAppBrowser.open"
+      ]
+    },
+    {
+      "id": "cordova-plugin-barcodescanner.BarcodeScanner",
+      "file": "plugins/cordova-plugin-barcodescanner/www/barcodescanner.js",
+      "pluginId": "cordova-plugin-barcodescanner",
+      "clobbers": [
+        "cordova.plugins.barcodeScanner"
       ]
     }
   ];
@@ -441,7 +441,7 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-media": "5.0.3",
     "cordova-plugin-camera": "4.1.0",
     "cordova-plugin-wkwebview-file-xhr": "3.0.0",
-    "cordova-plugin-barcodescanner": "0.7.4",
-    "cordova-plugin-inappbrowser": "4.0.0"
+    "cordova-plugin-inappbrowser": "4.0.0",
+    "cordova-plugin-barcodescanner": "0.7.4"
   };
 });

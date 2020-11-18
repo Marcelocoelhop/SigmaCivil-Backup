@@ -57,6 +57,9 @@
     },
     "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-barcodescanner": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
     }
   },
   "dependent_plugins": {

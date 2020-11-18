@@ -465,6 +465,14 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "clobbers": [
         "cordova.InAppBrowser.open"
       ]
+    },
+    {
+      "id": "cordova-plugin-barcodescanner.BarcodeScanner",
+      "file": "plugins/cordova-plugin-barcodescanner/www/barcodescanner.js",
+      "pluginId": "cordova-plugin-barcodescanner",
+      "clobbers": [
+        "cordova.plugins.barcodeScanner"
+      ]
     }
   ];
   module.exports.metadata = {
@@ -486,6 +494,7 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "es6-promise-plugin": "4.2.2",
     "phonegap-plugin-media-stream": "1.2.1",
     "phonegap-plugin-image-capture": "1.1.2",
-    "cordova-plugin-inappbrowser": "4.0.0"
+    "cordova-plugin-inappbrowser": "4.0.0",
+    "cordova-plugin-barcodescanner": "0.7.4"
   };
 });
