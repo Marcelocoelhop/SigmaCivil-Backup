@@ -1306,11 +1306,11 @@
 
         function up_loadPhoto(imageURI, q_k) {
 
-            if (!uploadAutomatic) {
-                document.getElementById("parte_load_content").style.display = "block";
-                document.getElementById("parte_load").style.display = "flex";
-                window.location.href = "#ancora123"
-            }
+            //if (!uploadAutomatic) {
+            document.getElementById("parte_load_content").style.display = "block";
+            document.getElementById("parte_load").style.display = "flex";
+            window.location.href = "#ancora123"
+            //}
 
             var q_k;
             var options = new FileUploadOptions();
@@ -1363,9 +1363,9 @@
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            if (!uploadAutomatic) {
-                                reload_page();
-                            }
+                            //if (!uploadAutomatic) {
+                            reload_page();
+                            //}
                         }
                     }
                 }
@@ -1594,11 +1594,11 @@
         // UPLOAD VIDEO
         function up_loadVideo(videoURL) {
 
-            if (!uploadAutomatic) {
-                document.getElementById("parte_load_content").style.display = "block";
-                document.getElementById("parte_load").style.display = "flex";
-                window.location.href = "#ancora123"
-            }
+            //if (!uploadAutomatic) {
+            document.getElementById("parte_load_content").style.display = "block";
+            document.getElementById("parte_load").style.display = "flex";
+            window.location.href = "#ancora123"
+            //}
 
             var options = new FileUploadOptions();
             options.fileKey = "file";
@@ -1643,9 +1643,9 @@
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            if (!uploadAutomatic) {
-                                reload_page();
-                            }
+                            //if (!uploadAutomatic) {
+                            reload_page();
+                            //}
                         }
                     }
                 }
@@ -1903,11 +1903,11 @@
 
         function up_loadAudio(audioURL) {
 
-            if (!uploadAutomatic) {
-                document.getElementById("parte_load_content").style.display = "block";
-                document.getElementById("parte_load").style.display = "flex";
-                window.location.href = "#ancora123"
-            }
+            //if (!uploadAutomatic) {
+            document.getElementById("parte_load_content").style.display = "block";
+            document.getElementById("parte_load").style.display = "flex";
+            window.location.href = "#ancora123"
+            //}
 
             var options = new FileUploadOptions();
             options.fileKey = "file";
@@ -1952,9 +1952,9 @@
 
                         var request = cursor.update(data);
                         request.onsuccess = function (event) {
-                            if (!uploadAutomatic) {
-                                reload_page();
-                            }
+                            //if (!uploadAutomatic) {
+                            reload_page();
+                            //}
                         }
                     }
                 }
@@ -2015,11 +2015,11 @@
 
         function up_loadTexto(textoURL) {
 
-            if (!uploadAutomatic) {
-                document.getElementById("parte_load_content").style.display = "block";
-                document.getElementById("parte_load").style.display = "flex";
-                window.location.href = "#ancora123"
-            }
+            //if (!uploadAutomatic) {
+            document.getElementById("parte_load_content").style.display = "block";
+            document.getElementById("parte_load").style.display = "flex";
+            window.location.href = "#ancora123"
+            //}
 
             var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
             var ajax = new XMLHttpRequest();
@@ -2059,9 +2059,9 @@
 
                                 var request = cursor.update(data);
                                 request.onsuccess = function (event) {
-                                    if (!uploadAutomatic) {
-                                        reload_page();
-                                    }
+                                    //if (!uploadAutomatic) {
+                                    reload_page();
+                                    //}
                                 }
                             }
                         }
@@ -2135,14 +2135,6 @@
                 <img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
             </h4>
             <ul style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
-                <li>
-                    <a class="ui-btn ui-icon-back ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-                        onClick="reload_page_empree()">Manutenções</a>
-                </li>
-                <li>
-                    <a class="ui-btn ui-icon-carat-r ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-                        onClick="scan()">Ler QRcode</a>
-                </li>
                 <li>
                     <a class="ui-btn ui-icon-gear ui-btn-icon-right ui-shadow ui-corner-all" href="#"
                         onClick="go_to_page_config()">Configurações</a>
@@ -2337,7 +2329,7 @@
         </li>
 
         <!-- BOTÕES SALVAR E VOLTAR -->
-        <li class="shadow_box" style="border-radius: 0; display: none;">
+        <li class="shadow_box" style="border-radius: 0; display: none; margin-bottom: 60px;">
             <table>
                 <fieldset class="ui-grid-a">
                     <div class="ui-block-a ui-responsive">
@@ -2352,7 +2344,31 @@
         </li>
 
     </ul>
+
     <div id="id_ev_email"></div>
+
+    <!-- Menu bottom -->
+    <nav class="main-menu-bottom">
+        <div>
+            <button type="button" onclick="reload_page_empree()">
+                <img src="images/home.png" width="22" alt="Home" />
+                <p>manutenções</p>
+            </button>
+            <button type="button" onclick="scan()">
+                <img src="images/qr_code.png" width="22" alt="Qr_code" />
+                <p>qrcode</p>
+            </button>
+            <button type="button" onclick="go_relat_check2()">
+                <img src="images/graph.png" width="22" alt="Relatório" />
+                <p>relatório</p>
+            </button>
+            <button type="button" onclick="openBrowser()">
+                <img src="images/call.png" width="22" alt="Chamado" />
+                <p>abrir chamado</p>
+            </button>
+        </div>
+    </nav>
+    <!-- Fim Menu bottom -->
 </body>
 
 </html>
@@ -3184,6 +3200,20 @@
         text = text.replace(/ç/g, '@*L0@c')
 
         return text;
+    }
+
+    function go_relat_check2() {
+        if (tem_conexao()) {
+            window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + /*"&id_sist=" + id_sis +*/ "&l=" + login + "&s=" + senha + "&qm=" + parseInt(mes_ev) + "&qa=" + parseInt(ano_ev))
+        } else {
+            alert('Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.');
+        }
+    }
+
+    function openBrowser() {
+        var options = "location=yes,lefttoright=yes,toolbarcolor=#b10b0b,hideurlbar=yes,closebuttoncaption=<  SigmaCivil,closebuttoncolor=#ffffff";
+
+        cordova.InAppBrowser.open('https://www.google.com.br', '_blank', options);
     }
 
     function scrollDate() {
