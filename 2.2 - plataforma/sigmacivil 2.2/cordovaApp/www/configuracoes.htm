@@ -202,7 +202,7 @@
 	<nav class="main-menu-bottom">
 		<div>
 			<button class="buttons-navigate" type="button" onclick="volta_uni()">
-				<img src="images/home.png" width="22" alt="Home" />
+				<img src="images/engenheiro_cogs.png" width="22" alt="Home" />
 				<p>manutenções</p>
 			</button>
 			<button class="buttons-navigate" type="button" onclick="scan()">
@@ -211,7 +211,7 @@
 			</button>
 			<button class="buttons-navigate" type="button" onclick="go_relat_check2()">
 				<img src="images/graph.png" width="22" alt="Relatório" />
-				<p>relatório</p>
+				<p>rel.checkpoint</p>
 			</button>
 			<button class="buttons-navigate" type="button" onclick="openBrowser()">
 				<img src="images/call.png" width="22" alt="Chamado" />
@@ -304,10 +304,10 @@
 		'<form>',
 		'<div style="display: flex; align-items: center; justify-content: space-between;">',
 		'<div style="margin: 0">',
-		'<p style="padding: 0 10px 0 0; margin-bottom: 8px;" for="flip-2">Ativar a edição de imagens ao serem tiradas:</p>',
+		'<p style="padding: 0 10px 0 0; margin-bottom: 8px;" for="flip-select">Ativar a edição de imagens ao serem tiradas:</p>',
 		'<small style="margin-left: 8px; color: #666;">teste testando</small>',
 		'</div>',
-		'<select name="flip-2" id="flip-2" onchange="editaImagem()" class="edit-picture" data-role="slider" data-mini="true" data-track-theme="b" data-theme="b">',
+		'<select name="flip-select" id="flip-select" onchange="editaImagem()" class="edit-picture" data-role="slider" data-mini="true" data-track-theme="a" data-theme="a">',
 		'<option value="off">Des</option>',
 		'<option value="on" ' + localStorage.getItem('sl1') + '>Lig</option>',
 		'</select>',
@@ -316,10 +316,10 @@
 
 		'<div style="display: flex; align-items: center; justify-content: space-between;">',
 		'<div style="margin: 0">',
-		'<p style="padding: 0 10px 0 0; margin-bottom: 8px;" for="flip-2">Ativar o upload de mídias automaticamente:</p>',
+		'<p style="padding: 0 10px 0 0; margin-bottom: 8px;" for="flip-select">Ativar o upload de mídias automaticamente:</p>',
 		'<small style="margin-left: 8px; color: #666;">teste testando</small>',
 		'</div>',
-		'<select name="flip-2" id="flip-2" onchange="editaImagem()" class="automatic-upload" data-role="slider" data-mini="true" data-track-theme="b" data-theme="b">',
+		'<select name="flip-select" id="flip-select" onchange="editaImagem()" class="automatic-upload" data-role="slider" data-mini="true" data-track-theme="a" data-theme="a">',
 		'<option value="off">Des</option>',
 		'<option value="on" ' + localStorage.getItem('sl2') + '>Lig</option>',
 		'</select>',

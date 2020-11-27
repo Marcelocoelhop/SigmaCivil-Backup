@@ -81,7 +81,7 @@
     <nav class="main-menu-bottom">
         <div>
             <button class="button-actived" type="button" onclick="enviar()">
-                <img src="images/home.png" width="22" alt="Home" />
+                <img src="images/engenheiro_cogs.png" width="22" alt="Home" />
                 <p>manutenções</p>
             </button>
             <button class="buttons-navigate" type="button" onclick="scan()">
@@ -90,7 +90,7 @@
             </button>
             <button class="buttons-navigate" type="button" onclick="go_relat_check2()">
                 <img src="images/graph.png" width="22" alt="Relatório" />
-                <p>relatório</p>
+                <p>rel.checkpoint</p>
             </button>
             <button class="buttons-navigate" type="button" onclick="openBrowser()">
                 <img src="images/call.png" width="22" alt="Chamado" />
@@ -103,7 +103,8 @@
     <script type="text/javascript">
 
         window.onerror = function (message, url, lineNumber) {
-            alert("Error: " + message + " in " + url + " at line " + lineNumber);
+            alert(`Erro: ${message} em ${url} na linha ${lineNumber}. Por favor, tente novamente`);
+            enviar();
         }
 
         var num_empree = getquerystring("e");
