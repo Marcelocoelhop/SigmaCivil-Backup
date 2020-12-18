@@ -569,7 +569,7 @@
                         vetor_dados_manutencao = vetor_dados_manutencao.substring(0, vetor_dados_manutencao.length - 1);
 
                         var ajax2 = new XMLHttpRequest();
-                        ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento + "&versao=2.1&t=" + Math.random(), false);
+                        ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/apagar_new_onlineB.asp?l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento + "&versao=2.1&t=" + Math.random(), false);
                         ajax2.addEventListener("loadend", function (evt) {
                             var resposta_total = this.responseText;
                             var jsontext = resposta_total.split("#")

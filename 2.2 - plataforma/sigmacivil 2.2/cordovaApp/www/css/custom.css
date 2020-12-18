@@ -45,8 +45,25 @@
     font-size: 25px;
 }
 
+.btn-success {
+    background: green !important;
+    color: #fff !important;
+    text-shadow: none !important;
+}
+
 .actived {
     background: #d8d8d8 !important;
+}
+
+.menu_opc {
+    width: 100%;
+    position: fixed;
+    z-index: 49;
+    transition: top 0.3s;
+}
+
+.menu_opc form {
+    box-shadow: 0 0 5px 0 rgba(0,0,0,0.4);
 }
 
 .main-menu-bottom {
@@ -56,7 +73,8 @@
     position: fixed;
     bottom: 0;
     z-index: 1;
-    box-shadow: 0 0 10px 0 rgba(0,0,0,0.4);
+    box-shadow: 0 0 5px 0 rgba(0,0,0,0.4);
+    transition: bottom 0.3s;
 }
 
 .button-actived {
@@ -102,7 +120,7 @@
     margin: 8px;
     border-radius: 8px;
     border: 1px solid #b10b0b !important;
-    padding: 48px 16px !important;
+    padding: 36px 40px !important;
     transition: all 0.25s;
 }
 
@@ -111,9 +129,18 @@
 }
 
 .cogs-button div {
+    width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
+    /* justify-content: center; */
+}
+
+.cogs-button div .divisao {
+    height: 100%;
+    margin-right: 8px;
+    width: 0;
+    border-right: 1px solid #707070;
 }
 
 .cogs-button div img {
@@ -237,6 +264,12 @@ hr.line-color {
     text-align: center;
 }
 
+#progress-value {
+    font-size: 24px;
+    color: #fff;
+    text-shadow: none;
+}
+
 .margin-between {
     padding: 10px;
 }
@@ -278,11 +311,15 @@ hr.line-color {
     padding: 16px;
 }
 
+.main-menu-bars {
+    transition: top 0.3s !important;
+}
+
 #qtd_manut_pendentes {
     float: right;
-    position: relative;
-    bottom: 52px;
-    z-index: 10;
+    position: fixed;
+    top: 16px;
+    z-index: 50;
     font-size: 14.5px;
     right: 20px;
     color: #fff;
@@ -294,6 +331,7 @@ hr.line-color {
     display: none;
     align-items: center;
     justify-content: center;
+    transition: top 0.3s;
 }
 
 #assistir_tutorial:hover {

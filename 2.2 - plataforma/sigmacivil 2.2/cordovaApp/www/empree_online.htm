@@ -8,11 +8,14 @@
     <link rel="stylesheet" href="css/custom.css" />
     <link rel="stylesheet" href="css/custom-mobile.css" />
     <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-tour-standalone.min.css" />
     <title>Empree_onlline</title>
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
     <script type="text/javascript" src="js/mc.js"></script>
     <script src="js/jquery.js"></script>
     <script src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script src="js/scrollPage.js"></script>
+    <script src="js/bootstrap-tour-standalone.min.js"></script>
     <style>
         .menu .ui-mini.ui-btn-icon-left:after,
         .ui-mini .ui-btn-icon-left:after,
@@ -45,30 +48,30 @@
     <div id="qtd_manut_pendentes"></div>
 
     <div class="btn-bars">
-        <div style="top:4; z-index: 50;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
-            data-mini="true">
+        <div style="top:4; z-index: 50; position: fixed;" data-role="collapsible" data-collapsed="true"
+            class="ui-btn-left menu main-menu-bars" data-mini="true">
             <h4 class="btn-bars-bars">
                 <!-- <span class="fas fa-bars"></span> -->
                 <img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
                 <img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
             </h4>
-            <ul class="menu-tablet-responsive" style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
-                <li>
+            <ul class="menu-tablet-responsive" style="border: 1px solid #38c;" data-role="listview" data-mini="true">
+                <li id="step-4">
                     <a class="ui-btn ui-icon-gear ui-btn-icon-right ui-shadow ui-corner-all" href="#"
                         onClick="go_to_page_config()">Configurações</a>
                 </li>
-                <li>
+                <li id="step-5">
                     <a class="ui-btn ui-icon-power ui-btn-icon-right ui-shadow ui-corner-all" href="#"
                         onClick="closeApp()">Fechar app</a>
                 </li>
-                <li>
+                <li id="step-6">
                     <a class="click" href="#" onClick="enviar_sync()">Logout</a>
                 </li>
             </ul>
         </div>
     </div>
 
-    <div class="title" style="padding-top: 0px !important; padding-bottom: 10px;">
+    <div class="title" style="padding-top: 0px !important; padding-bottom: 10px; margin-top: 66px;">
         <h4 id="nome_empree_" style="display: inline;"></h4>
     </div>
     <table>
@@ -79,23 +82,23 @@
 
     <!-- Menu bottom -->
     <nav class="main-menu-bottom">
-        <div>
-            <button class="button-actived" type="button" onclick="enviar()">
+        <div id="step-0">
+            <button id="step-1" class="button-actived" type="button" onclick="enviar()">
                 <img src="images/engenheiro_cogs.png" width="22" alt="Home" />
                 <p>manutenções</p>
             </button>
-            <button class="buttons-navigate" type="button" onclick="scan()">
+            <button id="step-2" class="buttons-navigate" type="button" onclick="scan()">
                 <img src="images/qr_code.png" width="22" alt="Qr_code" />
                 <p>qrcode</p>
             </button>
-            <button class="buttons-navigate" type="button" onclick="go_relat_check2()">
+            <button id="step-3" class="buttons-navigate" type="button" onclick="go_relat_check2()">
                 <img src="images/graph.png" width="22" alt="Relatório" />
                 <p>rel.checkpoint</p>
             </button>
-            <button class="buttons-navigate" type="button" onclick="openBrowser()">
+            <!-- <button class="buttons-navigate" type="button" onclick="openBrowser()">
                 <img src="images/call.png" width="22" alt="Chamado" />
                 <p>abrir chamado</p>
-            </button>
+            </button> -->
         </div>
     </nav>
     <!-- Fim Menu bottom -->
@@ -116,6 +119,10 @@
 
         var filtro_sis = addAcento(getquerystring("fil"));
         var filtro_bool = false;
+
+        var qual_id_cliente = "";
+        var q_e_construtora = "";
+
 
         /////////////////////////
         var q_mes = getquerystring("qm");
@@ -331,6 +338,7 @@
             }
 
             var menu_sup_offline = [
+                '<div class="menu_opc">',
                 '<form name="form_sup" action="" method="get">',
                 '<div data-role="header" data-position="fixed" data-theme="a">',
                 '<div class="ui-corner-all custom-corners">',
@@ -346,10 +354,12 @@
                 '</div>',
                 '</div>',
                 '</div>',
-                '</form>'
+                '</form>',
+                '</div>'
             ].join('');
 
             var menu_sup_online = [
+                '<div class="menu_opc">',
                 '<form name="form_sup" action="" method="get">',
                 '<div data-role="header" data-position="fixed" data-theme="a">',
                 '<div class="ui-corner-all custom-corners">',
@@ -365,7 +375,8 @@
                 '</div>',
                 '</div>',
                 '</div>',
-                '</form>'
+                '</form>',
+                '</div>'
             ].join('');
 
             document.getElementById('menu_opc2').innerHTML = menu_sup_online;
@@ -375,10 +386,16 @@
 
                 if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
                     document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
+
+                    document.querySelector("#qtd_manut_pendentes").style.top = "16px";
+                    document.querySelector(".main-menu-bars").style.top = "4px";
                     return false;
                 }
                 else {
                     document.getElementById('menu_opc2').innerHTML = menu_sup_online;
+
+                    document.querySelector("#qtd_manut_pendentes").style.top = "16px";
+                    document.querySelector(".main-menu-bars").style.top = "4px";
                     return true;
                 }
             }, 5000);
@@ -386,6 +403,84 @@
             var statusRelacionamento;
             var statusDocumentacao;
             var mudaStatus = '<img src="images/danger.svg" width="25" height="25" />'
+
+            // Instance the tour
+            var tour = new Tour({
+                steps: [
+                    {
+                        element: ".box-shadow",
+                        title: "Bem vindo ao SigmaCivil",
+                        content: "Confira as novidades da versão 2.2",
+                        // placement: "auto",
+                        template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
+                        orphan: true
+                    },
+                    {
+                        element: "#step-0",
+                        title: "Novo menu de navegação",
+                        content: "Navegue mais rápido entre as páginas",
+                        placement: "top",
+                        template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
+                    },
+                    {
+                        element: "#step-1",
+                        title: "Veja as manutenções",
+                        content: "Aqui você encontra todas as suas manutenções pendentes e realizadas",
+                        placement: "top",
+                        template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
+                    },
+                    {
+                        element: "#step-2",
+                        title: "Scanear um QRCode",
+                        content: "Aqui você consegue realizar uma manutenção especifica através de um QRCode ou realizar um checkpoint.",
+                        placement: "top",
+                        template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
+                    },
+                    {
+                        element: "#step-3",
+                        title: "Gráfico de checkpoints",
+                        content: "Aqui você consulta todos os checkpoints realizados",
+                        placement: "top",
+                        template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
+                        onHidden: function (tour) {
+                            document.querySelector('.btn-bars-bars').click();
+                        }
+                    },
+                    {
+                        element: "#step-4",
+                        title: "Configurações",
+                        content: "Configure o seu aplicativo da sua melhor forma.",
+                        placement: "bottom",
+                        template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
+                    },
+                    {
+                        element: "#step-5",
+                        title: "Fechar aplicativo",
+                        content: "Aqui você fecha o aplicativo completamente.",
+                        placement: "bottom",
+                        template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
+                    },
+                    {
+                        element: "#step-6",
+                        title: "Fazer logout",
+                        content: "Aqui você faz login com outro usuário e senha",
+                        placement: "bottom",
+                        template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-primary' data-role='end'>Configurações</button></div></div>",
+                        onHidden: function (tour) {
+                            window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + qual_id_cliente + "&econst=" + q_e_construtora);
+                        }
+                    },
+                ],
+                name: "empree_online",
+                backdrop: true,
+                autoscroll: false
+            });
+
+            // Initialize the tour
+            tour.init();
+
+            // Start the tour
+            tour.start();
 
             /////////////////////////////////
             var data1_aux = q_mes + "/01/" + q_ano
@@ -420,10 +515,10 @@
 
                 var getLogin = JSON.parse(jsontext[0]);
                 var logou = getLogin.logou;
-                var qual_id_cliente = getLogin.id_cliente;
+                qual_id_cliente = getLogin.id_cliente;
                 var num_empree = getLogin.id_empree;
                 var nome_empree = getLogin.nome_empree;
-                var q_e_construtora = getLogin.e_construtora;
+                q_e_construtora = getLogin.e_construtora;
                 var data_implantacao_sc = new Date(getLogin.data_implantacao_sc)
 
                 var resultado_consulta = getLogin.status_sync;
@@ -609,10 +704,12 @@
                         vetor_consulta_evento = vetor_consulta_evento.substring(0, vetor_consulta_evento.length - 1);
                         vetor_dados_manutencao = vetor_dados_manutencao.substring(0, vetor_dados_manutencao.length - 1);
 
+                        var data_post = "l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento;
                         var ajax2 = new XMLHttpRequest();
-                        ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento + "&versao=2.2&t=" + Math.random(), false);
+                        ajax2.open("POST", "https://www.sigmacivil.com.br/app_sc/apagar_new_onlineB.asp?versao=2.2&t=" + Math.random(), true);
+                        ajax2.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                         ajax2.addEventListener("loadend", function (evt) {
-                            var resposta_total = this.responseText;
+                            var resposta_total = this.response;
                             var jsontext = resposta_total.split("#")
 
                             var getLogin = JSON.parse(jsontext[0]);
@@ -911,7 +1008,312 @@
                             }
                         });
 
-                        ajax2.send();
+                        ajax2.send(data_post);
+
+                        // var ajax2 = new XMLHttpRequest();
+                        // ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento + "&versao=2.2" + "&t=" + Math.random(), false);
+                        // // ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/apagar_new_onlineB.asp?l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento + "&versao=2.2" + "&t=" + Math.random(), false);
+                        // ajax2.addEventListener("loadend", function (evt) {
+                        //     var resposta_total = this.responseText;
+                        //     var jsontext = resposta_total.split("#")
+
+                        //     var getLogin = JSON.parse(jsontext[0]);
+                        //     logou = getLogin.logou;
+
+                        //     if (logou == "S") {
+
+                        //         var getEvento = jsontext[1];
+                        //         var objEvento = JSON.parse(getEvento);
+
+                        //         var cada_vet_manut = vetor_dados_manutencao.split(";")
+                        //         var cada_vet_evento = vetor_consulta_evento.split(';')
+
+                        //         var qtdEv = 0
+
+                        //         for (i = 0; i < objEvento.dados_emp.length; i++) {
+                        //             string_auxiliar += " <br>-------CADA evento-----%%%%%%%%%%%%%%-------------  ev=" + objEvento.dados_emp[i].ev + "- up=" + objEvento.dados_emp[i].up + "---------FIM evento------------<br>"
+
+                        //             var ev = objEvento.dados_emp[i].ev
+                        //             var up = objEvento.dados_emp[i].up
+
+                        //             string_auxiliar += " <br>-------CADA manut-------%%%%%%%%%%%%%-----------  " + cada_vet_manut[i] + "---------FIM manut------------<br>"
+
+                        //             var cada_parte_vet_manut = cada_vet_manut[i].split("*")
+                        //             var cada_parte_vet_evento = cada_vet_evento[i].split("*")
+
+                        //             string_auxiliar += " <br>-------CADA PARTE -------%%%%%%%%%%%%%-----------  " + cada_parte_vet_manut[0] + "---------FIM manut------------<br>"
+
+                        //             var camera = ""
+                        //             if (up == "S") {
+                        //                 camera = '<img src="images/camera.png" width="25" />'
+                        //             } else {
+                        //                 camera = '<img src="images/camera.png" style="display: none;" width="25" />'
+                        //             }
+
+                        //             /////////////////////////////////////////////////
+                        //             var dias_gap = 0;
+                        //             var fator_freq;
+                        //             var dias_gap_temporario;
+                        //             var aux_dias1;
+                        //             var aux_dias_ev;
+                        //             var aux_dias2;
+                        //             var imagem1 = ""
+                        //             var barra = ""
+                        //             var faixa_dias;
+                        //             var aux_dist;
+                        //             var aux_mes;
+                        //             var aux_ano;
+                        //             var aux_new_event;
+
+                        //             fator_freq = cada_parte_vet_manut[6] * cada_parte_vet_manut[7]
+
+                        //             if (fator_freq < 180) {
+                        //                 dias_gap = 16
+                        //             } else if (fator_freq >= 180) {
+                        //                 dias_gap = 31
+                        //             }
+
+                        //             if (cada_parte_vet_manut[8] != 0) {
+                        //                 dias_gap = cada_parte_vet_manut[8]
+                        //             }
+
+                        //             aux_new_event = new Date(cada_parte_vet_manut[9])
+
+                        //             data_minima_alteracao = new Date(cada_parte_vet_manut[9])
+                        //             data_minima_alteracao.setDate(data_minima_alteracao.getDate() - dias_gap);
+                        //             if (data_minima_alteracao.getMonth() == aux_new_event.getMonth()) {
+                        //                 var mes_auxiliar = data_minima_alteracao.getMonth() + 1
+                        //                 data_minima_alteracao = ('1' + '/' + mes_auxiliar + '/' + data_minima_alteracao.getFullYear());
+                        //             } else {
+                        //                 var mes_auxiliar = data_minima_alteracao.getMonth() + 1
+                        //                 data_minima_alteracao = (data_minima_alteracao.getDate() + '/' + mes_auxiliar + '/' + data_minima_alteracao.getFullYear());
+                        //             }
+                        //             string_auxiliar += " <br><br><br>------- INI data_minima_alteracao------------------ " + fator_freq + "--" + dias_gap + "--" + data_minima_alteracao + "---------FIM data_minima_alteracao------------<br>"
+
+
+                        //             data_maxima_alteracao = new Date(cada_parte_vet_manut[9])
+                        //             data_maxima_alteracao.setDate(data_maxima_alteracao.getDate() + parseInt(dias_gap))
+
+                        //             if (data_maxima_alteracao.getMonth() == aux_new_event.getMonth()) {
+                        //                 if (data_maxima_alteracao.getMonth() <= 10) {
+                        //                     aux_mes = data_maxima_alteracao.getMonth() + 1;
+                        //                     aux_mes = aux_mes + 1;
+                        //                     aux_ano = data_maxima_alteracao.getFullYear();
+                        //                 } else if (data_maxima_alteracao.getMonth() == 11) {
+                        //                     aux_mes = 1;
+                        //                     aux_ano = data_maxima_alteracao.getFullYear() + 1;
+                        //                 }
+
+                        //                 data_maxima_alteracao = (aux_mes + '/' + '1' + '/' + aux_ano);
+                        //                 data_maxima_alteracao = new Date(data_maxima_alteracao)
+                        //                 //alert('data_maxima_alteracao: ' + data_maxima_alteracao)
+
+                        //                 data_maxima_alteracao.setDate(data_maxima_alteracao.getDate() - 1);
+                        //                 var mes_auxiliar = data_maxima_alteracao.getMonth() + 1
+                        //                 data_maxima_alteracao = (data_maxima_alteracao.getDate() + '/' + mes_auxiliar + '/' + data_maxima_alteracao.getFullYear());
+                        //             }
+                        //             else {
+                        //                 var mes_auxiliar = data_maxima_alteracao.getMonth() + 1
+                        //                 data_maxima_alteracao = (data_maxima_alteracao.getDate() + '/' + mes_auxiliar + '/' + data_maxima_alteracao.getFullYear());
+                        //             }
+                        //             string_auxiliar += " <br><br><br>------- INI data_maxima_alteracao------------------ " + fator_freq + "--" + dias_gap + "--" + data_maxima_alteracao + "---------FIM data_maxima_alteracao------------<br>"
+
+                        //             data_minima_alteracao = dateToEN(data_minima_alteracao)
+                        //             aux_dias1 = datadiff2(Date.now(), data_minima_alteracao)
+
+                        //             var data_format_1 = new Date(cada_parte_vet_manut[9]);
+                        //             var mes_format_1 = data_format_1.getMonth() + 1
+                        //             var format_1 = dateToEN(data_format_1.getDate() + '/' + mes_format_1 + '/' + data_format_1.getFullYear())
+                        //             aux_dias_ev = datadiff(Date.now(), format_1)
+
+                        //             data_maxima_alteracao = dateToEN(data_maxima_alteracao)
+                        //             aux_dias2 = datadiff(Date.now(), data_maxima_alteracao)
+
+                        //             if (aux_dias1 > 0) {
+                        //                 imagem1 = '<img src="images/hand-paper.svg" width="24" class="is-opacity">'
+                        //                 color1 = "#cccccc"
+                        //             } else if (aux_dias1 <= 0 && aux_dias_ev > 0) {
+                        //                 imagem1 = '<img src="images/danger.svg" width="25" />'
+                        //                 color1 = "#2974f1"
+                        //             } else if (aux_dias_ev <= 0 && aux_dias2 >= 0) {
+                        //                 imagem1 = '<img src="images/danger.svg" width="25" />'
+                        //                 color1 = "#FF0000"
+                        //             } else if (aux_dias2 < 0) {
+                        //                 imagem1 = '<img src="images/exclamation-triangle.png" width="26">'
+                        //                 color1 = "#FF0000"
+                        //             }
+
+                        //             if (ev == 0 && imagem1 == '<img src="images/danger.svg" width="25" />') {
+                        //                 qtdEv += 1
+                        //             }
+
+                        //             if (qtdEv > 0) {
+                        //                 document.getElementById('qtd_manut_pendentes').style.display = 'flex'
+                        //                 document.getElementById('qtd_manut_pendentes').innerHTML = qtdEv
+                        //             }
+
+                        //             var format_faixa_dias = data_minima_alteracao.replace(/[-]/g, '/') + " 23:59:59"
+                        //             var format_faixa_dias_B = new Date(format_faixa_dias).getTime();
+
+                        //             faixa_dias = datadiff(format_faixa_dias_B, data_maxima_alteracao) + 1
+
+                        //             aux_dist = (-1) * datadiff2(Date.now(), data_minima_alteracao)
+
+                        //             if (aux_dias1 > 0) {
+                        //                 barra = '<img src="images/Barra_1.png" width="120" height="23">'
+                        //             } else if (aux_dist >= 0 && aux_dist < Math.round(1 / 7 * faixa_dias)) {
+                        //                 barra = '<img src="images/Barra_2.png" width="120" height="23">'
+                        //             } else if (aux_dist >= Math.round(1 / 7 * faixa_dias) && aux_dist < Math.round(2 / 7 * faixa_dias)) {
+                        //                 barra = '<img src="images/Barra_3.png" width="120" height="23">'
+                        //             } else if (aux_dist >= Math.round(2 / 7 * faixa_dias) && aux_dist < Math.round(3 / 7 * faixa_dias)) {
+                        //                 barra = '<img src="images/Barra_4.png" width="120" height="23">'
+                        //             } else if (aux_dist >= Math.round(3 / 7 * faixa_dias) && aux_dist < Math.round(4 / 7 * faixa_dias)) {
+                        //                 barra = '<img src="images/Barra_5.png" width="120" height="23">'
+                        //             } else if (aux_dist >= Math.round(4 / 7 * faixa_dias) && aux_dist < Math.round(5 / 7 * faixa_dias)) {
+                        //                 barra = '<img src="images/Barra_6.png" width="120" height="23">'
+                        //             } else if (aux_dist >= Math.round(5 / 7 * faixa_dias) && aux_dist < Math.round(6 / 7 * faixa_dias)) {
+                        //                 barra = '<div class="barra1"><img src="images/Barra_7.png" width="120" height="23"></div>'
+                        //             } else if (aux_dist >= Math.round(6 / 7 * faixa_dias) && aux_dist < Math.round(7 / 7 * faixa_dias)) {
+                        //                 barra = '<div class="barra1"><img src="images/Barra_8.png" width="120" height="23"></div>'
+                        //             } else if (aux_dias2 < 0) {
+                        //                 barra = '<img src="images/Barra_9.png" width="120" height="23">'
+                        //             }
+
+                        //             /////////////////////////////////////////////////
+
+                        //             if (filtro_sis === cada_parte_vet_manut[1]) {
+                        //                 filtro_bool = true;
+                        //                 ini_lista = "<form class='ui-filterable'><div class='ui-input-search ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear'><input data-role='listview' value='" + filtro_sis + "' placeholder='Buscar...' id='filterBasic-input' data-type='search'><a href='#' tabindex='-1' aria-hidden='true' class='ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-input-clear-hidden' title='Clear text'>Clear text</a></div></form><ul data-input='#filterBasic-input' id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
+                        //                 fim_lista = "</ul>"
+                        //             }
+
+                        //             var focus = "";
+                        //             if (ipm == cada_parte_vet_manut[0] && dia_focus == cada_parte_vet_evento[3]) {
+                        //                 focus = "ui-focus";
+                        //             }
+
+                        //             if (ev == "1") {
+
+                        //                 dados_1 += [
+                        //                     '<li class="shadow-box ' + focus + '">',
+                        //                     '<a href="#" onclick="ir_para(' + String.fromCharCode(39) + '?ipm=' + cada_parte_vet_manut[0] + '&dia_ev=' + cada_parte_vet_evento[3] + '&mes_ev=' + cada_parte_vet_evento[2] + '&ano_ev=' + cada_parte_vet_evento[1] + '&d_min=' + data_minima_alteracao + '&d_max=' + data_maxima_alteracao + '&tipo=alt&x=' + Math.random() + String.fromCharCode(39) + ')">',
+                        //                     '<font size="4" face="Arial">' + cada_parte_vet_manut[1] + '</font>',
+                        //                     '<p class="text-size-content" size="2" face="Arial" color="#0000FF">' + cada_parte_vet_manut[2] + '</p>',
+                        //                     '<p class="text-purple" size="2" face="Arial" color="#333"><strong class="text-blue-content" style="color: #cc4200; font-weight: bold;">' + cada_parte_vet_manut[3] + '</strong> - ' + cada_parte_vet_manut[4] + '</p>',
+                        //                     '<table class="date-spacing" border="0" cellpadding="0" cellspacing="0">',
+                        //                     '<tr>',
+                        //                     '<td>',
+                        //                     '<div align="center">',
+                        //                     '<font size="3" face="Arial">' + cada_parte_vet_manut[5] + '</font>',
+                        //                     '</div>',
+                        //                     '</td>',
+                        //                     '<td>',
+                        //                     '<p class="text-green" size="2" face="Arial"></p>',
+                        //                     '</td>',
+                        //                     '</tr>',
+                        //                     '</table>',
+                        //                     '<table border="0" cellspacing="0" cellpadding="0">',
+                        //                     '<hr class="line-color">',
+                        //                     '</table>',
+                        //                     '<table class="images-center" width="50%" border="0" cellpadding="0" cellspacing="0">',
+                        //                     '<tr>',
+                        //                     '<td width="25%">',
+                        //                     '<div class="tickt1"><img src="images/check.png" width="25"></div>',
+                        //                     '</td>',
+                        //                     '<td>',
+                        //                     '<table class="date-center" border="0">',
+                        //                     '</table>',
+                        //                     '</td>',
+                        //                     '<td width="25%">',
+                        //                     '<div class="camera1">' + camera + '</div>',
+                        //                     '</td>',
+                        //                     '</tr>',
+                        //                     '</table>',
+                        //                     '</a>',
+                        //                     '</li>'
+                        //                 ].join('');
+
+                        //             } else if (ev == 0) {
+
+                        //                 dados_0 += [
+                        //                     '<li class="shadow-box ' + focus + '">',
+                        //                     '<a href="#" onclick="ir_para(' + String.fromCharCode(39) + '?ipm=' + cada_parte_vet_manut[0] + '&dia_ev=' + cada_parte_vet_evento[3] + '&mes_ev=' + cada_parte_vet_evento[2] + '&ano_ev=' + cada_parte_vet_evento[1] + '&d_min=' + data_minima_alteracao + '&d_max=' + data_maxima_alteracao + '&tipo=ins&x=' + Math.random() + String.fromCharCode(39) + ')">',
+                        //                     '<font size="4" face="Arial">' + cada_parte_vet_manut[1] + '</font>',
+                        //                     '<p class="text-size-content" size="2" face="Arial" color="#0000FF">' + cada_parte_vet_manut[2] + '</p>',
+                        //                     '<p class="text-purple" size="2" face="Arial" color="#333"><strong class="text-blue-content" style="color: #cc4200; font-weight: bold;">' + cada_parte_vet_manut[3] + '</strong> - ' + cada_parte_vet_manut[4] + '</p>',
+                        //                     '<table class="date-spacing" border="0" cellpadding="0" cellspacing="0">',
+                        //                     '<tr>',
+                        //                     '<td>',
+                        //                     '<div align="center">',
+                        //                     '<font size="3" face="Arial">' + cada_parte_vet_manut[5] + '</font>',
+                        //                     '</div>',
+                        //                     '</td>',
+                        //                     '<td>',
+                        //                     '<p class="text-green" size="2" face="Arial"></p>',
+                        //                     '</td>',
+                        //                     '</tr>',
+                        //                     '</table>',
+                        //                     '<table border="0" cellspacing="0" cellpadding="0">',
+                        //                     '<hr class="line-color">',
+                        //                     '</table>',
+                        //                     '<table class="images-center" width="50%" border="0" cellpadding="0" cellspacing="0">',
+                        //                     '<tr>',
+                        //                     '<td width="25%">',
+                        //                     '<div class="tickt1">' + imagem1 + '</div>',
+                        //                     '</td>',
+                        //                     '<td>',
+                        //                     '<table class="date-center" border="0">',
+                        //                     '<tr><div style="float: right; position: relative; left: 30px">' + barra + '</div></tr>',
+                        //                     '<tr>',
+                        //                     '<td width="60%" style="position: relative; left: 35px;">',
+                        //                     '<font size="2" face="Arial">' + data_minima_alteracao.split('-').reverse().join('/') + '</font>',
+                        //                     '<td width="5%">',
+                        //                     '</td>',
+                        //                     '<td width="60%" style="position: relative; left: 75px;">',
+                        //                     '<font size="2" face="Arial">' + data_maxima_alteracao.split('-').reverse().join('/') + '</font>',
+                        //                     '</td>',
+                        //                     '</tr>',
+                        //                     '</table>',
+                        //                     '</td>',
+                        //                     '<td width="25%">',
+                        //                     '</td>',
+                        //                     '</tr>',
+                        //                     '</table>',
+                        //                     '</a>',
+                        //                     '</li>'
+                        //                 ].join('');
+
+                        //             }
+                        //         }
+
+                        //         if (filtro_sis !== '' && filtro_bool === false) {
+                        //             navigator.notification.alert(
+                        //                 'Não há manutenções deste sistema neste mês!',  // message
+                        //                 function () {
+                        //                     return;
+                        //                 },         // callback
+                        //                 'SigmaCivil',            // title
+                        //                 'OK'                  // buttonName
+                        //             );
+                        //             filtro_sis = '';
+                        //             ini_lista = "<form class='ui-filterable'><div class='ui-input-search ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear'><input data-role='listview' value='" + filtro_sis + "' placeholder='Buscar...' id='filterBasic-input' data-type='search'><a href='#' tabindex='-1' aria-hidden='true' class='ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-input-clear-hidden' title='Clear text'>Clear text</a></div></form><ul data-input='#filterBasic-input' id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
+                        //             fim_lista = "</ul>"
+                        //         }
+
+                        //         // Define a ordem que irá aparecer cada manutenção
+                        //         if (datadiff(Date.now(), data_maxima_alteracao) < 0 || datadiff2(Date.now(), data_minima_alteracao) > 0) {
+                        //             document.getElementById('box-content').innerHTML = ini_lista + dados_1 + dados_0 + fim_lista
+                        //         } else {
+                        //             document.getElementById('box-content').innerHTML = ini_lista + dados_0 + dados_1 + fim_lista
+                        //         }
+                        //         $(".loading_page").hide();
+                        //         $('#q_empree').listview();
+                        //         document.getElementById('nome_empree_').innerHTML = nome_empree
+
+                        //     }
+                        // });
+
+                        // ajax2.send();
 
                     } else { //nao logou
                         window.location.assign("login.htm");
@@ -1230,7 +1632,6 @@
                                         }
                                     }
                                 );
-
                             } else {
                                 alert("Esse QRCode não é válido");
                             }
@@ -1249,11 +1650,11 @@
         }
 
         function go_to_page(q_id_sistema, q_num_empree) {
-            window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+            window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + qual_id_cliente + "&econst=" + q_e_construtora);
         }
 
         function go_to_page_config() {
-            window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+            window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + qual_id_cliente + "&econst=" + q_e_construtora);
         }
 
         function removeAcento(text) {
@@ -1318,7 +1719,7 @@
 
         function go_relat_check2() {
             if (tem_conexao()) {
-                window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + /*"&id_sist=" + id_sis +*/ "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano))
+                window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + /*"&id_sist=" + id_sis +*/ "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + qual_id_cliente + "&econst=" + q_e_construtora);
             } else {
                 alert('Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.');
             }
