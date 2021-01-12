@@ -4,16 +4,18 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Configurações</title>
-	<meta name="viewport"
-		content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no">
+	<!-- <meta name="viewport"
+		content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no"> -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 	<link rel="stylesheet" href="css/custom.css" />
 	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
-	<link rel="stylesheet" href="css/bootstrap-tour-standalone.min.css" />
+	<!-- <link rel="stylesheet" href="css/bootstrap-tour-standalone.min.css" /> -->
 	<script type="text/javascript" src="js/mc.js"></script>
 	<script type="text/javascript" src="cordova.js"></script>
 	<script src="js/jquery.js"></script>
 	<script src="js/jquery.mobile-1.4.5.min.js"></script>
-	<script src="js/bootstrap-tour-standalone.min.js"></script>
+	<script src="js/shepherd.js"></script>
+	<!-- <script src="js/bootstrap-tour-standalone.min.js"></script> -->
 	<style>
 		.menu .ui-mini.ui-btn-icon-left:after,
 		.ui-mini .ui-btn-icon-left:after,
@@ -134,41 +136,130 @@
 				}
 			}, 5000);
 
-			// Instance the tour
-			var tour = new Tour({
-				steps: [
-					{
-						element: "#step-1",
-						title: "Novo menu de navegação",
-						content: "Navegue mais rápido entre as páginas",
-						placement: "bottom",
-						template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
-					},
-					{
-						element: "#step-2",
-						title: "Veja as manutenções",
-						content: "Aqui você encontra todas as suas manutenções pendentes e realizadas",
-						placement: "bottom",
-						template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
-					},
-					{
-						element: "#step-3",
-						title: "Upload de arquivos",
-						content: "Aqui você faz o upload de todos os arquivos que ainda não estão no servidor",
-						placement: "bottom",
-						template: "<div class='popover tour'><div class='arrow'></div><h3 class='popover-title'></h3><div class='popover-content'></div><div class='popover-navigation'><button class='btn btn-default' data-role='prev'>« Anterior</button><span data-role='separator'></span><button class='btn btn-default' data-role='next'>Próximo »</button><button class='btn btn-danger' data-role='end'>Fechar</button></div></div>",
-					},
-				],
-				name: "config",
-				backdrop: true,
-				autoscroll: false
-			});
+			var db;
+			var request = window.indexedDB.open("db_sigmacivil", "1");
 
-			// Initialize the tour
-			tour.init();
+			request.onerror = function (event) {
+				alert("Erro ao criar o banco (cod 03)");
+			};
 
-			// Start the tour
-			tour.start();
+			request.onsuccess = function (event) {
+				db = request.result;
+
+				updateMtabConfigTutorial(db);
+
+				db.onerror = function (event) {
+					alert("Database error: " + event.target.errorCode);
+				}
+			}
+
+			function updateMtabConfigTutorial(db) {
+				var tx = db.transaction(['mtab_config'], 'readwrite');
+				var store = tx.objectStore('mtab_config');
+				var objectStoreRequest = store.openCursor();
+				objectStoreRequest.onsuccess = function (event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						var data = cursor.value;
+
+						if (!data.tutorial) {
+							var tour = new Shepherd.Tour({
+								useModalOverlay: true,
+								defaultStepOptions: {
+									cancelIcon: {
+										enabled: true,
+									},
+									classes: "shadow-md bg-purple-dark",
+									scrollTo: false,
+								},
+							});
+
+							tour.addSteps([
+								{
+									title: "Creating a Shepherd Tour",
+									text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+									attachTo: {
+										element: "#step-1",
+										on: "bottom",
+									},
+									buttons: [
+										{
+											action() {
+												return this.back();
+											},
+											classes: "shepherd-button-secondary",
+											text: "Back",
+										},
+										{
+											action() {
+												return this.next();
+											},
+											text: "Next",
+										},
+									],
+									id: "creating",
+								},
+								{
+									title: "Creating a Shepherd Tour",
+									text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+									attachTo: {
+										element: "#step-2",
+										on: "bottom",
+									},
+									buttons: [
+										{
+											action() {
+												return this.back();
+											},
+											classes: "shepherd-button-secondary",
+											text: "Back",
+										},
+										{
+											action() {
+												return this.next();
+											},
+											text: "Next",
+										},
+									],
+									id: "creating",
+								},
+								{
+									title: "Creating a Shepherd Tour",
+									text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+									attachTo: {
+										element: "#step-3",
+										on: "bottom",
+									},
+									buttons: [
+										{
+											action() {
+												return this.back();
+											},
+											classes: "shepherd-button-secondary",
+											text: "Back",
+										},
+										{
+											action() {
+												return this.next();
+											},
+											text: "Next",
+										},
+									],
+									id: "creating",
+								},
+							]);
+
+							tour.start();
+						}
+
+						data.tutorial = true;
+						var request = cursor.update(data);
+					}
+				}
+			}
 
 			/////////////////////////////////
 			var data1_aux = q_mes + "/01/" + q_ano
@@ -411,7 +502,8 @@
 		<img src="images/tail-spin.svg" width="35" height="35">
 		<p id="progress-value"></p>
 		<div style="display: flex; margin-top: 50px;">
-			<button class="ui-btn ui-mini" style="margin-right: 10px; background: #b10b0b; border-color: #b10b0b;" type="button">
+			<button class="ui-btn ui-mini" style="margin-right: 10px; background: #b10b0b; border-color: #b10b0b;"
+				type="button">
 				<a href="#" onclick="cancelarUpload()"
 					style="color: #fff; text-shadow: none; text-decoration: none;">Cancelar</a>
 			</button>
@@ -498,6 +590,17 @@
 			<button class="ui-btn ui-icon-cloud ui-btn-icon-left ui-shadow ui-corner-all btn-success" type="button"
 				onclick="uploadArquivos()">Upload de arquivos</button>
 		</div>
+	</div>
+
+	<div class="btns_opcionais">
+		<button type="button" onclick="showTour()">
+			<img src="images/chalkboard-teacher.svg" width="25" alt="Tour" />
+			Tour
+		</button>
+		<button type="button">
+			<img src="images/chalkboard-teacher.svg" width="25" alt="Tour" />
+			Tutorial em vídeo
+		</button>
 	</div>
 
 	<!-- <div id="progress-value"></div> -->
@@ -791,7 +894,7 @@
 			document.getElementById("progress-value").innerHTML = `${progressValue.toFixed()}%`;
 		};
 
-		ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up(id_prog_manut, dia_ev, mes_ev, ano_ev, aux_1_status), fail_up, options);
+		ft.upload(imageURI, "http://www.sigmacivil.com.br/app_sc/rec_foto_uploaded.php?idpm=" + id_prog_manut + "&dia=" + dia_ev + "&mes=" + mes_ev + "&ano=" + ano_ev + "&versao=2.2&econst=" + e_construtora + "&idc=" + id_cliente + "&q_k=" + q_k, win_up(id_prog_manut, dia_ev, mes_ev, ano_ev, aux_1_status), fail_up, options);
 	}
 
 	var win_up = function (id_prog_manut, dia_ev, mes_ev, ano_ev, aux_1_status, r) {
@@ -1401,88 +1504,6 @@
 
 	document.getElementById('forms-configs').innerHTML = formConfig;
 
-	var registrar_manut = document.querySelector('.register');
-	registrar_manut.addEventListener('click', function () {
-		go_to_page(id_sis, num_empree);
-	});
-
-	function go_to_page(q_id_sistema, q_num_empree) {
-		var nome_sistema = ""
-		var tem_alguma_manut = "";
-		var qual_id_sistema = q_id_sistema
-		var qual_num_empree = q_num_empree
-
-		var xhr = new XMLHttpRequest();
-		xhr.open("GET", "http://www.sigmacivil.com.br/app_sc/consult_sist_checkpoint.asp?id_sis=" + qual_id_sistema + "&l=" + login + "&s=" + senha, true)
-		xhr.addEventListener("loadend", function (evt) {
-			var response = this.responseText;
-			var pedaco = response.split('*//*');
-			tem_alguma_manut = pedaco[0];
-
-			nome_sistema = pedaco[1];
-
-			if (tem_alguma_manut == "0") {
-				alert('Não há manutenções para serem registradas!');
-			} else if (tem_alguma_manut == "1") {
-				if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
-					window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
-				} else {
-					window.location.assign("empree_online.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
-				}
-			} else {
-				navigator.notification.alert(
-					'Problemas com sua conexão. Conecte seu celular com a internet e tente novamente!',  // message
-					function () {
-						go_page_qrcode(qual_id_sistema, qual_num_empree);
-					},         // callback
-					'SigmaCivil',            // title
-					'OK'                  // buttonName
-				);
-			}
-		});
-
-		xhr.send();
-
-
-
-		/*var xhr = new XMLHttpRequest();
-		xhr.open("GET", "http://www.sigmacivil.com.br/app_sc/consult_sist_checkpoint.asp?id_sis=" + qual_id_sistema + "&l=" + login + "&s=" + senha, true)
-		xhr.onreadystatechange = function () {
-			if (xhr.readyState == 4) {
-				if (xhr.status == 200 || xhr.status == 0) {
-					var response = xhr.responseText;
-					var pedaco = response.split('*//*');
-tem_alguma_manut = pedaco[0];
-
-nome_sistema = pedaco[1];
-
-if (tem_alguma_manut == "0") {
-alert('Não há manutenções para serem registradas!');
-} else if (tem_alguma_manut == "1") {
-if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
-window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
-} else {
-window.location.assign("empree_online.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
-}
-} else {
-navigator.notification.alert(
-'Problemas com sua conexão. Conecte seu celular com a internet e tente novamente!',  // message
-function () {
-go_page_qrcode(qual_id_sistema, qual_num_empree);
-},         // callback
-'SigmaCivil',            // title
-'OK'                  // buttonName
-);
-}
-} else {
-alert("Problemas com sua conexao internet. Erro: 0146");
-}
-}
-}
-
-xhr.send()*/
-	}
-
 	function scan() {
 		cordova.plugins.barcodeScanner.scan(
 			function (result) {
@@ -1784,6 +1805,39 @@ xhr.send()*/
 			'SigmaCivil',
 			['OK', 'Cancelar']
 		);
+	}
+
+	function showTour() {
+		var db;
+        var request = window.indexedDB.open("db_sigmacivil", "1");
+
+        request.onerror = function (event) {
+            alert("Erro ao criar o banco (cod 03)");
+        };
+
+        request.onsuccess = function (event) {
+            db = request.result;
+
+			var tx = db.transaction(['mtab_config'], 'readwrite');
+            var store = tx.objectStore('mtab_config');
+            var objectStoreRequest = store.openCursor();
+            objectStoreRequest.onsuccess = function (event) {
+                var cursor = event.target.result;
+                if (cursor) {
+					var data = cursor.value;
+
+					data.tutorial = false;
+					var request = cursor.update(data);
+					request.onsuccess = function (event) {
+						volta_uni();
+					}
+				}
+			}
+
+            db.onerror = function (event) {
+                alert("Database error: " + event.target.errorCode);
+            }
+        }
 	}
 
 	function sleep(milliseconds) {
