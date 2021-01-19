@@ -3,8 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no">
+    <!-- <meta name="viewport"
+        content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <link rel="stylesheet" href="css/custom.css" />
     <link rel="stylesheet" href="css/custom-mobile.css" />
     <link rel="stylesheet" href="css/custom_new_checkpoint.css" />
@@ -62,21 +63,13 @@
     <span id="menu_opc2"></span>
 
     <div class="btn-bars">
-        <div style="top:4; z-index: 50" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
-            data-mini="true">
+        <div style="top:4; z-index: 50; position: fixed;" data-role="collapsible" data-collapsed="true"
+            class="ui-btn-left menu main-menu-bars" data-mini="true">
             <h4 class="btn-bars-bars">
                 <img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
                 <img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
             </h4>
-            <ul class="menu-tablet-responsive" style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
-                <li>
-                    <a class="ui-btn ui-icon-back ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-                        onClick="volta_uni()">Manutenções</a>
-                </li>
-                <li>
-                    <a class="ui-btn ui-icon-carat-r ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-                        onClick="scan()">Ler QRcode</a>
-                </li>
+            <ul class="menu-tablet-responsive" style="border: 1px solid #38c;" data-role="listview" data-mini="true">
                 <li>
                     <a class="ui-btn ui-icon-gear ui-btn-icon-right ui-shadow ui-corner-all" href="#"
                         onClick="go_to_page_config()">Configurações</a>
@@ -90,9 +83,13 @@
         </div>
     </div>
 
+    <div class="title" style="padding-top: 0px !important; padding-bottom: 10px; margin-top: 66px;">
+        <h4 id="nome_empree_" style="display: inline;"></h4>
+    </div>
+
     <td width="20" class="menu_2">
         <div align="right">
-            <a style="position: absolute; top: 80px; right: 20px;" href="#transitionExample" data-transition="pop"
+            <a style="position: absolute; top: 105px; right: 20px;" href="#transitionExample" data-transition="pop"
                 data-rel="popup">
                 <img src="images/question-circle.png" width="15" alt="">
             </a>
@@ -148,19 +145,36 @@
 
     <div id="map"></div>
 
+    <!-- Menu bottom -->
+    <nav class="main-menu-bottom">
+        <div>
+            <button class="buttons-navigate" type="button" onclick="volta_uni()">
+                <img src="images/engenheiro_cogs.png" width="22" alt="Home" />
+                <p>manutenções</p>
+            </button>
+            <button class="buttons-navigate" type="button" onclick="scan()">
+                <img src="images/qr_code.png" width="22" alt="Qr_code" />
+                <p>qrcode</p>
+            </button>
+            <button class="button-actived" type="button" onclick="enviar()">
+                <img src="images/graph.png" width="22" alt="Relatório" />
+                <p>rel.checkpoint</p>
+            </button>
+            <!--button class="buttons-navigate" type="button" onclick="openBrowser()">
+                <img src="images/call.png" width="22" alt="Chamado" />
+                <p>abrir chamado</p>
+            </!--button-->
+        </div>
+    </nav>
+    <!-- Fim Menu bottom -->
+
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <script type="text/javascript">
 
         window.onerror = function (message, url, lineNumber) {
-            navigator.notification.alert(
-                `Error: ${message} in ${url} at line ${lineNumber}`,  // message
-                function () {
-                    return;
-                },         // callback
-                'SigmaCivil',            // title
-                'OK'                  // buttonName
-            );
+            alert(`Erro: ${message} em ${url} na linha ${lineNumber}. Por favor, tente novamente.`);
+            enviar();
         }
 
         var num_empree = getquerystring("e");
@@ -170,6 +184,9 @@
 
         var q_mes = getquerystring("qm");
         var q_ano = getquerystring("qa");
+
+        var id_cliente = getquerystring("idc");
+	    var e_construtora = getquerystring("econst");
 
         var q_sist = getquerystring("id_sist");
 
@@ -362,6 +379,7 @@
         function iniciar() {
 
             var menu_sup_offline = [
+                '<div class="menu_opc">',
                 '<form name="form_sup" action="" method="get">',
                 '<div data-role="header" data-position="fixed" data-theme="a">',
                 '<div class="ui-corner-all custom-corners">',
@@ -378,10 +396,12 @@
                 '</div>',
                 '</div>',
                 '</div>',
-                '</form>'
+                '</form>',
+                '</div>'
             ].join('');
 
             var menu_sup_online = [
+                '<div class="menu_opc">',
                 '<form name="form_sup" action="" method="get">',
                 '<div data-role="header" data-position="fixed" data-theme="a">',
                 '<div class="ui-corner-all custom-corners">',
@@ -398,20 +418,43 @@
                 '</div>',
                 '</div>',
                 '</div>',
-                '</form>'
+                '</form>',
+                '</div>'
             ].join('');
 
             document.getElementById('menu_opc2').innerHTML = menu_sup_online;
+
+            var prevScrollpos = window.pageYOffset;
+            window.onscroll = function () {
+                var currentScrollPos = window.pageYOffset;
+                if (prevScrollpos > currentScrollPos) {
+                    document.querySelector(".menu_opc").style.top = "0";
+                    // document.querySelector("#qtd_manut_pendentes").style.top = "16px";
+                    document.querySelector(".main-menu-bars").style.top = "4px";
+                } else if (prevScrollpos < currentScrollPos) {
+                    document.querySelector(".menu_opc").style.top = "-80px";
+                    // document.querySelector("#qtd_manut_pendentes").style.top = "-80px";
+                    document.querySelector(".main-menu-bars").style.top = "-80px";
+                } else {
+                    null;
+                }
+
+                prevScrollpos = currentScrollPos;
+            }
 
             setInterval(function () {
                 // window.StatusBar.hide();
 
                 if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
                     document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
+                    document.querySelector(".main-menu-bars").style.top = "4px";
+
                     return false;
                 }
                 else {
                     document.getElementById('menu_opc2').innerHTML = menu_sup_online;
+                    document.querySelector(".main-menu-bars").style.top = "4px";
+
                     return true;
                 }
             }, 5000);
@@ -437,18 +480,136 @@
             var data_final_p_busca = new Date(data2_aux)
             /////////////////////////////////////////////
 
-            var response;
-
             document.getElementById('opc_periodo').innerHTML = op_periodo
+
+            // carregar dados das manutenções do servidor 
+            var ajax = new XMLHttpRequest();
+            ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp_online.asp?l=" + login + "&s=" + senha + "&versao=2.2&t=" + Math.random(), true);
+            ajax.addEventListener("loadend", function (evt) {
+                var resposta_total = this.responseText;
+                var jsontext = resposta_total.split("*")
+
+                var getLogin = JSON.parse(jsontext[0]);
+                var nome_empree = getLogin.nome_empree;
+
+                document.getElementById('nome_empree_').innerHTML = nome_empree;
+            });
+
+            ajax.send();
+            // fim carregar dados manutenção
 
             google.charts.load('current', { 'packages': ['corechart'] });
             google.charts.setOnLoadCallback(drawChart);
 
             function drawChart() {
                 var xhr = new XMLHttpRequest()
-                xhr.open("GET", "http://www.sigmacivil.com.br/app_sc/consult_checkpoint.asp?l=" + login + "&s=" + senha + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&id_sist=" + q_sist + "&t=" + Math.random(), false);
+                xhr.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_checkpoint.asp?l=" + login + "&s=" + senha + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&id_sist=" + q_sist + "&t=" + Math.random(), false);
                 xhr.addEventListener("loadend", function (evt) {
-                    response = this.responseText;
+                    var response = this.responseText;
+
+                    if (response == "nok") {
+                        document.getElementById('barchart').innerHTML = '<p class="nok_text" style="position: relative; bottom: 50px;">Não há ocorrência de check points neste mês!</p>';
+                        return $('#load-sigma').hide();
+                    } else {
+
+                        var reqDados = response.split('//*//');
+                        var dadosGrafico = reqDados[0];
+                        var dadosUsuario = reqDados[1];
+                        var dadosBusca = reqDados[2];
+
+                        var blocoUsuario = dadosUsuario.split('/,/');
+                        var blocoBusca = dadosBusca.split('/,/');
+
+                        var ini_ = [
+                            '<table style="width: 100%;" data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke">',
+                            '<thead class="table_titles_blue">',
+                            '<tr>',
+                            '<th>Data check point</th>',
+                            '<th data-priority="1">Sistema e login</th>',
+                            '<th style="padding: 10px;">Local check</th>',
+                            '</tr>',
+                            '</thead>'
+                        ].join('');
+
+                        var fim_ = '</table>';
+
+                        var ini_select = [
+                            '<form style="margin: 0; padding: 0; font-weight: normal;">',
+                            '<div style="margin: 0 0.5rem; padding: 0; font-weight: normal;" class="ui-field-contain">',
+                            '<select style="width: 100%; padding: 6px; padding-left: 25px; box-shadow: none; position: relative; bottom: 8px;" class="ui-btn ui-icon-carat-d ui-btn-icon-right ui-corner-all ui-shadow select_manut" onchange="enviar_select()" name="select-native-2" id="q_manut" data-mini="true">',
+                            '<option value="">Buscar...</option>',
+                        ].join('');
+
+                        var fim_select = [
+                            '</select>',
+                            '</div>',
+                            '</form>'
+                        ].join('');
+
+                        var dados = "";
+                        var dados_select = "";
+                        var arr = [];
+
+                        for (var i = 0; i < blocoUsuario.length; i++) {
+                            var partUser = blocoUsuario[i].split('/_/');
+                            var q_lat = partUser[3];
+                            var q_lon = partUser[4];
+
+                            dados += [
+                                '<tbody>',
+                                '<tr class="table-check">',
+                                '<td style="text-align: center; font-size: 14px; border-bottom: 1px solid #cccccc; padding: 10px;">' + partUser[2] + '</td>',
+                                '<td style="border-bottom: 1px solid #cccccc; padding: 10px;"><span style="color: #038ad0;">' + partUser[0] + '</span><div style="font-size: 14px;">' + partUser[1] + '</div></td>',
+                                '<td style="text-align: center; border-bottom: 1px solid #cccccc; padding: 10px;"><img src="images/map-marked-alt.png" width="20" onclick="loadMap(' + "'" + q_lat + "'" + "," + "'" + q_lon + "'" + ')"></td>',
+                                '</tr>',
+                                '</tbody>'
+                            ].join('');
+                        }
+
+                        for (var i = 0; i < blocoBusca.length; i++) {
+                            var partBusca = blocoBusca[i].split('/_/');
+
+                            var encontrou = arr.indexOf(partBusca[0]);
+
+                            arr.push(partBusca[0]);
+
+                            partBusca[0] == q_sist ? sl = "selected" : sl = "";
+
+                            if (encontrou == -1) {
+                                dados_select += [
+                                    `<option style="color: #fff;" value="${partBusca[0]}" ${sl}>${partBusca[1]}</option>`,
+                                    // `<option style="color: #fff;" value="${partBusca[0]}">${partBusca[1]}</option>`,
+                                ].join('');
+                            }
+                        }
+
+                        document.getElementById('dados_usuario').innerHTML = ini_ + dados + fim_;
+                        document.getElementById('dados_select').innerHTML = ini_select + dados_select + fim_select;
+
+                        var search = '<img style="position: relative; z-index: 1; top: 25px; left: 15px;" src="images/search.png" width="15" />';
+                        document.getElementById('search').innerHTML = search;
+
+                        var result = "var data = google.visualization.arrayToDataTable([" + dadosGrafico + "]);"
+                        var sequencia_dados = eval(result);
+
+                        var options = {
+                            title: 'Quantidade de check points x Dia do mês',
+                            titleTextStyle: { width: '100%' },
+                            width: '100%',
+                            height: '650',
+                            hAxis: { textStyle: { color: '#333333', fontSize: 10.5 }, slantedTextAngle: 90 },
+                            fontSize: 11,
+                            isStacked: true,
+                            bar: { groupWidth: '60%' },
+                            legend: { textStyle: { fontSize: 11 } },
+                            chartArea: { width: '55%', height: '90%', left: '10%' },
+                        };
+
+                        var chart = new google.visualization.BarChart(document.getElementById('barchart'));
+
+                        chart.draw(data, options);
+                        $('#load-sigma').hide();
+                    }
                 });
 
                 xhr.send();
@@ -456,7 +617,7 @@
 
 
                 /*var xhr = new XMLHttpRequest()
-                xhr.open("GET", "http://www.sigmacivil.com.br/app_sc/consult_checkpoint.asp?l=" + login + "&s=" + senha + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&id_sist=" + q_sist + "&t=" + Math.random(), false);
+                xhr.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_checkpoint.asp?l=" + login + "&s=" + senha + "&mes=" + q_mes + "&ano=" + q_ano + "&versao=2.2&id_sist=" + q_sist + "&t=" + Math.random(), false);
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4) {
                         if (xhr.status == 200 || xhr.status == 0) {
@@ -466,109 +627,6 @@
                 }
                 xhr.send();*/
 
-                if (response == "nok") {
-                    document.getElementById('barchart').innerHTML = '<p class="nok_text" style="position: relative; bottom: 50px;">Não há ocorrência de check points neste mês!</p>';
-                    return $('#load-sigma').hide();
-                } else {
-
-                    var reqDados = response.split('//*//');
-                    var dadosGrafico = reqDados[0];
-                    var dadosUsuario = reqDados[1];
-                    var dadosBusca = reqDados[2];
-
-                    var blocoUsuario = dadosUsuario.split('/,/');
-                    var blocoBusca = dadosBusca.split('/,/');
-
-                    var ini_ = [
-                        '<table style="width: 100%;" data-role="table" id="table-column-toggle" data-mode="columntoggle" class="ui-responsive table-stroke">',
-                        '<thead class="table_titles_blue">',
-                        '<tr>',
-                        '<th>Data check point</th>',
-                        '<th data-priority="1">Sistema e login</th>',
-                        '<th style="padding: 10px;">Local check</th>',
-                        '</tr>',
-                        '</thead>'
-                    ].join('');
-
-                    var fim_ = '</table>';
-
-                    var ini_select = [
-                        '<form style="margin: 0; padding: 0; font-weight: normal;">',
-                        '<div style="margin: 0 0.5rem; padding: 0; font-weight: normal;" class="ui-field-contain">',
-                        '<select style="width: 100%; padding: 6px; padding-left: 25px; box-shadow: none; position: relative; bottom: 8px;" class="ui-btn ui-icon-carat-d ui-btn-icon-right ui-corner-all ui-shadow select_manut" onchange="enviar_select()" name="select-native-2" id="q_manut" data-mini="true">',
-                        '<option value="">Buscar...</option>',
-                    ].join('');
-
-                    var fim_select = [
-                        '</select>',
-                        '</div>',
-                        '</form>'
-                    ].join('');
-
-                    var dados = "";
-                    var dados_select = "";
-                    var arr = [];
-
-                    for (var i = 0; i < blocoUsuario.length; i++) {
-                        var partUser = blocoUsuario[i].split('/_/');
-                        var q_lat = partUser[3];
-                        var q_lon = partUser[4];
-
-                        dados += [
-                            '<tbody>',
-                            '<tr>',
-                            '<td style="text-align: center; font-size: 14px; border-bottom: 1px solid #cccccc; padding: 10px;">' + partUser[2] + '</td>',
-                            '<td style="border-bottom: 1px solid #cccccc; padding: 10px;"><span style="color: #038ad0;">' + partUser[0] + '</span><div style="font-size: 14px;">' + partUser[1] + '</div></td>',
-                            '<td style="text-align: center; border-bottom: 1px solid #cccccc; padding: 10px;"><img src="images/map-marked-alt.png" width="20" onclick="loadMap(' + "'" + q_lat + "'" + "," + "'" + q_lon + "'" + ')"></td>',
-                            '</tr>',
-                            '</tbody>'
-                        ].join('');
-                    }
-
-                    for (var i = 0; i < blocoBusca.length; i++) {
-                        var partBusca = blocoBusca[i].split('/_/');
-
-                        var encontrou = arr.indexOf(partBusca[0]);
-
-                        arr.push(partBusca[0]);
-
-                        partBusca[0] == q_sist ? sl = "selected" : sl = "";
-
-                        if (encontrou == -1) {
-                            dados_select += [
-                                `<option style="color: #fff;" value="${partBusca[0]}" ${sl}>${partBusca[1]}</option>`,
-                                // `<option style="color: #fff;" value="${partBusca[0]}">${partBusca[1]}</option>`,
-                            ].join('');
-                        }
-                    }
-
-                    document.getElementById('dados_usuario').innerHTML = ini_ + dados + fim_;
-                    document.getElementById('dados_select').innerHTML = ini_select + dados_select + fim_select;
-
-                    var search = '<img style="position: relative; z-index: 1; top: 25px; left: 15px;" src="images/search.png" width="15" />';
-                    document.getElementById('search').innerHTML = search;
-
-                    var result = "var data = google.visualization.arrayToDataTable([" + dadosGrafico + "]);"
-                    var sequencia_dados = eval(result);
-
-                    var options = {
-                        title: 'Quantidade de check points x Dia do mês',
-                        titleTextStyle: { width: '100%' },
-                        width: '100%',
-                        height: '650',
-                        hAxis: { textStyle: { color: '#333333', fontSize: 10.5 }, slantedTextAngle: 90 },
-                        fontSize: 11,
-                        isStacked: true,
-                        bar: { groupWidth: '60%' },
-                        legend: { textStyle: { fontSize: 11 } },
-                        chartArea: { width: '55%', height: '90%', left: '10%' },
-                    };
-
-                    var chart = new google.visualization.BarChart(document.getElementById('barchart'));
-
-                    chart.draw(data, options);
-                    $('#load-sigma').hide();
-                }
             }
         }
 
@@ -728,11 +786,11 @@
         }
 
         function go_to_page(q_id_sistema, q_num_empree) {
-            window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+            window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + id_cliente + "&econst=" + e_construtora);
         }
 
         function go_to_page_config() {
-            window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+            window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + id_cliente + "&econst=" + e_construtora);
         }
 
         function enviar() {
@@ -793,7 +851,7 @@
         }
 
         function go_page_qrcode(q_id_sistema, q_num_empree) {
-            window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+            window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + id_cliente + "&econst=" + e_construtora);
         }
 
         function closeApp() {
@@ -809,6 +867,13 @@
                 'SigmaCivil',
                 ['OK', 'Cancelar']
             );
+        }
+
+
+        function openBrowser() {
+            var options = "location=yes,lefttoright=yes,toolbarcolor=#b10b0b,hideurlbar=yes,closebuttoncaption=<  SigmaCivil,closebuttoncolor=#ffffff";
+
+            cordova.InAppBrowser.open('https://www.google.com.br', '_blank', options);
         }
 
         function goBack() {

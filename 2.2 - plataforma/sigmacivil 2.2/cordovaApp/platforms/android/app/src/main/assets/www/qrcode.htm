@@ -4,8 +4,9 @@
 <head>
 	<meta charset="UTF-8">
 	<title>QRcode</title>
-	<meta name="viewport"
-		content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no">
+	<!-- <meta name="viewport"
+		content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no"> -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 	<link rel="stylesheet" href="css/custom.css" />
 	<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
 	<script type="text/javascript" src="js/mc.js"></script>
@@ -176,14 +177,14 @@
 								var botao_sincro = [
 									'<div style="margin-top: 16px;">',
 									'<img src="images/check-circle.png" width="25" />',
-									'<div style="margin-top: 8px;" align="center"><span style="text-decoration: none;">CheckPoints Sincronizados</span></div>',
+									'<div align="center"><span style="text-decoration: none;">Sincronizado</span></div>',
 									'</div>'
 								].join('');
 							} else {
 								var botao_sincro = [
-									'<div style="margin-top: 16px;>',
-									'<img src="images/exclamation-circle.png" width="25" />',
-									'<div style="margin-top: 8px;" align="center"><span style="text-decoration: none;">Sincronizar CheckPoints</span></div>',
+									'<div style="margin-top: 16px;">',
+									'<img src="images/exclamation-circ.png" width="25" />',
+									'<div align="center"><span style="text-decoration: none;">Não sincronizado</span></div>',
 									'</div>'
 								].join('');
 							}
@@ -219,16 +220,8 @@
 					<img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
 					<img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
 				</h4>
-				<ul class="menu-tablet-responsive" style="border: 1px solid #e0e0e0;" data-role="listview"
+				<ul class="menu-tablet-responsive" style="border: 1px solid #38c;" data-role="listview"
 					data-mini="true">
-					<li>
-						<a class="ui-btn ui-icon-back ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-							onClick="volta_uni()">Manutenções</a>
-					</li>
-					<li>
-						<a class="ui-btn ui-icon-carat-r ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-							onClick="scan()">Ler QRcode</a>
-					</li>
 					<li>
 						<a class="ui-btn ui-icon-gear ui-btn-icon-right ui-shadow ui-corner-all" href="#"
 							onClick="go_to_page_config()">Configurações</a>
@@ -281,36 +274,67 @@
 			</ol>
 		</div>
 
+		<p style="font-weight: bold;" id="nome-sistema"></p>
+
 		<div class="ui-grid-a">
-			<div class="ui-block-a">
+			<div class="ui-block">
 				<a href="#" class="is-not-decoration register">
-					<div class="ui-bar ui-bar-a cogs-button" style="height:60px;">
-						<img src="images/cogs.png" width="50" alt="cogs">
-						<span>Registrar manutenção</span>
+					<div class="ui-bar ui-bar-a cogs-button" style="height:24px;">
+						<div>
+							<img src="images/cogs.png" width="35" alt="cogs">
+							<span>Registrar manutenção</span>
+						</div>
 					</div>
 				</a>
 			</div>
-			<div class="ui-block-b">
-				<a href="#" class="is-not-decoration" onClick="go_relat_check2()">
-					<div class="ui-bar ui-bar-a cogs-button" style="height:60px">
-						<img src="images/check-square.png" width="50" alt="cogs">
-						<span>Relatório de checkpoints</span>
-					</div>
-				</a>
-			</div>
-			<div class="ui-block-a">
+			<!-- <div class="ui-block">
 				<a href="#" class="is-not-decoration" onclick="openBrowser()">
-					<div class="ui-bar ui-bar-a cogs-button" style="height:60px;">
-						<img src="images/phone.png" width="50" alt="cogs">
-						<span>Abrir chamado</span>
+					<div class="ui-bar ui-bar-a cogs-button" style="height:24px;">
+						<div>
+							<img src="images/phone.png" width="35" alt="cogs">
+							<span>Abrir chamado</span>
+						</div>
+					</div>
+				</a>
+			</div> -->
+			<div class="ui-block" style="margin-bottom: 64px;">
+				<a href="#" class="is-not-decoration" onClick="go_relat_check2()">
+					<div class="ui-bar ui-bar-a cogs-button" style="height:24px">
+						<div>
+							<img src="images/check-square.png" width="35" alt="cogs">
+							<span>Relatório de checkpoints</span>
+						</div>
+						<span id="bot_sincro"></span>
+
 					</div>
 				</a>
 			</div>
 		</div><!-- /grid-a -->
 
-		<span id="bot_sincro"></span>
-
 	</div>
+
+	<!-- Menu bottom -->
+	<nav class="main-menu-bottom">
+		<div>
+			<button class="buttons-navigate" type="button" onclick="volta_uni()">
+				<img src="images/engenheiro_cogs.png" width="22" alt="Home" />
+				<p>manutenções</p>
+			</button>
+			<button class="buttons-navigate" type="button" onclick="scan()">
+				<img src="images/qr_code.png" width="22" alt="Qr_code" />
+				<p>qrcode</p>
+			</button>
+			<button class="buttons-navigate" type="button" onclick="go_relat_check2()">
+				<img src="images/graph.png" width="22" alt="Relatório" />
+				<p>rel.checkpoint</p>
+			</button>
+            <!--button class="buttons-navigate" type="button" onclick="openBrowser()">
+                <img src="images/call.png" width="22" alt="Chamado" />
+                <p>abrir chamado</p>
+            </!--button-->
+		</div>
+	</nav>
+	<!-- Fim Menu bottom -->
 
 </body>
 
@@ -326,9 +350,34 @@
 	var q_mes = getquerystring("qm")
 	var q_ano = getquerystring("qa")
 
+	var id_cliente = getquerystring("idc");
+	var e_construtora = getquerystring("econst");
+
 	var id_sis = getquerystring("id_sis");
 
 	//////////////////////////////////////	
+
+	var nome_sistema = ""
+	var tem_alguma_manut = "";
+
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "http://www.sigmacivil.com.br/app_sc/consult_sist_checkpoint.asp?id_sis=" + id_sis + "&l=" + login + "&s=" + senha, true)
+	xhr.addEventListener("loadend", function (evt) {
+		var response = this.responseText;
+		var pedaco = response.split('*//*');
+
+		tem_alguma_manut = pedaco[0];
+
+		nome_sistema = pedaco[1];
+
+		if (nome_sistema == 'nada') {
+			document.getElementById('nome-sistema').innerHTML = '';
+		} else {
+			document.getElementById('nome-sistema').innerHTML = nome_sistema;
+		}
+	});
+
+	xhr.send();
 
 	var registrar_manut = document.querySelector('.register');
 	registrar_manut.addEventListener('click', function () {
@@ -336,83 +385,27 @@
 	});
 
 	function go_to_page(q_id_sistema, q_num_empree) {
-		var nome_sistema = ""
-		var tem_alguma_manut = "";
 		var qual_id_sistema = q_id_sistema
 		var qual_num_empree = q_num_empree
 
-		var xhr = new XMLHttpRequest();
-		xhr.open("GET", "http://www.sigmacivil.com.br/app_sc/consult_sist_checkpoint.asp?id_sis=" + qual_id_sistema + "&l=" + login + "&s=" + senha, true)
-		xhr.addEventListener("loadend", function (evt) {
-			var response = this.responseText;
-			var pedaco = response.split('*//*');
-			tem_alguma_manut = pedaco[0];
-
-			nome_sistema = pedaco[1];
-
-			if (tem_alguma_manut == "0") {
-				alert('Não há manutenções para serem registradas!');
-			} else if (tem_alguma_manut == "1") {
-				if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
-					window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
-				} else {
-					window.location.assign("empree_online.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
-				}
+		if (tem_alguma_manut == "0") {
+			alert('Não há manutenções para serem registradas!');
+		} else if (tem_alguma_manut == "1") {
+			if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+				window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
 			} else {
-				navigator.notification.alert(
-					'Problemas com sua conexão. Conecte seu celular com a internet e tente novamente!',  // message
-					function () {
-						go_page_qrcode(qual_id_sistema, qual_num_empree);
-					},         // callback
-					'SigmaCivil',            // title
-					'OK'                  // buttonName
-				);
+				window.location.assign("empree_online.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
 			}
-		});
-
-		xhr.send();
-
-
-
-
-
-
-		/*var xhr = new XMLHttpRequest();
-		xhr.open("GET", "http://www.sigmacivil.com.br/app_sc/consult_sist_checkpoint.asp?id_sis=" + qual_id_sistema + "&l=" + login + "&s=" + senha, true)
-		xhr.onreadystatechange = function () {
-			if (xhr.readyState == 4) {
-				if (xhr.status == 200 || xhr.status == 0) {
-					var response = xhr.responseText;
-					var pedaco = response.split('*//*');
-					tem_alguma_manut = pedaco[0];
-
-					nome_sistema = pedaco[1];
-
-					if (tem_alguma_manut == "0") {
-						alert('Não há manutenções para serem registradas!');
-					} else if (tem_alguma_manut == "1") {
-						if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
-							window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
-						} else {
-							window.location.assign("empree_online.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
-						}
-					} else {
-						navigator.notification.alert(
-							'Problemas com sua conexão. Conecte seu celular com a internet e tente novamente!',  // message
-							function () {
-								go_page_qrcode(qual_id_sistema, qual_num_empree);
-							},         // callback
-							'SigmaCivil',            // title
-							'OK'                  // buttonName
-						);
-					}
-				} else {
-					alert("Problemas com sua conexao internet. Erro: 0146");
-				}
-			}
+		} else {
+			navigator.notification.alert(
+				'Problemas com sua conexão. Conecte seu celular com a internet e tente novamente!',  // message
+				function () {
+					go_page_qrcode(qual_id_sistema, qual_num_empree);
+				},         // callback
+				'SigmaCivil',            // title
+				'OK'                  // buttonName
+			);
 		}
-
-		xhr.send()*/
 	}
 
 	function scan() {
@@ -484,7 +477,7 @@
 										});
 
 										tx.oncomplete = function () {
-											go_to_page(qid_sistema, qid_empree);
+											go_page_qrcode(qid_sistema, qid_empree);
 										}
 
 										tx.onerror = function (event) {
@@ -531,7 +524,7 @@
 										});
 
 										tx.oncomplete = function () {
-											go_to_page(qid_sistema, qid_empree);
+											go_page_qrcode(qid_sistema, qid_empree);
 										}
 
 										tx.onerror = function (event) {
@@ -567,7 +560,7 @@
 	}
 
 	function go_page_qrcode(q_id_sistema, q_num_empree) {
-		window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+		window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + id_cliente + "&econst=" + e_construtora);
 	}
 
 	function go_relat_check() {
@@ -590,7 +583,7 @@
 	function go_relat_check2() {
 
 		if (tem_conexao()) {
-			window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + /*"&id_sist=" + id_sis +*/ "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano))
+			window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + /*"&id_sist=" + id_sis +*/ "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + id_cliente + "&econst=" + e_construtora)
 		}
 		else {
 			alert('Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.');
@@ -654,7 +647,7 @@
 			alert("Sem conexão com internet! Não é possível sincronizar!");
 		} else {
 			var ajax = new XMLHttpRequest();
-			ajax.open("GET", "http://www.sigmacivil.com.br/app_sc/sincronizar_checkpoint.asp?retor=" + dados_checkpoint + "&l=" + login + "&s=" + senha, true);
+			ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/sincronizar_checkpoint.asp?retor=" + encodeURIComponent(dados_checkpoint) + "&l=" + login + "&s=" + senha, true);
 			ajax.addEventListener("loadend", function (evt) {
 				var resposta_total = this.responseText;
 				if (resposta_total == 'sim') {

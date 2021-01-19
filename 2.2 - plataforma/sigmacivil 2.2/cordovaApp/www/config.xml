@@ -38,7 +38,7 @@
 	<feature name="http://api.phonegap.com/1.0/file"/>
 
 	<feature name="NetworkStatus">
-			 <param name="android-package" value="CDVConnection" />
+		<param name="android-package" value="CDVConnection" />
 	</feature>
 
 	<!-- para o audio -->
@@ -140,6 +140,7 @@
     <plugin name="cordova-plugin-inappbrowser" spec="~4.0.0" />
 
     <plugin name="cordova-plugin-app-exit" spec="~0.0.1" />
+    <plugin name="cordova-plugin-local-notification" spec="~0.9.0-beta.2" />
     
     <!-- <plugin name="cordova-plugin-wkwebview-engine" source="npm" spec="~1.2.1" /> -->
     
@@ -204,6 +205,14 @@
     <icon src="res/icon/ios/Icon-256.png"        gap:platform="ios"      width="256" height="256" />
     <icon src="res/icon/ios/Icon-512.png"        gap:platform="ios"      width="512" height="512" />
     <icon src="res/icon/ios/Icon-1024.png"       gap:platform="ios"      width="1024" height="1024" />
+
+    <!-- <icon density="ldpi" src="res/icon/android/icon-36-ldpi.png" />
+    <icon density="mdpi" src="res/icon/android/icon-48-mdpi.png" />
+    <icon density="hdpi" src="res/icon/android/icon-72-hdpi.png" />
+    <icon density="xhdpi" src="res/icon/android/icon-96-xhdpi.png" />
+    
+    <icon density="xxhdpi" src="res/icon/android/drawable-xxhdpi/ic_stat_engineering.png" />
+    <icon density="xxxhdpi" src="res/icon/android/icon-96-xhdpi.png" /> -->
 
     <!-- autorizacoes para apple -->
     <!-- <key>NSCameraUsageDescription</key>

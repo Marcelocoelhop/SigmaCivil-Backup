@@ -3,16 +3,21 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no">
+    <!-- <meta name="viewport"
+        content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, `user-scalable=no"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <link rel="stylesheet" href="css/custom.css" />
     <link rel="stylesheet" href="css/custom-mobile.css" />
     <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+    <!-- <link rel="stylesheet" href="css/bootstrap-tour-standalone.min.css" /> -->
     <title>Empree_onlline</title>
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
     <script type="text/javascript" src="js/mc.js"></script>
     <script src="js/jquery.js"></script>
     <script src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script src="js/scrollPage.js"></script>
+    <script src="js/shepherd.js"></script>
+    <!-- <script src="js/bootstrap-tour-standalone.min.js"></script> -->
     <style>
         .menu .ui-mini.ui-btn-icon-left:after,
         .ui-mini .ui-btn-icon-left:after,
@@ -45,38 +50,30 @@
     <div id="qtd_manut_pendentes"></div>
 
     <div class="btn-bars">
-        <div style="top:4; z-index: 50;" data-role="collapsible" data-collapsed="true" class="ui-btn-left menu"
-            data-mini="true">
+        <div style="top:4; z-index: 50; position: fixed;" data-role="collapsible" data-collapsed="true"
+            class="ui-btn-left menu main-menu-bars" data-mini="true">
             <h4 class="btn-bars-bars">
                 <!-- <span class="fas fa-bars"></span> -->
                 <img class="is-bars" src="images/bars.svg" width="14" alt="Menu" />
                 <img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
             </h4>
-            <ul class="menu-tablet-responsive" style="border: 1px solid #e0e0e0;" data-role="listview" data-mini="true">
-                <li>
-                    <a class="ui-btn ui-icon-back ui-btn-icon-right ui-shadow ui-corner-all actived" href="#"
-                        onClick="enviar()">Manutenções</a>
-                </li>
-                <li>
-                    <a class="ui-btn ui-icon-carat-r ui-btn-icon-right ui-shadow ui-corner-all" href="#"
-                        onClick="scan()">Ler QRcode</a>
-                </li>
-                <li>
+            <ul class="menu-tablet-responsive" style="border: 1px solid #38c;" data-role="listview" data-mini="true">
+                <li id="step-4">
                     <a class="ui-btn ui-icon-gear ui-btn-icon-right ui-shadow ui-corner-all" href="#"
                         onClick="go_to_page_config()">Configurações</a>
                 </li>
-                <li>
+                <li id="step-5">
                     <a class="ui-btn ui-icon-power ui-btn-icon-right ui-shadow ui-corner-all" href="#"
                         onClick="closeApp()">Fechar app</a>
                 </li>
-                <li>
+                <li id="step-6">
                     <a class="click" href="#" onClick="enviar_sync()">Logout</a>
                 </li>
             </ul>
         </div>
     </div>
 
-    <div class="title" style="padding-top: 0px !important; padding-bottom: 10px;">
+    <div class="title" style="padding-top: 0px !important; padding-bottom: 10px; margin-top: 66px;">
         <h4 id="nome_empree_" style="display: inline;"></h4>
     </div>
     <table>
@@ -85,10 +82,34 @@
 
     <div id="box-content"></div>
 
+    <!-- Menu bottom -->
+    <nav class="main-menu-bottom">
+        <div id="step-0">
+            <button id="step-1" class="button-actived" type="button" onclick="enviar()">
+                <img src="images/engenheiro_cogs.png" width="22" alt="Home" />
+                <p>manutenções</p>
+            </button>
+            <button id="step-2" class="buttons-navigate" type="button" onclick="scan()">
+                <img src="images/qr_code.png" width="22" alt="Qr_code" />
+                <p>qrcode</p>
+            </button>
+            <button id="step-3" class="buttons-navigate" type="button" onclick="go_relat_check2()">
+                <img src="images/graph.png" width="22" alt="Relatório" />
+                <p>rel.checkpoint</p>
+            </button>
+            <!-- <button class="buttons-navigate" type="button" onclick="openBrowser()">
+                <img src="images/call.png" width="22" alt="Chamado" />
+                <p>abrir chamado</p>
+            </button> -->
+        </div>
+    </nav>
+    <!-- Fim Menu bottom -->
+
     <script type="text/javascript">
 
         window.onerror = function (message, url, lineNumber) {
-            alert("Error: " + message + " in " + url + " at line " + lineNumber);
+            alert(`Erro: ${message} em ${url} na linha ${lineNumber}. Por favor, tente novamente`);
+            enviar();
         }
 
         var num_empree = getquerystring("e");
@@ -100,6 +121,10 @@
 
         var filtro_sis = addAcento(getquerystring("fil"));
         var filtro_bool = false;
+
+        var qual_id_cliente = "";
+        var q_e_construtora = "";
+
 
         /////////////////////////
         var q_mes = getquerystring("qm");
@@ -315,6 +340,7 @@
             }
 
             var menu_sup_offline = [
+                '<div class="menu_opc">',
                 '<form name="form_sup" action="" method="get">',
                 '<div data-role="header" data-position="fixed" data-theme="a">',
                 '<div class="ui-corner-all custom-corners">',
@@ -330,10 +356,12 @@
                 '</div>',
                 '</div>',
                 '</div>',
-                '</form>'
+                '</form>',
+                '</div>'
             ].join('');
 
             var menu_sup_online = [
+                '<div class="menu_opc">',
                 '<form name="form_sup" action="" method="get">',
                 '<div data-role="header" data-position="fixed" data-theme="a">',
                 '<div class="ui-corner-all custom-corners">',
@@ -349,7 +377,8 @@
                 '</div>',
                 '</div>',
                 '</div>',
-                '</form>'
+                '</form>',
+                '</div>'
             ].join('');
 
             document.getElementById('menu_opc2').innerHTML = menu_sup_online;
@@ -359,10 +388,16 @@
 
                 if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
                     document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
+
+                    document.querySelector("#qtd_manut_pendentes").style.top = "16px";
+                    document.querySelector(".main-menu-bars").style.top = "4px";
                     return false;
                 }
                 else {
                     document.getElementById('menu_opc2').innerHTML = menu_sup_online;
+
+                    document.querySelector("#qtd_manut_pendentes").style.top = "16px";
+                    document.querySelector(".main-menu-bars").style.top = "4px";
                     return true;
                 }
             }, 5000);
@@ -404,10 +439,10 @@
 
                 var getLogin = JSON.parse(jsontext[0]);
                 var logou = getLogin.logou;
-                var qual_id_cliente = getLogin.id_cliente;
+                qual_id_cliente = getLogin.id_cliente;
                 var num_empree = getLogin.id_empree;
                 var nome_empree = getLogin.nome_empree;
-                var q_e_construtora = getLogin.e_construtora;
+                q_e_construtora = getLogin.e_construtora;
                 var data_implantacao_sc = new Date(getLogin.data_implantacao_sc)
 
                 var resultado_consulta = getLogin.status_sync;
@@ -593,10 +628,12 @@
                         vetor_consulta_evento = vetor_consulta_evento.substring(0, vetor_consulta_evento.length - 1);
                         vetor_dados_manutencao = vetor_dados_manutencao.substring(0, vetor_dados_manutencao.length - 1);
 
+                        var data_post = "l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento;
                         var ajax2 = new XMLHttpRequest();
-                        ajax2.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento + "&versao=2.2&t=" + Math.random(), false);
+                        ajax2.open("POST", "https://www.sigmacivil.com.br/app_sc/apagar_new_onlineB.asp?versao=2.2&t=" + Math.random(), true);
+                        ajax2.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                         ajax2.addEventListener("loadend", function (evt) {
-                            var resposta_total = this.responseText;
+                            var resposta_total = this.response;
                             var jsontext = resposta_total.split("#")
 
                             var getLogin = JSON.parse(jsontext[0]);
@@ -765,8 +802,8 @@
 
                                     if (filtro_sis === cada_parte_vet_manut[1]) {
                                         filtro_bool = true;
-                                        var ini_lista = "<form class='ui-filterable'><div class='ui-input-search ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear'><input data-role='listview' value='" + filtro_sis + "' placeholder='Buscar...' id='filterBasic-input' data-type='search'><a href='#' tabindex='-1' aria-hidden='true' class='ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-input-clear-hidden' title='Clear text'>Clear text</a></div></form><ul data-input='#filterBasic-input' id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
-                                        var fim_lista = "</ul>"
+                                        ini_lista = "<form class='ui-filterable'><div class='ui-input-search ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear'><input data-role='listview' value='" + filtro_sis + "' placeholder='Buscar...' id='filterBasic-input' data-type='search'><a href='#' tabindex='-1' aria-hidden='true' class='ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-input-clear-hidden' title='Clear text'>Clear text</a></div></form><ul data-input='#filterBasic-input' id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
+                                        fim_lista = "</ul>"
                                     }
 
                                     var focus = "";
@@ -797,20 +834,24 @@
                                             '<table border="0" cellspacing="0" cellpadding="0">',
                                             '<hr class="line-color">',
                                             '</table>',
-                                            '<table class="images-center" width="50%" border="0" cellpadding="0" cellspacing="0">',
-                                            '<tr>',
-                                            '<td width="25%">',
-                                            '<div class="tickt1"><img src="images/check.png" width="25"></div>',
-                                            '</td>',
-                                            '<td>',
-                                            '<table class="date-center" border="0">',
-                                            '</table>',
-                                            '</td>',
-                                            '<td width="25%">',
-                                            '<div class="camera1">' + camera + '</div>',
-                                            '</td>',
-                                            '</tr>',
-                                            '</table>',
+                                            '<div style="display: flex; justify-content: space-around;">',
+                                            '<img src="images/check.png" width="25" height="25" />',
+                                            '<div>' + camera + '</div>',
+                                            '</div>',
+                                            // '<table class="images-center" width="50%" border="0" cellpadding="0" cellspacing="0">',
+                                            // '<tr>',
+                                            // '<td width="25%">',
+                                            // '<div class="tickt1"><img src="images/check.png" width="25"></div>',
+                                            // '</td>',
+                                            // '<td>',
+                                            // '<table class="date-center" border="0">',
+                                            // '</table>',
+                                            // '</td>',
+                                            // '<td width="25%">',
+                                            // '<div class="camera1">' + camera + '</div>',
+                                            // '</td>',
+                                            // '</tr>',
+                                            // '</table>',
                                             '</a>',
                                             '</li>'
                                         ].join('');
@@ -838,65 +879,75 @@
                                             '<table border="0" cellspacing="0" cellpadding="0">',
                                             '<hr class="line-color">',
                                             '</table>',
-                                            '<table class="images-center" width="50%" border="0" cellpadding="0" cellspacing="0">',
-                                            '<tr>',
-                                            '<td width="25%">',
-                                            '<div class="tickt1">' + imagem1 + '</div>',
-                                            '</td>',
-                                            '<td>',
-                                            '<table class="date-center" border="0">',
-                                            '<tr><div style="float: right; position: relative; left: 30px">' + barra + '</div></tr>',
-                                            '<tr>',
-                                            '<td width="60%" style="position: relative; left: 35px;">',
-                                            '<font size="2" face="Arial">' + data_minima_alteracao.split('-').reverse().join('/') + '</font>',
-                                            '<td width="5%">',
-                                            '</td>',
-                                            '<td width="60%" style="position: relative; left: 75px;">',
-                                            '<font size="2" face="Arial">' + data_maxima_alteracao.split('-').reverse().join('/') + '</font>',
-                                            '</td>',
-                                            '</tr>',
-                                            '</table>',
-                                            '</td>',
-                                            '<td width="25%">',
-                                            '</td>',
-                                            '</tr>',
-                                            '</table>',
+                                            '<div style="display: flex; justify-content: space-around; width: 100%; align-items: center;">',
+                                            '<div>' + imagem1 + '</div>',
+                                            '<div style="display: flex; flex-direction: column; align-items: center;">',
+                                            '<div>' + barra + '</div>',
+                                            '<div style="display: flex; justify-content: space-between;">',
+                                            '<p>' + data_minima_alteracao.split('-').reverse().join('/') + '</p>',
+                                            '<div style="margin: 0 24px;"></div>',
+                                            '<p>' + data_maxima_alteracao.split('-').reverse().join('/') + '</p>',
+                                            '</div>',
+                                            '</div>',
+                                            '</div>',
+                                            // '<table class="images-center" width="50%" border="0" cellpadding="0" cellspacing="0">',
+                                            // '<tr>',
+                                            // '<td width="25%">',
+                                            // '<div class="tickt1">' + imagem1 + '</div>',
+                                            // '</td>',
+                                            // '<td>',
+                                            // '<table class="date-center" border="0">',
+                                            // '<tr><div style="float: right; position: relative; left: 30px">' + barra + '</div></tr>',
+                                            // '<tr>',
+                                            // '<td width="60%" style="position: relative; left: 35px;">',
+                                            // '<font size="2" face="Arial">' + data_minima_alteracao.split('-').reverse().join('/') + '</font>',
+                                            // '<td width="5%">',
+                                            // '</td>',
+                                            // '<td width="60%" style="position: relative; left: 75px;">',
+                                            // '<font size="2" face="Arial">' + data_maxima_alteracao.split('-').reverse().join('/') + '</font>',
+                                            // '</td>',
+                                            // '</tr>',
+                                            // '</table>',
+                                            // '</td>',
+                                            // '<td width="25%">',
+                                            // '</td>',
+                                            // '</tr>',
+                                            // '</table>',
                                             '</a>',
                                             '</li>'
                                         ].join('');
 
                                     }
-
                                 }
+
+                                if (filtro_sis !== '' && filtro_bool === false) {
+                                    navigator.notification.alert(
+                                        'Não há manutenções deste sistema neste mês!',  // message
+                                        function () {
+                                            return;
+                                        },         // callback
+                                        'SigmaCivil',            // title
+                                        'OK'                  // buttonName
+                                    );
+                                    filtro_sis = '';
+                                    ini_lista = "<form class='ui-filterable'><div class='ui-input-search ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear'><input data-role='listview' value='" + filtro_sis + "' placeholder='Buscar...' id='filterBasic-input' data-type='search'><a href='#' tabindex='-1' aria-hidden='true' class='ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-input-clear-hidden' title='Clear text'>Clear text</a></div></form><ul data-input='#filterBasic-input' id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
+                                    fim_lista = "</ul>"
+                                }
+
+                                // Define a ordem que irá aparecer cada manutenção
+                                if (datadiff(Date.now(), data_maxima_alteracao) < 0 || datadiff2(Date.now(), data_minima_alteracao) > 0) {
+                                    document.getElementById('box-content').innerHTML = ini_lista + dados_1 + dados_0 + fim_lista
+                                } else {
+                                    document.getElementById('box-content').innerHTML = ini_lista + dados_0 + dados_1 + fim_lista
+                                }
+                                $(".loading_page").hide();
+                                $('#q_empree').listview();
+                                document.getElementById('nome_empree_').innerHTML = nome_empree
 
                             }
                         });
 
-                        ajax2.send();
-
-                        if (filtro_sis !== '' && filtro_bool === false) {
-                            navigator.notification.alert(
-                                'Não há manutenções deste sistema neste mês!',  // message
-                                function () {
-                                    return;
-                                },         // callback
-                                'SigmaCivil',            // title
-                                'OK'                  // buttonName
-                            );
-                            filtro_sis = '';
-                            ini_lista = "<form class='ui-filterable'><div class='ui-input-search ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear'><input data-role='listview' value='" + filtro_sis + "' placeholder='Buscar...' id='filterBasic-input' data-type='search'><a href='#' tabindex='-1' aria-hidden='true' class='ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-input-clear-hidden' title='Clear text'>Clear text</a></div></form><ul data-input='#filterBasic-input' id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
-                            fim_lista = "</ul>"
-                        }
-
-                        // Define a ordem que irá aparecer cada manutenção
-                        if (datadiff(Date.now(), data_maxima_alteracao) < 0 || datadiff2(Date.now(), data_minima_alteracao) > 0) {
-                            document.getElementById('box-content').innerHTML = ini_lista + dados_1 + dados_0 + fim_lista
-                        } else {
-                            document.getElementById('box-content').innerHTML = ini_lista + dados_0 + dados_1 + fim_lista
-                        }
-                        $(".loading_page").hide();
-                        $('#q_empree').listview();
-                        document.getElementById('nome_empree_').innerHTML = nome_empree
+                        ajax2.send(data_post);
 
                     } else { //nao logou
                         window.location.assign("login.htm");
@@ -1047,46 +1098,198 @@
                 if (cursor) {
                     var data = cursor.value;
 
-                    if (!data['tutorial']) {
-                        var tutorial_video = [
-                            '<div id="tutorial_div" style="width: 100%; height: 100vh; position: fixed; display: flex; flex-direction: column; background: rgba(0,0,0,0.8); z-index: 100; transition: 2s; color: #FFF; text-shadow: none;">',
-                            '<div style="padding: 20px; margin-top: 10px; display: flex; justify-content: flex-end;">',
-                            '<button id="close_tutorial" onclick="closeTutorial()" style="width: 50px; background: none; border: 0;" type="button">',
-                            '<img src="images/times-branco.png" width="16" alt="Fechar"/>',
-                            '</button>',
-                            '</div>',
-                            '<div style="display: flex; height: 100vh; align-items: center; flex-direction: column; justify-content: center; padding: 20px;">',
-                            '<h1 style="text-align: center;">Bem vindo ao aplicativo SigmaCivil!</h1>',
-                            '<p style="font-size: 18px; line-height: 22px">Este aplicativo lista as manutenções preventivas mensais personalizadas de determinado empreendimento e permite que seja realizada a gestão das manutenções, possibilitando ao usuário que faça upload de fotos, videos, áudios e textos que mostrem e comprovem sua realização.</p>',
-                            '<div style="width: 100%; display: flex; flex-direction: row; justify-content: space-between;">',
-                            '<button id="assistir_tutorial" style="width: 100%; background: #c00c13; padding: 8px; border: 0; border-radius: 4px; color: #FFF; font-weight: bold; transition: background 0.2s;" type="button">Assistir tutorial</button>',
-                            '<button class="closeTutorial" onclick="closeTutorial()" style="width: 100%; background: #666; padding: 8px; border: 0; border-radius: 4px; color: #FFF; font-weight: bold; transition: background 0.2s;" type="button">Pular</button>',
-                            '</div>',
-                            '</div>',
-                            '</div>'
-                        ].join('');
+                    if (!data.tutorial) {
+                        var tour = new Shepherd.Tour({
+                            useModalOverlay: true,
+                            defaultStepOptions: {
+                                cancelIcon: {
+                                    enabled: true,
+                                },
+                                classes: "shadow-md bg-purple-dark",
+                                scrollTo: false,
+                            },
+                        });
 
-                        // document.getElementById('tutorial-video').innerHTML = tutorial_video;
+                        tour.addSteps([
+                            {
+                                title: "Creating a Shepherd Tour",
+                                text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                                attachTo: {
+                                    element: "#step-0",
+                                    on: "bottom",
+                                },
+                                buttons: [
+                                    {
+                                        action() {
+                                            return this.back();
+                                        },
+                                        classes: "shepherd-button-secondary",
+                                        text: "Back",
+                                    },
+                                    {
+                                        action() {
+                                            return this.next();
+                                        },
+                                        text: "Next",
+                                    },
+                                ],
+                                id: "creating",
+                            },
+                            {
+                                title: "Creating a Shepherd Tour",
+                                text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                                attachTo: {
+                                    element: "#step-1",
+                                    on: "bottom",
+                                },
+                                buttons: [
+                                    {
+                                        action() {
+                                            return this.back();
+                                        },
+                                        classes: "shepherd-button-secondary",
+                                        text: "Back",
+                                    },
+                                    {
+                                        action() {
+                                            return this.next();
+                                        },
+                                        text: "Next",
+                                    },
+                                ],
+                                id: "creating",
+                            },
+                            {
+                                title: "Creating a Shepherd Tour",
+                                text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                                attachTo: {
+                                    element: "#step-2",
+                                    on: "bottom",
+                                },
+                                buttons: [
+                                    {
+                                        action() {
+                                            return this.back();
+                                        },
+                                        classes: "shepherd-button-secondary",
+                                        text: "Back",
+                                    },
+                                    {
+                                        action() {
+                                            return this.next();
+                                        },
+                                        text: "Next",
+                                    },
+                                ],
+                                id: "creating",
+                            },
+                            {
+                                title: "Creating a Shepherd Tour",
+                                text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                                attachTo: {
+                                    element: "#step-3",
+                                    on: "bottom",
+                                },
+                                buttons: [
+                                    {
+                                        action() {
+                                            return this.back();
+                                        },
+                                        classes: "shepherd-button-secondary",
+                                        text: "Back",
+                                    },
+                                    {
+                                        action() {
+                                            return this.next();
+                                        },
+                                        text: "Next",
+                                    },
+                                ],
+                                id: "creating",
+                            },
+                            {
+                                title: "Creating a Shepherd Tour",
+                                text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                                attachTo: {
+                                    element: "#step-4",
+                                    on: "bottom",
+                                },
+                                buttons: [
+                                    {
+                                        action() {
+                                            return this.back();
+                                        },
+                                        classes: "shepherd-button-secondary",
+                                        text: "Back",
+                                    },
+                                    {
+                                        action() {
+                                            return this.next();
+                                        },
+                                        text: "Next",
+                                    },
+                                ],
+                                id: "creating",
+                                when: {
+                                    show: function () {
+                                        document.querySelector('.btn-bars-bars').click();
+                                    },
+                                },
+                            },
+                            {
+                                title: "Creating a Shepherd Tour",
+                                text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                                attachTo: {
+                                    element: "#step-5",
+                                    on: "bottom",
+                                },
+                                buttons: [
+                                    {
+                                        action() {
+                                            return this.back();
+                                        },
+                                        classes: "shepherd-button-secondary",
+                                        text: "Back",
+                                    },
+                                    {
+                                        action() {
+                                            return this.next();
+                                        },
+                                        text: "Next",
+                                    },
+                                ],
+                                id: "creating",
+                            },
+                            {
+                                title: "Creating a Shepherd Tour",
+                                text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                                attachTo: {
+                                    element: "#step-6",
+                                    on: "bottom",
+                                },
+                                buttons: [
+                                    {
+                                        action() {
+                                            go_to_page_config();
+                                            return;
+                                        },
+                                        text: "Configurações",
+                                    },
+                                ],
+                                id: "creating",
+                            },
+                        ]);
 
-                        /*document.getElementById('assistir_tutorial').addEventListener('click', function () {
-                            tutorial_video = [
-                                '<div id="tutorial_div" style="width: 100%; height: 100vh; position: fixed; display: flex; justify-content: center; flex-direction: column; align-items: center; background: rgba(0,0,0,0.8); z-index: 100; color: #FFF; text-shadow: none;">',
-                                '<div style="padding: 20px; margin-right: 40px; width: 100%; display: flex; justify-content: flex-end;">',
-                                '<button id="close_tutorial" onclick="closeTutorial()" style="width: 50px; background: none; border: 0;" type="button">',
-                                '<img src="images/times-branco.png" width="16" alt="Fechar"/>',
-                                '</button>',
-                                '</div>',
-                                '<video poster="images/background.jpg" style="border-radius: 20px;" width="100%" height="600" controls>',
-                                '<source style="border-radius: 20px;" src="images/tutorial.mp4" type="video/mp4">',
-                                '</video>',
-                                '</div>'
-                            ].join('');
-
-                            document.getElementById('tutorial-video').innerHTML = tutorial_video;
-                        });*/
+                        tour.start();
                     }
 
-                    data['tutorial'] = true;
                     var request = cursor.update(data);
                 }
             }
@@ -1215,7 +1418,6 @@
                                         }
                                     }
                                 );
-
                             } else {
                                 alert("Esse QRCode não é válido");
                             }
@@ -1234,11 +1436,11 @@
         }
 
         function go_to_page(q_id_sistema, q_num_empree) {
-            window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+            window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + qual_id_cliente + "&econst=" + q_e_construtora);
         }
 
         function go_to_page_config() {
-            window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+            window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + qual_id_cliente + "&econst=" + q_e_construtora);
         }
 
         function removeAcento(text) {
@@ -1299,6 +1501,20 @@
             text = text.replace(/ç/g, 'xcL0c')
 
             return text;
+        }
+
+        function go_relat_check2() {
+            if (tem_conexao()) {
+                window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + /*"&id_sist=" + id_sis +*/ "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + qual_id_cliente + "&econst=" + q_e_construtora);
+            } else {
+                alert('Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.');
+            }
+        }
+
+        function openBrowser() {
+            var options = "location=yes,lefttoright=yes,toolbarcolor=#b10b0b,hideurlbar=yes,closebuttoncaption=<  SigmaCivil,closebuttoncolor=#ffffff";
+
+            cordova.InAppBrowser.open('https://www.google.com.br', '_blank', options);
         }
 
         function closeApp() {

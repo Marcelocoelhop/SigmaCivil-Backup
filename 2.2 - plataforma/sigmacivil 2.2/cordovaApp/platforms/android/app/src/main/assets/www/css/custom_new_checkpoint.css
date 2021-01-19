@@ -4,7 +4,7 @@
 
 /* ÁREA DA TABELA */
 .table-stroke {
-    margin-bottom: 15px;
+    margin-bottom: 66px;
 }
 
 .table-stroke .table_titles {
@@ -81,4 +81,8 @@
     justify-content: center;
     color: #c00c13;
     font-weight: bold;
+}
+
+.table-check:last-child {
+    margin-bottom: 60px;
 }
