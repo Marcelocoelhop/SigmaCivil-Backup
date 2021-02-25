@@ -37,7 +37,7 @@
     </style>
 </head>
 
-<body>
+<body id="step">
     <!-- <div id="tutorial-video"></div> -->
 
     <div class="loading_page"
@@ -125,6 +125,8 @@
         var qual_id_cliente = "";
         var q_e_construtora = "";
 
+        var qtdEv = 0
+        var manutCurtoPrazo = 0;
 
         /////////////////////////
         var q_mes = getquerystring("qm");
@@ -402,22 +404,6 @@
                 }
             }, 5000);
 
-            // cordova.plugins.notification.local.schedule({
-            //     title: 'My first notification',
-            //     text: 'Thats pretty easy...',
-            //     smallIcon: 'res://ic_stat_engineering',
-            //     foreground: true
-            // });
-
-            cordova.plugins.notification.local.schedule(
-                { 
-                    id: 1,
-                    title: 'My first notification',
-                    icon: 'file://images/notification_upload.png',
-                    smallIcon: 'res://icon' 
-                }
-            );
-
             var statusRelacionamento;
             var statusDocumentacao;
             var mudaStatus = '<img src="images/danger.svg" width="25" height="25" />'
@@ -663,8 +649,6 @@
                                 var cada_vet_manut = vetor_dados_manutencao.split(";")
                                 var cada_vet_evento = vetor_consulta_evento.split(';')
 
-                                var qtdEv = 0
-
                                 for (i = 0; i < objEvento.dados_emp.length; i++) {
                                     string_auxiliar += " <br>-------CADA evento-----%%%%%%%%%%%%%%-------------  ev=" + objEvento.dados_emp[i].ev + "- up=" + objEvento.dados_emp[i].up + "---------FIM evento------------<br>"
 
@@ -808,8 +792,10 @@
                                         barra = '<img src="images/Barra_6.png" width="120" height="23">'
                                     } else if (aux_dist >= Math.round(5 / 7 * faixa_dias) && aux_dist < Math.round(6 / 7 * faixa_dias)) {
                                         barra = '<div class="barra1"><img src="images/Barra_7.png" width="120" height="23"></div>'
+                                        manutCurtoPrazo += 1;
                                     } else if (aux_dist >= Math.round(6 / 7 * faixa_dias) && aux_dist < Math.round(7 / 7 * faixa_dias)) {
                                         barra = '<div class="barra1"><img src="images/Barra_8.png" width="120" height="23"></div>'
+                                        manutCurtoPrazo += 1;
                                     } else if (aux_dias2 < 0) {
                                         barra = '<img src="images/Barra_9.png" width="120" height="23">'
                                     }
@@ -898,6 +884,19 @@
 
                                     }
                                 }
+
+                                // notification
+
+                                setTimeout(function () {
+                                    cordova.plugins.notification.local.schedule({
+                                        title: 'Você possui manutenções pendentes',
+                                        text: qtdEv > 0 && `${qtdEv} manutenções ainda não foram realizadas`,
+                                        icon: 'file://images/civil-eng.png',
+                                        // trigger: { every: 'day', count: 5 },
+                                        // smallIcon: 'res://images/civil-eng.png',
+                                        foreground: true
+                                    });
+                                }, 5000);
 
                                 if (filtro_sis !== '' && filtro_bool === false) {
                                     navigator.notification.alert(
@@ -1101,6 +1100,33 @@
                                 buttons: [
                                     {
                                         action() {
+                                            updateViewTutorial(db);
+
+                                            return this.hide();
+                                        },
+                                        classes: "shepherd-button-secondary",
+                                        text: "Pular tutorial",
+                                    },
+                                    {
+                                        action() {
+                                            return this.next();
+                                        },
+                                        text: "Next",
+                                    },
+                                ],
+                                id: "creating",
+                            },
+                            {
+                                title: "Creating a Shepherd Tour",
+                                text: `Creating a Shepherd tour is easy. too!\
+ Just create a \`Tour\` instance, and add as many steps as you want.`,
+                                attachTo: {
+                                    element: "#step-0",
+                                    on: "bottom",
+                                },
+                                buttons: [
+                                    {
+                                        action() {
                                             return this.back();
                                         },
                                         classes: "shepherd-button-secondary",
@@ -1269,6 +1295,21 @@
                         tour.start();
                     }
 
+                    var request = cursor.update(data);
+                }
+            }
+        }
+
+        function updateViewTutorial(db) {
+            var tx = db.transaction(['mtab_config'], 'readwrite');
+            var store = tx.objectStore('mtab_config');
+            var objectStoreRequest = store.openCursor();
+            objectStoreRequest.onsuccess = function (event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    var data = cursor.value;
+
+                    data.tutorial = true;
                     var request = cursor.update(data);
                 }
             }
@@ -1491,9 +1532,15 @@
         }
 
         function openBrowser() {
-            var options = "location=yes,lefttoright=yes,toolbarcolor=#b10b0b,hideurlbar=yes,closebuttoncaption=<  SigmaCivil,closebuttoncolor=#ffffff";
+            var options = "location=no,fullscreen=no,zoom=no,toolbar=no,hideurlbar=yes,hidenavigationbuttons=yes";
 
-            cordova.InAppBrowser.open('https://www.google.com.br', '_blank', options);
+            var inAppBrowserRef = cordova.InAppBrowser.open('https://www.google.com.br', '_self', options);
+
+            inAppBrowserRef.addEventListener('loadstart', loadStartCallBack);
+        }
+
+        function loadStartCallBack() {
+            alert('Abriu em nova aba!');
         }
 
         function closeApp() {
