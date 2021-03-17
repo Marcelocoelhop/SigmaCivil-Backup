@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Empree</title>
+
+    <!-- <link rel="manifest" href="manifest.json"> -->
+
+    <!-- un-comment this code to enable service worker
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(() => console.log('service worker installed'))
+          .catch(err => console.log('Error', err));
+      }
+    </script>-->
+
+    <!-- <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+    <link rel="stylesheet" href="css/custom.css" />
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+    <!-- ionic/angularjs js -->
+    <!-- <script src="lib/ionic/js/ionic.bundle.js"></script> -->
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+    <script type="text/javascript" src="js/mc.js"></script>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.mobile-1.4.5.min.js"></script>
+  </head>
+  <body ng-app="starter">
+    <script type="text/javascript">
+      window.onerror = function (message, url, lineNumber) {
+        alert(`Error: ${message} in ${url} at line ${lineNumber}`);
+      }
+  
+      var login = getquerystring("l");
+      var senha = getquerystring("s");
+  
+      var num_empree = getquerystring("e");
+  
+      var data_de_hoje = new Date()
+  
+      var qual_id_cliente = "";
+      var q_e_construtora = "";
+  
+      var q_mes = getquerystring("qm");
+      var q_ano = getquerystring("qa");
+  
+      if (q_mes != '') {
+        q_mes = q_mes
+      }
+      else {
+        var mes_now = new Date();
+        q_mes = mes_now.getMonth() + 1;
+        q_mes = q_mes.toString()
+      }
+  
+      if (q_ano != '') {
+        q_ano = q_ano
+      }
+      else {
+        var ano_now = new Date();
+        q_ano = ano_now.getFullYear();
+        q_ano = q_ano.toString()
+      }
+  
+  
+      ////// variaveis para mes e ano
+      var marca1 = ''
+      var marca2 = ''
+      var marca3 = ''
+      var marca4 = ''
+      var marca5 = ''
+      var marca6 = ''
+      var marca7 = ''
+      var marca8 = ''
+      var marca9 = ''
+      var marca10 = ''
+      var marca11 = ''
+      var marca12 = ''
+      var marca2010 = ''
+      var marca2011 = ''
+      var marca2012 = ''
+      var marca2013 = ''
+      var marca2014 = ''
+      var marca2015 = ''
+      var marca2016 = ''
+      var marca2017 = ''
+      var marca2018 = ''
+      var marca2019 = ''
+      var marca2020 = ''
+      var marca2021 = ''
+      var marca2022 = ''
+      var marca2023 = ''
+      var marca2024 = ''
+  
+      switch (q_mes) {
+        case '1':
+          marca1 = "selected";
+          break;
+        case '2':
+          marca2 = "selected";
+          break;
+        case '3':
+          marca3 = "selected";
+          break;
+        case '4':
+          marca4 = "selected";
+          break;
+        case '5':
+          marca5 = "selected";
+          break;
+        case '6':
+          marca6 = "selected";
+          break;
+        case '7':
+          marca7 = "selected";
+          break;
+        case '8':
+          marca8 = "selected";
+          break;
+        case '9':
+          marca9 = "selected";
+          break;
+        case '10':
+          marca10 = "selected";
+          break;
+        case '11':
+          marca11 = "selected";
+          break;
+        case '12':
+          marca12 = "selected";
+          break;
+      }
+  
+      switch (q_ano) {
+        case '2010':
+          marca2010 = "selected";
+          break;
+        case '2011':
+          marca2011 = "selected";
+          break;
+        case '2012':
+          marca2012 = "selected";
+          break;
+        case '2013':
+          marca2013 = "selected";
+          break;
+        case '2014':
+          marca2014 = "selected";
+          break;
+        case '2015':
+          marca2015 = "selected";
+          break;
+        case '2016':
+          marca2016 = "selected";
+          break;
+        case '2017':
+          marca2017 = "selected";
+          break;
+        case '2018':
+          marca2018 = "selected";
+          break;
+        case '2019':
+          marca2019 = "selected";
+          break;
+        case '2020':
+          marca2020 = "selected";
+          break;
+        case '2021':
+          marca2021 = "selected";
+          break;
+        case '2022':
+          marca2022 = "selected";
+          break;
+        case '2023':
+          marca2023 = "selected";
+          break;
+        case '2024':
+          marca2024 = "selected";
+          break;
+      }
+  
+      ////// variaveis para mes e ano
+  
+      var ini_lista = "<ul id='q_empree' data-filter='true' data-filter-placeholder='Buscar...' data-role='listview' data-inset='true'>"
+      var fim_lista = "</ul>"
+  
+      var op_periodo = [
+        '<div align="center">',
+        '<form name="form1" action="" method="get">',
+        '<table border="0" cellpadding="0" cellspacing="0">',
+        '<tr>',
+        '<td ><div align="center">',
+        '<div data-role="controlgroup" data-type="horizontal" data-mini="true"  >',
+        '<select onchange="enviar()" name="mes" id="idmes">',
+        '<option value="1" ' + marca1 + ' >Janeiro</option>',
+        '<option value="2" ' + marca2 + ' >Fevereiro</option>',
+        '<option value="3" ' + marca3 + '>Mar&ccedil;o</option>',
+        '<option value="4" ' + marca4 + '>Abril</option>',
+        '<option value="5" ' + marca5 + '>Maio</option>',
+        '<option value="6" ' + marca6 + '>Junho</option>',
+        '<option value="7" ' + marca7 + '>Julho</option>',
+        '<option value="8" ' + marca8 + '>Agosto</option>',
+        '<option value="9" ' + marca9 + '>Setembro</option>',
+        '<option value="10" ' + marca10 + '>Outubro</option>',
+        '<option value="11" ' + marca11 + '>Novembro</option>',
+        '<option value="12" ' + marca12 + '>Dezembro</option>',
+        '</select>',
+        '<select onchange="enviar()" name="ano" id="idano">',
+        '<option value="2010" ' + marca2010 + '   >2010</option>',
+        '<option value="2011" ' + marca2011 + '   >2011</option>',
+        '<option value="2012" ' + marca2012 + '   >2012</option>',
+        '<option value="2013" ' + marca2013 + '   >2013</option>',
+        '<option value="2014" ' + marca2014 + '   >2014</option>',
+        '<option value="2015" ' + marca2015 + '   >2015</option>',
+        '<option value="2016" ' + marca2016 + '   >2016</option>',
+        '<option value="2017" ' + marca2017 + '   >2017</option>',
+        '<option value="2018" ' + marca2018 + '   >2018</option>',
+        '<option value="2019" ' + marca2019 + '   >2019</option>',
+        '<option value="2020" ' + marca2020 + '   >2020</option>',
+        '<option value="2021" ' + marca2021 + '   >2021</option>',
+        '<option value="2022" ' + marca2022 + '   >2022</option>',
+        '<option value="2023" ' + marca2023 + '	  >2023</option>',
+        '<option value="2024" ' + marca2024 + '   >2024</option>',
+        '</select>',
+        '</div>',
+        '</div></td>',
+        '<td ><div align="center">',
+        '</div></td>',
+        '</tr>',
+        '</table>',
+        '</form>',
+        '</div>'
+      ].join('');
+  
+  
+      document.addEventListener("deviceready", onDeviceReady, false);
+  
+  
+      function onDeviceReady() {
+        window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+        window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+        window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+  
+        if (!window.indexedDB) {
+          alert("Seu navegador não suporta uma versão estável do IndexedDB. Alguns recursos não estarão disponíveis.");
+        }
+  
+        var emprees = [];
+  
+        var manuts = [];
+  
+        var status_sync = "";
+  
+        if (navigator.connection.type == 0 || navigator.connection.type == 'none')  //checa internet
+        {
+          iniciar();
+        }
+        else {
+  
+          var resposta_total;
+          var ajax = new XMLHttpRequest();
+          ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_status_sync.asp?e=" + num_empree + "&versao=2.2&t=" + Math.random(), true);
+          ajax.addEventListener("loadend", function (evt) {
+            var resultado_consulta = this.responseText;
+            var parte_resultado = resultado_consulta.split('_')
+            var status_sync_serv = parte_resultado[0]
+            var bloqueio = parte_resultado[1]
+            var q_mensagem = parte_resultado[2]
+  
+            if (bloqueio == "2") {
+              alert(q_mensagem)
+              window.location.href = "del.htm"
+            }
+  
+            if (bloqueio == "1" || bloqueio == "0") {
+              if (bloqueio == "1") {
+                alert(q_mensagem)
+              }
+              if (status_sync_serv != "nada") {
+  
+                var db;
+                var request = window.indexedDB.open("db_sigmacivil", "1");
+  
+                request.onerror = function (event) {
+                  alert("Erro ao criar o banco (cod 02)");
+                };
+  
+                request.onsuccess = function (event) {
+                  db = request.result;
+                  consultaEmpree(db, emprees);
+                  db.onerror = function (event) {
+                    alert("Database error: " + event.target.error);
+                  }
+                };
+  
+                function consultaEmpree(db, emprees) {
+                  var tx = db.transaction(['mtab_empree'], 'readwrite');
+                  var store = tx.objectStore('mtab_empree');
+                  var objectStoreRequest = store.openCursor();
+                  objectStoreRequest.onsuccess = function (event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                      status_sync = cursor.value.status_sync;
+                      if (status_sync_serv == status_sync) {
+                        iniciar();
+                      } else {
+                        var r = confirm("Houve uma atualização no seu Programa de Manutenção e é necessário sincronizá-lo com este aplicativo. Somente serão apagadas imagens/videos deste app que ainda não foram enviados para o servidor. Confirma a atualização ?");
+                        if (r == true) {
+                          window.location.assign("del.htm");
+                        } else {
+                          iniciar();
+                        }
+                      }
+                    }
+                  }
+                }
+  
+              } else {
+                iniciar();
+              }
+            }
+          });
+  
+          ajax.send();
+  
+        } //checa internet
+  
+      }
+  
+  
+      /////////////////////////////
+      function iniciar() {
+  
+        var menu_sup_offline = [
+          '<form name="form_sup" action="" method="get">',
+          '<div data-role="header" data-position="fixed" data-theme="a">',
+          '<div class="ui-corner-all custom-corners">',
+          '<div class="ui-bar ui-bar-a" style="height:38;text-align:center">',
+          '<div class="barra1" align="left"><img src="images/wifi_vermelho.png" style="position: absolute; left: 85px; top: 20px;" width="17" /></div>',
+          '<div align="center">',
+          '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
+          '<tr>',
+          '<td width="30" ><img src="images/logo6.png" width="142"> </td>',
+          '</tr>',
+          '</table>',
+          '</div>',
+          '</div>',
+          '</div>',
+          '</div>',
+          '</form>'
+        ].join('');
+  
+        var menu_sup_online = [
+          '<form name="form_sup" action="" method="get">',
+          '<div data-role="header" data-position="fixed" data-theme="a">',
+          '<div class="ui-corner-all custom-corners">',
+          '<div class="ui-bar ui-bar-a" style="height:38;text-align:center">',
+          '<div class="barra1" align="left"><img src="images/wifi_verde.png" style="position: absolute; left: 85px; top: 20px;" width="17" /></div>',
+          '<div align="center">',
+          '<table width="30" border="0" cellpadding="0" cellspacing="0" >',
+          '<tr>',
+          '<td width="30" ><img src="images/logo6.png" width="142"> </td>',
+          '</tr>',
+          '</table>',
+          '</div>',
+          '</div>',
+          '</div>',
+          '</div>',
+          '</form>'
+        ].join('');
+  
+        document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
+  
+        setInterval(function () {
+          // window.StatusBar.hide();
+  
+          if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+            document.getElementById('menu_opc2').innerHTML = menu_sup_offline;
+            return false;
+          }
+          else {
+            document.getElementById('menu_opc2').innerHTML = menu_sup_online;
+            return true;
+          }
+        }, 5000);
+  
+        var data1_aux = q_mes + "/01/" + q_ano
+        var data_ini_p_busca = new Date(data1_aux)
+  
+        var q_dia
+  
+        if (q_mes == 04 || q_mes == 06 || q_mes == 09 || q_mes == 11) {
+          q_dia = 30;
+        } else if ((q_mes == 02) && (q_ano % 4 == 0)) {
+          q_dia = 29;
+        } else if ((q_mes == 02) && (q_ano % 4 != 0)) {
+          q_dia = 28;
+        } else {
+          q_dia = 31;
+        }
+  
+        var data2_aux = q_mes + "/" + q_dia + "/" + q_ano
+  
+        var data_final_p_busca = new Date(data2_aux)
+  
+        var db;
+        var request = window.indexedDB.open("db_sigmacivil", "1");
+  
+        request.onerror = function (event) {
+          alert("Erro ao criar o banco (cod 01)");
+        };
+  
+        emprees = [];
+  
+        manuts = [];
+  
+        request.onsuccess = function (event) {
+          db = request.result;
+          consultaEmpree2(db, emprees, manuts);
+          db.onerror = function (event) {
+            alert("Database error: " + event.target.error);
+          }
+        };
+  
+        var data_implantacao_sc;
+        var nome_empree = "";
+  
+        function consultaEmpree2(db, emprees, manuts) {
+          var tx = db.transaction(['mtab_empree'], 'readwrite');
+          var store = tx.objectStore('mtab_empree');
+          var objectStoreRequest = store.openCursor();
+          objectStoreRequest.onsuccess = function (event) {
+            var cursor = event.target.result;
+            if (cursor) {
+              var data = cursor.value;
+  
+              data_implantacao_sc = new Date(cursor.value.data_implantacao_sc);
+              nome_empree = cursor.value.nome_empree;
+              document.getElementById('nome_emp').innerHTML = nome_empree;
+            }
+  
+            removerAcentoMtabProgManut(db, manuts)
+  
+            consultaEmpreeOrderBy(db, manuts);
+          }
+        }
+  
+        function removerAcentoMtabProgManut(db, manuts) {
+          var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
+          var store = tx.objectStore('mtab_prog_manut');
+          var objectStoreRequest = store.openCursor();
+          objectStoreRequest.onsuccess = function (event) {
+            var cursor = event.target.result;
+            if (cursor) {
+              var data = cursor.value;
+  
+              data.nome_sistema = removerAcento(data["nome_sistema"]);
+  
+              var request = cursor.update(data);
+              request.onsuccess = function (event) {
+                console.log('dados ordenados');
+              }
+  
+              cursor.continue();
+            }
+          }
+        }
+  
+        var meio_empree = "";
+        var final_empree = "";
+  
+        var qtde_eventos = 0;
+        var str = ""
+        var str2 = ""
+        var compl2 = ""
+  
+        var temp1 = ""
+        var aux1 = ""
+  
+        function consultaEmpreeOrderBy(db, manuts) {
+          var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
+          var store = tx.objectStore('mtab_prog_manut');
+          var index = store.index('nome_sistema');
+          var keyRangeValue = IDBKeyRange.lowerBound('A', true);
+          var objectStoreRequest = index.openCursor(keyRangeValue, "next");
+          objectStoreRequest.onsuccess = function (event) {
+            var cursor = event.target.result;
+  
+            if (cursor) {
+              var data = cursor.value;
+  
+              qtde_eventos = parseInt(data['prazo_garantia_dias'] / (data['qtde_dias_periodicidade'] * data['qtde_agrupamentos_eventos']))
+  
+              str = data['formato_periodicidade']
+              var data_inicial_garantia = new Date(data['data_inicial_garantia'])
+              str2 = str.split("_")
+  
+              for (var j = 1; j <= qtde_eventos; j++) {
+                compl2 = j * str2[0] * cursor.value.qtde_agrupamentos_eventos;
+  
+                var new_data_evento = new Date(data_inicial_garantia);
+  
+                if (str2[1] == "d") {
+                  new_data_evento.setDate(new_data_evento.getDate() + compl2);
+                }
+                if (str2[1] == "m") {
+  
+                  /////para soma em MESES
+                  var inteiro_ano = compl2 / 12;
+                  inteiro_ano = Math.floor(inteiro_ano);
+                  var aux_mes = compl2 - (12 * inteiro_ano);
+                  aux_mes = (new_data_evento.getMonth() + aux_mes)
+  
+                  var soma_ano
+                  var aux_dia
+  
+                  if (aux_mes >= 12) {
+                    aux_mes = aux_mes - 12;
+                    soma_ano = 1;
+                  }
+                  else {
+                    aux_mes = aux_mes;
+                    soma_ano = 0;
+                  }
+  
+                  var aux_ano = inteiro_ano + soma_ano
+                  aux_ano = (new_data_evento.getFullYear() + aux_ano)
+  
+                  if (new_data_evento.getDate() == 31) {
+  
+                    if (aux_mes == 03 || aux_mes == 05 || aux_mes == 08 || aux_mes == 10) {
+                      aux_dia = 30;
+                    } else if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
+                      aux_dia = 29;
+                    } else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
+                      aux_dia = 28;
+                    } else {
+                      aux_dia = 31;
+                    }
+  
+                  } else if (new_data_evento.getDate() == 30) {
+  
+                    if ((aux_mes == 01) && (aux_ano % 4 == 0)) {
+                      aux_dia = 29;
+                    } else if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
+                      aux_dia = 28;
+                    } else {
+                      aux_dia = 30;
+                    }
+  
+                  } else if (new_data_evento.getDate() == 29) {
+  
+                    if ((aux_mes == 01) && (aux_ano % 4 != 0)) {
+                      aux_dia = 28;
+                    } else {
+                      aux_dia = 29;
+                    }
+  
+                  } else {
+                    aux_dia = new_data_evento.getDate();
+                  }
+  
+                  new_data_evento = new Date(aux_ano, aux_mes, aux_dia)
+                  /////para soma em MESES
+  
+                }
+  
+                if (str2[1] == "yyyy") {
+                  new_data_evento.setFullYear(new_data_evento.getFullYear() + compl2);
+                }
+  
+                if (new_data_evento >= data_implantacao_sc) {
+  
+                  if (new_data_evento >= data_ini_p_busca && new_data_evento <= data_final_p_busca) {
+  
+                    //var texto_aux
+                    if (new_data_evento > data_de_hoje) {
+                      //texto_aux = "faltam " + parseInt((new_data_evento.getTime() - data_de_hoje.getTime()) / (24 * 3600 * 1000), 10)
+                      colorAux1 = "#42B750"
+                    }
+                    else {
+                      //texto_aux = "passados " + parseInt((data_de_hoje.getTime() - new_data_evento.getTime()) / (24 * 3600 * 1000), 10)
+                      colorAux1 = "#D13434"
+                    }
+  
+                    temp1 = new_data_evento.getDate() + "/" + (new_data_evento.getMonth() + 1) + "/" + new_data_evento.getFullYear() + "<br>"
+                    aux1 = "0" + (new_data_evento.getMonth() + 1)
+                    aux2 = "0" + (new_data_evento.getDate())
+  
+                    //var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); 
+  
+                    meio_empree += "<li class='last_btn_off'><a href='' onClick='ir_para(" + String.fromCharCode(34) + "?ipm=" + data['id_prog_manut'] + "&dia_ev=" + aux2.substring(aux2.length - 2, aux2.length) + "&mes_ev=" + aux1.substring(aux1.length - 2, aux1.length) + "&ano_ev=" + new_data_evento.getFullYear() + "" + String.fromCharCode(34) + ")'><table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td><font size='3' face='Arial' color='#000000'>" + colocarAcento(data['nome_sistema']) + "</font></td></tr></table><table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td> <font size='2' face='Arial' color='#0033CC'>" + data['nome_atividade'] + "</font></td></tr></table>"
+                    meio_empree += "<table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td><font size='2' face='Arial'> (" + data['nome_periodicidade'] + ")</font></td></tr></table>"
+                    meio_empree += "<table border='0' cellpadding='0' cellspacing='0'><tr><td><div align='center'><font size='3' face='Arial'>" + temp1 + "</font></div></td><td></td></tr></table>"
+                    meio_empree += "</a></li>"
+  
+                  }
+  
+                }
+  
+                if (new_data_evento > data_final_p_busca) { break; }
+              } //for next
+  
+              cursor.continue();
+            }
+  
+            final_empree = ini_lista + meio_empree + fim_lista
+            document.getElementById('lista_empree').innerHTML = final_empree;
+            $('#q_empree').listview();
+          }
+  
+        }
+  
+        function removerAcento(text) {
+          text = text.replace(/Á/g, 'AxcL1A');
+          text = text.replace(/À/g, 'AxcL2A');
+          text = text.replace(/Â/g, 'AxcL3A');
+          text = text.replace(/Ã/g, 'AxcL4A');
+  
+          text = text.replace(/É/g, 'ExcL1E');
+          text = text.replace(/È/g, 'ExcL2E');
+          text = text.replace(/Ê/g, 'ExcL3E');
+  
+          text = text.replace(/Í/g, 'IxcL1I');
+          text = text.replace(/Ì/g, 'IxcL2I');
+          text = text.replace(/Î/g, 'IxcL3I');
+  
+          text = text.replace(/Ó/g, 'OxcL1O');
+          text = text.replace(/Ò/g, 'OxcL2O');
+          text = text.replace(/Ô/g, 'OxcL3O');
+  
+          text = text.replace(/Ú/g, 'UxcL1U');
+          text = text.replace(/Ù/g, 'UxcL2U');
+          text = text.replace(/Û/g, 'UxcL3U');
+  
+          return text;
+        }
+  
+        function colocarAcento(text) {
+          text = text.replace(/AxcL1A/g, 'Á');
+          text = text.replace(/AxcL2A/g, 'À');
+          text = text.replace(/AxcL3A/g, 'Â');
+          text = text.replace(/AxcL4A/g, 'Ã');
+  
+          text = text.replace(/ExcL1E/g, 'É');
+          text = text.replace(/ExcL2E/g, 'È');
+          text = text.replace(/ExcL3E/g, 'Ê');
+  
+          text = text.replace(/IxcL1I/g, 'Í');
+          text = text.replace(/IxcL2I/g, 'Ì');
+          text = text.replace(/IxcL3I/g, 'Î');
+  
+          text = text.replace(/OxcL1O/g, 'Ó');
+          text = text.replace(/OxcL2O/g, 'Ò');
+          text = text.replace(/OxcL3O/g, 'Ô');
+  
+          text = text.replace(/UxcL1U/g, 'Ú');
+          text = text.replace(/UxcL2U/g, 'Ù');
+          text = text.replace(/UxcL3U/g, 'Û');
+  
+          return text;
+        }
+      }
+  
+  
+    </script>
+  
+    <span id="menu_opc2"></span>
+  
+    <div align="center">
+      <table border="0" cellpadding="0" cellspacing="6">
+        <tr>
+          <td>
+            <div align="center"><span id="nome_emp"></span></div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  
+    <span id="opc_periodo"></span>
+  
+    <span id="lista_empree"></span><br>
+  
+  
+    <div style="top:4" data-role="collapsible" data-collapsed="true" class="ui-btn-left" data-mini="true">
+      <h4>Menu</h4>
+      <ul class="menu-tablet-responsive" style="border: 2px solid #38c;" data-role="listview" data-mini="true">
+        <li id="step-4">
+          <a class="ui-btn ui-icon-gear ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+            onClick="go_to_page_config()">Configurações</a>
+        </li>
+        <li id="step-5">
+          <a class="ui-btn ui-icon-power ui-btn-icon-right ui-shadow ui-corner-all" href="#"
+            onClick="closeApp()">Fechar app</a>
+        </li>
+        <li id="step-6">
+          <a class="click" href="#" onClick="enviar_sync()">Logout</a>
+        </li>
+      </ul>
+    </div>
+  
+    <!-- Menu bottom -->
+    <nav class="main-menu-bottom">
+      <div id="step-0">
+        <button id="step-1" class="button-actived" type="button" onclick="volta_uni()">
+          <img src="images/engenheiro_cogs.png" width="22" alt="Home" />
+          <p>manutenções</p>
+        </button>
+        <button id="step-2" class="buttons-navigate" type="button" onclick="scan()">
+          <img src="images/qr_code.png" width="22" alt="Qr_code" />
+          <p>qrcode</p>
+        </button>
+        <button id="step-3" class="buttons-navigate" type="button" onclick="go_relat_check2()">
+          <img src="images/graph.png" width="22" alt="Relatório" />
+          <p>rel.checkpoint</p>
+        </button>
+        <!-- <button class="buttons-navigate" type="button" onclick="openBrowser()">
+            <img src="images/call.png" width="22" alt="Chamado" />
+            <p>abrir chamado</p>
+          </button> -->
+      </div>
+    </nav>
+    <!-- Fim Menu bottom -->
+  </body>
+</html>
+
+<script>
+	document.getElementById('opc_periodo').innerHTML = op_periodo;
+</script>
+
+<script>
+	function ir_para(qlink) {
+
+		if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+			window.location.assign("even.htm" + qlink + "&e=" + num_empree + "&l=" + login + "&s=" + senha)
+		}
+		else {
+			window.location.assign("empree_online.htm?l=" + login + "&s=" + senha + "&e=" + num_empree + "&qm=" + document.getElementById('idmes').value + "&qa=" + document.getElementById('idano').value);
+		}
+
+	}
+
+	function enviar() {
+		if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+			window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + num_empree + "&qm=" + document.getElementById('idmes').value + "&qa=" + document.getElementById('idano').value);
+		} else {
+			window.location.assign("empree_online.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + document.getElementById('idmes').value + "&qa=" + document.getElementById('idano').value);
+		}
+	}
+
+	function enviar_sync() {
+
+		decisao = confirm("Confirma efetuar novo LOGIN ? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção");
+
+		if (decisao) {
+			document.form_sup.action = "del.htm";
+			document.form_sup.submit();
+
+		} else {
+		}
+
+	}
+
+	function volta_uni() {
+		if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+			// alert('Está offline');
+			window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+		}
+		else {
+			// alert('Está onlline');
+			window.location.assign("empree_online.htm?l=" + login + "&s=" + senha + "&e=" + num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+		}
+	}
+
+	function scan() {
+		cordova.plugins.barcodeScanner.scan(
+			function (result) {
+				if (!result.cancelled) {
+					// In this case we only want to process QR Codes
+					if (result.format == "QR_CODE") {
+						var value = result.text;
+
+						var ponto_ini = value.indexOf("www.sigmacivil.com.br/us/new_qr_hist_mp.asp?c=");
+						var parte1 = value.substring(ponto_ini + 46);
+
+						var pedaco = parte1.split("_");
+
+						// alert(num_empree);
+						// alert(pedaco[0]);
+
+						if (num_empree == pedaco[0]) {
+
+							var qid_empree = num_empree;
+							var qid_sistema = pedaco[1];
+
+							var d = new Date();
+							var qdata_checkpoint = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+
+							var qatualizado_serv = "N";
+
+							navigator.geolocation.getCurrentPosition(
+								function (position) {
+									var qlatitude_checkpoint = position.coords.latitude;
+									var qlongitude_checkpoint = position.coords.longitude;
+									var qaltura_checkpoint = position.coords.altitude;
+
+									var db;
+									var request = window.indexedDB.open("db_sigmacivil", "1");
+
+									request.onerror = function (event) {
+										alert("Erro ao criar o banco (cod 02)");
+									};
+
+									request.onsuccess = function (event) {
+										db = request.result;
+
+										inserirDadosCheckpoint(db, dadosCheckpoint);
+
+										db.onerror = function (event) {
+											alert("Database error: " + event.target.errorCode);
+										}
+									}
+
+									var dadosCheckpoint = [
+										{
+											id_empree: qid_empree,
+											id_sistema: qid_sistema,
+											data_checkpoint: qdata_checkpoint,
+											latitude_checkpoint: qlatitude_checkpoint,
+											longitude_checkpoint: qlongitude_checkpoint,
+											altura_checkpoint: qaltura_checkpoint,
+											atualizado_serv: qatualizado_serv,
+										}
+									];
+
+									function inserirDadosCheckpoint(db, dadosCheckpoint) {
+										var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+										var store = tx.objectStore('mtab_checkpoint');
+
+										dadosCheckpoint.map(function (dadoCheckpoint) {
+											store.add(dadoCheckpoint);
+										});
+
+										tx.oncomplete = function () {
+											go_to_page(qid_sistema, qid_empree);
+										}
+
+										tx.onerror = function (event) {
+											alert('error storing checkpoint note ' + event.target.error);
+										}
+									}
+								},
+								function (error) {
+									var db;
+									var request = window.indexedDB.open("db_sigmacivil", "1");
+
+									request.onerror = function (event) {
+										alert("Erro ao criar o banco (cod 03)");
+									};
+
+									request.onsuccess = function (event) {
+										db = request.result;
+
+										inserirDadosCheckpointError(db, dadosCheckpointError);
+
+										db.onerror = function (event) {
+											alert("Database error: " + event.target.errorCode);
+										}
+									}
+
+									var dadosCheckpointError = [
+										{
+											id_empree: qid_empree,
+											id_sistema: qid_sistema,
+											data_checkpoint: qdata_checkpoint,
+											latitude_checkpoint: "",
+											longitude_checkpoint: "",
+											altura_checkpoint: "",
+											atualizado_serv: qatualizado_serv,
+										}
+									];
+
+									function inserirDadosCheckpointError(db, dadosCheckpointError) {
+										var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+										var store = tx.objectStore('mtab_checkpoint');
+
+										dadosCheckpointError.map(function (dadoCheckpointError) {
+											store.add(dadoCheckpointError);
+										});
+
+										tx.oncomplete = function () {
+											go_to_page(qid_sistema, qid_empree);
+										}
+
+										tx.onerror = function (event) {
+											alert('error storing checkpointError note ' + event.target.error);
+										}
+									}
+								}
+							);
+
+						} else {
+							alert("Esse QRCode não é válido");
+						}
+
+					} else {
+						alert("Desculpe, só é possível ler QRCODES");
+					}
+				} else {
+					// alert("Leitura do QRCODE cancelada");
+				}
+			},
+			function (error) {
+				// alert("Erro: " + error);
+			}
+		);
+	}
+
+	function go_to_page(q_id_sistema, q_num_empree) {
+		window.location.assign("qrcode.htm?l=" + login + "&s=" + senha + "&e=" + q_num_empree + "&id_sis=" + q_id_sistema + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano));
+	}
+
+	function removeAcento(text) {
+		// text = text.toLowerCase();
+
+		// a
+		text = text.replace(/Á/g, 'xcL1A')
+		text = text.replace(/À/g, 'xcL2A')
+		text = text.replace(/Ã/g, 'xcL3A')
+		text = text.replace(/Â/g, 'xcL4A')
+
+		text = text.replace(/á/g, 'xcL1a')
+		text = text.replace(/à/g, 'xcL2a')
+		text = text.replace(/ã/g, 'xcL3a')
+		text = text.replace(/â/g, 'xcL4a')
+
+		// e
+		text = text.replace(/É/g, 'xcL1E')
+		text = text.replace(/È/g, 'xcL2E')
+		text = text.replace(/Ê/g, 'xcL4E')
+
+		text = text.replace(/é/g, 'xcL1e')
+		text = text.replace(/è/g, 'xcL2e')
+		text = text.replace(/ê/g, 'xcL4e')
+
+		// i
+		text = text.replace(/Í/g, 'xcL1I')
+		text = text.replace(/Ì/g, 'xcL2I')
+		text = text.replace(/Î/g, 'xcL4I')
+
+		text = text.replace(/í/g, 'xcL1i')
+		text = text.replace(/ì/g, 'xcL2i')
+		text = text.replace(/î/g, 'xcL4i')
+
+		// o
+		text = text.replace(/Ó/g, 'xcL1O')
+		text = text.replace(/Ò/g, 'xcL2O')
+		text = text.replace(/Õ/g, 'xcL3O')
+		text = text.replace(/Ô/g, 'xcL4O')
+
+		text = text.replace(/ó/g, 'xcL1o')
+		text = text.replace(/ò/g, 'xcL2o')
+		text = text.replace(/õ/g, 'xcL3o')
+		text = text.replace(/ô/g, 'xcL4o')
+
+		// u
+		text = text.replace(/Ú/g, 'xcL1U')
+		text = text.replace(/Ù/g, 'xcL2U')
+		text = text.replace(/Û/g, 'xcL4U')
+
+		text = text.replace(/ú/g, 'xcL1u')
+		text = text.replace(/ù/g, 'xcL2u')
+		text = text.replace(/û/g, 'xcL4u')
+
+		// ç
+		text = text.replace(/Ç/g, 'xcL0C')
+
+		text = text.replace(/ç/g, 'xcL0c')
+
+		return text;
+	}
+
+	function tem_conexao() {
+		if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
+			// alert('Sem conexão com internet. Favor se conectar.');
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	function go_to_page_config() {
+		window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + qual_id_cliente + "&econst=" + q_e_construtora);
+	}
+
+	function go_relat_check2() {
+		if (tem_conexao()) {
+			window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + /*"&id_sist=" + id_sis +*/ "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + qual_id_cliente + "&econst=" + q_e_construtora);
+		} else {
+			alert('Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.');
+		}
+	}
+
+	function closeApp() {
+		navigator.notification.confirm(
+			'Tem certeza que deseja sair do app SigmaCivil?',
+			function (buttonIndex) {
+				if (buttonIndex === 2) {
+					return;
+				}
+
+				navigator.app.exitApp();
+			},
+			'SigmaCivil',
+			['OK', 'Cancelar']
+		);
+	}
+
+</script>

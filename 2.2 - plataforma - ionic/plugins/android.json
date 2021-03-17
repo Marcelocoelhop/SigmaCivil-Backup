@@ -1,0 +1,102 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-custom-config": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-app-exit": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-badge": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-barcodescanner": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-battery-status": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-camera": {
+      "ANDROID_SUPPORT_V4_VERSION": "27.+",
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-contacts": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-datepicker": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-device-motion": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-device-orientation": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-dialogs": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-file-transfer": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-geolocation": {
+      "GPS_REQUIRED": "true",
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-globalization": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-ionic-keyboard": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-ionic-webview": {
+      "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+",
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-local-notification": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-media": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-media-capture": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-network-information": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-vibration": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-wkwebview-file-xhr": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-sqlite-storage": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    }
+  },
+  "dependent_plugins": {}
+}

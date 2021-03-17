@@ -1,0 +1,22 @@
+{
+  "name": "SigmaCivilIonic",
+  "integrations": {
+    "capacitor": {
+      "enabled": false
+    },
+    "cordova": {}
+  },
+  "type": "ionic1",
+  "watchPatterns": [
+    "scss/**/*",
+    "www/**/*",
+    "!www/lib/**/*",
+    "!www/**/*.map"
+  ],
+  "proxies": [
+    {
+      "path": "/app_sc",
+      "proxyUrl": "https://www.sigmacivil.com.br"
+    }
+  ]
+}

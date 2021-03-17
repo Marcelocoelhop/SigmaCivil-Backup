@@ -1,0 +1,48 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "io.ionic.starter"
+    },
+    "cordova-plugin-ionic-keyboard": {
+      "PACKAGE_NAME": "io.ionic.starter"
+    },
+    "cordova-plugin-wkwebview-file-xhr": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-device-orientation": {
+      "PACKAGE_NAME": "io.ionic.starter"
+    },
+    "cordova-plugin-vibration": {
+      "PACKAGE_NAME": "io.ionic.starter"
+    },
+    "cordova-plugin-app-exit": {
+      "PACKAGE_NAME": "io.ionic.starter"
+    },
+    "cordova-plugin-battery-status": {
+      "PACKAGE_NAME": "io.ionic.starter"
+    },
+    "cordova-sqlite-storage": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-custom-config": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-contacts": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-datepicker": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    }
+  },
+  "dependent_plugins": {}
+}

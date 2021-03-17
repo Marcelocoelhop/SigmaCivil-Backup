@@ -1,0 +1,62 @@
+{
+  "_from": "cordova-sqlite-storage@~0.8.5",
+  "_id": "cordova-sqlite-storage@0.8.5",
+  "_inBundle": false,
+  "_integrity": "sha1-VL5sreRUKzhNaxQRvMLBnVoTxq4=",
+  "_location": "/cordova-sqlite-storage",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "cordova-sqlite-storage@~0.8.5",
+    "name": "cordova-sqlite-storage",
+    "escapedName": "cordova-sqlite-storage",
+    "rawSpec": "~0.8.5",
+    "saveSpec": null,
+    "fetchSpec": "~0.8.5"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-sqlite-storage/-/cordova-sqlite-storage-0.8.5.tgz",
+  "_shasum": "54be6cade4542b384d6b1411bcc2c19d5a13c6ae",
+  "_spec": "cordova-sqlite-storage@~0.8.5",
+  "_where": "C:\\Users\\micro45\\Desktop\\SigmaCivilIonic",
+  "author": {
+    "name": "various"
+  },
+  "bugs": {
+    "url": "https://github.com/litehelpers/Cordova-sqlite-storage/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cordova-sqlite-storage",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "deprecated": false,
+  "description": "Native interface to SQLite for PhoneGap/Cordova (core version)",
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.3.0"
+    }
+  ],
+  "homepage": "https://github.com/litehelpers/Cordova-sqlite-storage",
+  "keywords": [
+    "sqlite",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios"
+  ],
+  "license": "MIT",
+  "name": "cordova-sqlite-storage",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/litehelpers/Cordova-sqlite-storage.git"
+  },
+  "version": "0.8.5"
+}

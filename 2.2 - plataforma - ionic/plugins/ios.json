@@ -1,0 +1,39 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-device-orientation": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-vibration": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-app-exit": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-battery-status": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-sqlite-storage": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-custom-config": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-contacts": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-datepicker": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
+    }
+  },
+  "dependent_plugins": {}
+}
