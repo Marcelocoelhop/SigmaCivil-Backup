@@ -719,14 +719,14 @@
           ],
           "NSLocationWhenInUseUsageDescription": [
             {
-              "xml": "<string>Allow the app to know your location</string>",
-              "count": 2
-            },
-            {
               "xml": "<string>need location access to find things nearby</string>",
-              "count": 1,
+              "count": 2,
               "mode": "merge",
               "id": "config.xml"
+            },
+            {
+              "xml": "<string>Allow the app to know your location</string>",
+              "count": 1
             }
           ],
           "NSPhotoLibraryAddUsageDescription": [
@@ -740,7 +740,7 @@
           "NSLocationAlwaysUsageDescription": [
             {
               "xml": "<string>Allow the app to know your location</string>",
-              "count": 74
+              "count": 79
             }
           ]
         }

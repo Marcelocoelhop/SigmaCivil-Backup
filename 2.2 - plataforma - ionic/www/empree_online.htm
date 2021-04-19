@@ -1,35 +1,13 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Empree_online</title>
-
-    <!-- <link rel="manifest" href="manifest.json"> -->
-
-    <!-- un-comment this code to enable service worker
-    <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('service-worker.js')
-          .then(() => console.log('service worker installed'))
-          .catch(err => console.log('Error', err));
-      }
-    </script>-->
-
-    <!-- <link href="lib/ionic/css/ionic.css" rel="stylesheet"> -->
-    <!-- <link href="css/style.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="css/custom.css" />
     <link rel="stylesheet" href="css/custom-mobile.css" />
     <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
-
-    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
-    <link href="css/ionic.app.css" rel="stylesheet">
-    -->
-
-    <!-- ionic/angularjs js -->
-    <!-- <script src="lib/ionic/js/ionic.bundle.js"></script> -->
-
-    <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
     <!-- your app's js -->
@@ -42,24 +20,29 @@
     <script src="js/shepherd.js"></script>
 
     <style>
-      .menu .ui-mini.ui-btn-icon-left:after,
-      .ui-mini .ui-btn-icon-left:after,
-      .ui-header .ui-btn-icon-left:after,
-      .ui-footer .ui-btn-icon-left:after {
-          display: none;
-      }
+        .menu .ui-mini.ui-btn-icon-left:after,
+        .ui-mini .ui-btn-icon-left:after,
+        .ui-header .ui-btn-icon-left:after,
+        .ui-footer .ui-btn-icon-left:after {
+            display: none;
+        }
 
-      .ui-btn-icon-left {
-          position: relative;
-          padding-left: 12px !important;
-      }
+        .ui-btn-icon-left {
+            position: relative;
+            padding-left: 12px !important;
+        }
 
-      .ui-collapsible-inset .ui-collapsible-heading .ui-btn {
-          box-shadow: none !important;
-      }
-  </style>
-  </head>
-  <body id="step" ng-app="starter">
+        .ui-collapsible-inset .ui-collapsible-heading .ui-btn {
+            box-shadow: none !important;
+        }
+
+        .shepherd-content {
+            width: 350px !important;
+        }
+    </style>
+</head>
+
+<body id="step" ng-app="starter">
     <!-- <div id="tutorial-video"></div> -->
 
     <div class="loading_page"
@@ -102,7 +85,9 @@
         <div id="opc_periodo"></div>
     </table>
 
-    <div id="box-content"></div>
+    <ion-content overflow-scroll='true'>
+        <div id="box-content"></div>
+    </ion-content>
 
     <!-- Menu bottom -->
     <nav class="main-menu-bottom">
@@ -451,6 +436,64 @@
             var data_final_p_busca = new Date(data2_aux)
             /////////////////////////////////////////////
 
+            // notificação
+            var db;
+            var request = window.indexedDB.open("db_sigmacivil", "1");
+
+            request.onerror = function (event) {
+                alert("Erro ao criar o banco (cod 03)");
+            };
+
+            request.onsuccess = function (event) {
+                db = request.result;
+
+                viewNotification(db);
+
+                db.onerror = function (event) {
+                    alert("Database error: " + event.target.errorCode);
+                }
+            }
+
+            function viewNotification(db) {
+                var tx = db.transaction(['mtab_config'], 'readwrite');
+                var store = tx.objectStore('mtab_config');
+                var objectStoreRequest = store.openCursor();
+                objectStoreRequest.onsuccess = function (event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        var data = cursor.value;
+
+                        if (data.notificacao) {
+                            var xhr = new XMLHttpRequest();
+                            xhr.open("GET", "https://www.sigmacivil.com.br/app_sc/notificacao.asp?l=" + login + "&s=" + senha + "&pag=empree_online.htm" + "&versao=2.2&t=" + Math.random(), true);
+                            xhr.addEventListener("loadend", function (evt) {
+                                var resposta_total = this.responseText;
+
+                                var jsontext = resposta_total.split("*");
+
+                                var tem_notificacao = jsontext[0];
+                                var titulo_notificacao = jsontext[1];
+                                var descricao_notificacao = jsontext[2];
+
+                                if (tem_notificacao == "S") {
+
+                                    cordova.plugins.notification.local.schedule({
+                                        title: titulo_notificacao,
+                                        text: descricao_notificacao,
+                                        icon: 'file://images/civil-eng.png',
+                                        foreground: true
+                                    });
+
+                                }
+                            });
+                            xhr.send();
+                        }
+
+                    }
+                }
+            }
+            // fim notificação
+
             var ini_lista = "<form class='ui-filterable'><div class='ui-input-search ui-body-inherit ui-corner-all ui-shadow-inset ui-input-has-clear'><input data-role='listview' value='" + filtro_sis + "' placeholder='Buscar...' id='filterBasic-input' data-type='search'><a href='#' tabindex='-1' aria-hidden='true' class='ui-input-clear ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all ui-input-clear-hidden' title='Clear text'>Clear text</a></div></form><ul data-input='#filterBasic-input' id='q_empree' class='list-content' data-mini='true' data-role='listview' data-filter='true' data-filter-placeholder='Buscar...' data-inset='true'>"
             var fim_lista = "</ul>"
 
@@ -459,6 +502,7 @@
             ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp_online.asp?l=" + login + "&s=" + senha + "&versao=2.2&t=" + Math.random(), true);
             ajax.addEventListener("loadend", function (evt) {
                 var resposta_total = this.responseText;
+
                 var jsontext = resposta_total.split("*")
 
                 var getLogin = JSON.parse(jsontext[0]);
@@ -652,12 +696,12 @@
                         vetor_consulta_evento = vetor_consulta_evento.substring(0, vetor_consulta_evento.length - 1);
                         vetor_dados_manutencao = vetor_dados_manutencao.substring(0, vetor_dados_manutencao.length - 1);
 
-                        var data_post = "l=" + login + "&s=" + senha + "&d=" + vetor_consulta_evento;
+                        var data_post = "l=" + login.trim() + "&s=" + senha.trim() + "&d=" + vetor_consulta_evento;
                         var ajax2 = new XMLHttpRequest();
-                        ajax2.open("POST", "https://www.sigmacivil.com.br/app_sc/apagar_new_onlineB.asp?versao=2.2&t=" + Math.random(), true);
+                        ajax2.open("POST", "https://www.sigmacivil.com.br/app_sc/consult_evento_onlineB.asp?versao=2.2&t=" + Math.random(), true);
                         ajax2.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                         ajax2.addEventListener("loadend", function (evt) {
-                            var resposta_total = this.response;
+                            var resposta_total = this.responseText;
                             var jsontext = resposta_total.split("#")
 
                             var getLogin = JSON.parse(jsontext[0]);
@@ -705,6 +749,7 @@
                                     var aux_mes;
                                     var aux_ano;
                                     var aux_new_event;
+                                    var id_step = "";
 
                                     fator_freq = cada_parte_vet_manut[6] * cada_parte_vet_manut[7]
 
@@ -730,7 +775,6 @@
                                         data_minima_alteracao = (data_minima_alteracao.getDate() + '/' + mes_auxiliar + '/' + data_minima_alteracao.getFullYear());
                                     }
                                     string_auxiliar += " <br><br><br>------- INI data_minima_alteracao------------------ " + fator_freq + "--" + dias_gap + "--" + data_minima_alteracao + "---------FIM data_minima_alteracao------------<br>"
-
 
                                     data_maxima_alteracao = new Date(cada_parte_vet_manut[9])
                                     data_maxima_alteracao.setDate(data_maxima_alteracao.getDate() + parseInt(dias_gap))
@@ -839,7 +883,7 @@
 
                                         dados_1 += [
                                             '<li class="shadow-box ' + focus + '">',
-                                            '<a href="#" onclick="ir_para(' + String.fromCharCode(39) + '?ipm=' + cada_parte_vet_manut[0] + '&dia_ev=' + cada_parte_vet_evento[3] + '&mes_ev=' + cada_parte_vet_evento[2] + '&ano_ev=' + cada_parte_vet_evento[1] + '&d_min=' + data_minima_alteracao + '&d_max=' + data_maxima_alteracao + '&tipo=alt&x=' + Math.random() + String.fromCharCode(39) + ')">',
+                                            '<a href="#" id="step-7' + id_step + '" onclick="ir_para(' + String.fromCharCode(39) + '?ipm=' + cada_parte_vet_manut[0] + '&dia_ev=' + cada_parte_vet_evento[3] + '&mes_ev=' + cada_parte_vet_evento[2] + '&ano_ev=' + cada_parte_vet_evento[1] + '&d_min=' + data_minima_alteracao + '&d_max=' + data_maxima_alteracao + '&tipo=alt&x=' + Math.random() + String.fromCharCode(39) + ')">',
                                             '<font size="4" face="Arial">' + cada_parte_vet_manut[1] + '</font>',
                                             '<p class="text-size-content" size="2" face="Arial" color="#0000FF">' + cada_parte_vet_manut[2] + '</p>',
                                             '<p class="text-purple" size="2" face="Arial" color="#333"><strong class="text-blue-content" style="color: #cc4200; font-weight: bold;">' + cada_parte_vet_manut[3] + '</strong> - ' + cada_parte_vet_manut[4] + '</p>',
@@ -870,7 +914,7 @@
 
                                         dados_0 += [
                                             '<li class="shadow-box ' + focus + '">',
-                                            '<a href="#" onclick="ir_para(' + String.fromCharCode(39) + '?ipm=' + cada_parte_vet_manut[0] + '&dia_ev=' + cada_parte_vet_evento[3] + '&mes_ev=' + cada_parte_vet_evento[2] + '&ano_ev=' + cada_parte_vet_evento[1] + '&d_min=' + data_minima_alteracao + '&d_max=' + data_maxima_alteracao + '&tipo=ins&x=' + Math.random() + String.fromCharCode(39) + ')">',
+                                            '<a href="#" id="step-7' + id_step + '" onclick="ir_para(' + String.fromCharCode(39) + '?ipm=' + cada_parte_vet_manut[0] + '&dia_ev=' + cada_parte_vet_evento[3] + '&mes_ev=' + cada_parte_vet_evento[2] + '&ano_ev=' + cada_parte_vet_evento[1] + '&d_min=' + data_minima_alteracao + '&d_max=' + data_maxima_alteracao + '&tipo=ins&x=' + Math.random() + String.fromCharCode(39) + ')">',
                                             '<font size="4" face="Arial">' + cada_parte_vet_manut[1] + '</font>',
                                             '<p class="text-size-content" size="2" face="Arial" color="#0000FF">' + cada_parte_vet_manut[2] + '</p>',
                                             '<p class="text-purple" size="2" face="Arial" color="#333"><strong class="text-blue-content" style="color: #cc4200; font-weight: bold;">' + cada_parte_vet_manut[3] + '</strong> - ' + cada_parte_vet_manut[4] + '</p>',
@@ -891,7 +935,7 @@
                                             '</table>',
                                             '<div style="display: flex; justify-content: space-around; width: 100%; align-items: center;">',
                                             '<div>' + imagem1 + '</div>',
-                                            '<div style="display: flex; flex-direction: column; align-items: center;">',
+                                            '<div id="step-8' + id_step + '" style="display: flex; flex-direction: column; align-items: center;">',
                                             '<div>' + barra + '</div>',
                                             '<div style="display: flex; justify-content: space-between;">',
                                             '<p>' + data_minima_alteracao.split('-').reverse().join('/') + '</p>',
@@ -905,52 +949,8 @@
                                         ].join('');
 
                                     }
-                                }
 
-                                // notification
-
-                                var db;
-                                var request = window.indexedDB.open("db_sigmacivil", "1");
-
-                                request.onerror = function (event) {
-                                    alert("Erro ao criar o banco (cod 03)");
-                                };
-
-                                request.onsuccess = function (event) {
-                                    db = request.result;
-
-                                    viewNotificacao(db);
-
-                                    db.onerror = function (event) {
-                                        alert("Database error: " + event.target.errorCode);
-                                    }
-                                }
-
-                                function viewNotificacao(db) {
-                                    var tx = db.transaction(['mtab_config'], 'readwrite');
-                                    var store = tx.objectStore('mtab_config');
-                                    var objectStoreRequest = store.openCursor();
-                                    objectStoreRequest.onsuccess = function (event) {
-                                        var cursor = event.target.result;
-                                        if (cursor) {
-                                            var data = cursor.value;
-
-                                            if (data.notificacao) {
-                                                setTimeout(function () {
-                                                    cordova.plugins.notification.local.schedule({
-                                                        title: 'Você possui manutenções pendentes',
-                                                        text: qtdEv > 0 && `${qtdEv} manutenções ainda não foram realizadas`,
-                                                        icon: 'file://images/civil-eng.png',
-                                                        // trigger: { every: 'day', count: 5 },
-                                                        // smallIcon: 'res://images/civil-eng.png',
-                                                        foreground: true
-                                                    });
-                                                }, 5000);
-                                            }
-
-                                            var request = cursor.update(data);
-                                        }
-                                    }
+                                    id_step = i;
                                 }
 
                                 if (filtro_sis !== '' && filtro_bool === false) {
@@ -976,6 +976,136 @@
                                 $(".loading_page").hide();
                                 $('#q_empree').listview();
                                 document.getElementById('nome_empree_').innerHTML = nome_empree
+
+                                var db;
+                                var request = window.indexedDB.open("db_sigmacivil", "1");
+
+                                request.onerror = function (event) {
+                                    alert("Erro ao criar o banco (cod 03)");
+                                };
+
+                                request.onsuccess = function (event) {
+                                    db = request.result;
+
+                                    updateMtabConfigTutorial(db);
+
+                                    db.onerror = function (event) {
+                                        alert("Database error: " + event.target.errorCode);
+                                    }
+                                }
+
+                                function updateMtabConfigTutorial(db) {
+                                    var tx = db.transaction(['mtab_config'], 'readwrite');
+                                    var store = tx.objectStore('mtab_config');
+                                    var objectStoreRequest = store.openCursor();
+                                    objectStoreRequest.onsuccess = function (event) {
+                                        var cursor = event.target.result;
+                                        if (cursor) {
+                                            var data = cursor.value;
+
+                                            if (!data.tutorial) {
+                                                var tour = new Shepherd.Tour({
+                                                    useModalOverlay: true,
+                                                    defaultStepOptions: {
+                                                        cancelIcon: {
+                                                            enabled: true,
+                                                        },
+                                                        classes: "custom",
+                                                        scrollTo: false,
+                                                        when: {
+                                                            cancel: function () {
+                                                                updateViewTutorial(db);
+                                                            },
+                                                        },
+                                                    },
+                                                });
+
+                                                tour.addSteps([
+                                                    {
+                                                        title: "Bem vindo",
+                                                        text: `<p style="text-align: left !important;">Bem vindo ao tour do aplicativo <strong>SigmaCivil</strong>, 
+                                    aqui você verá um tutorial de uso da plataforma. Clique em próximo para realizar o tour ou pule para encerrar.</p>`,
+                                                        // attachTo: {
+                                                        //     element: "#step-0",
+                                                        //     on: "top",
+                                                        // },
+                                                        buttons: [
+                                                            {
+                                                                action() {
+                                                                    this.removeStep(this.getCurrentStep());
+                                                                    return this.back();
+                                                                },
+                                                                classes: "shepherd-button-secondary",
+                                                                text: "Anterior",
+                                                            },
+                                                            {
+                                                                action() {
+                                                                    return this.next();
+                                                                },
+                                                                text: "Próximo",
+                                                            },
+                                                        ],
+                                                        id: "creating",
+                                                    },
+                                                    {
+                                                        title: "Manutenções",
+                                                        text: `<p style="text-align: left !important;">Este módulo você visualiza e registra as manutenções preventivas do seu condomínio.</p>`,
+                                                        attachTo: {
+                                                            element: "#step-1",
+                                                            on: "bottom",
+                                                        },
+                                                        buttons: [
+                                                            {
+                                                                action() {
+                                                                    return this.back();
+                                                                },
+                                                                classes: "shepherd-button-secondary",
+                                                                text: "Anterior",
+                                                            },
+                                                            {
+                                                                action() {
+                                                                    return this.next();
+                                                                },
+                                                                text: "Próximo",
+                                                            },
+                                                        ],
+                                                        id: "creating",
+                                                    },
+                                                    {
+                                                        title: "intervalo disponível",
+                                                        text: `<p style="text-align: left !important;">É importante prestar atenção no intervalo 
+                                    de tempo que fica <strong>disponível</strong> para realizar a comprovação de manutenção.</p>`,
+                                                        attachTo: {
+                                                            element: "#step-8",
+                                                            on: "bottom",
+                                                        },
+                                                        buttons: [
+                                                            {
+                                                                action() {
+                                                                    return this.back();
+                                                                },
+                                                                classes: "shepherd-button-secondary",
+                                                                text: "Anterior",
+                                                            },
+                                                            {
+                                                                action() {
+                                                                    document.getElementById('step-7').click();
+                                                                    return this.next();
+                                                                },
+                                                                text: "Próximo",
+                                                            },
+                                                        ],
+                                                        id: "creating",
+                                                    },
+                                                ]);
+
+                                                tour.start();
+                                            }
+
+                                            var request = cursor.update(data);
+                                        }
+                                    }
+                                }
 
                             }
                         });
@@ -1103,256 +1233,6 @@
             text = text.replace(/xcL0c/g, 'ç')
 
             return text;
-        }
-
-        var db;
-        var request = window.indexedDB.open("db_sigmacivil", "1");
-
-        request.onerror = function (event) {
-            alert("Erro ao criar o banco (cod 03)");
-        };
-
-        request.onsuccess = function (event) {
-            db = request.result;
-
-            updateMtabConfigTutorial(db);
-
-            db.onerror = function (event) {
-                alert("Database error: " + event.target.errorCode);
-            }
-        }
-
-        function updateMtabConfigTutorial(db) {
-            var tx = db.transaction(['mtab_config'], 'readwrite');
-            var store = tx.objectStore('mtab_config');
-            var objectStoreRequest = store.openCursor();
-            objectStoreRequest.onsuccess = function (event) {
-                var cursor = event.target.result;
-                if (cursor) {
-                    var data = cursor.value;
-
-                    if (!data.tutorial) {
-                        var tour = new Shepherd.Tour({
-                            useModalOverlay: true,
-                            defaultStepOptions: {
-                                cancelIcon: {
-                                    enabled: true,
-                                },
-                                classes: "shadow-md bg-purple-dark",
-                                scrollTo: false,
-                            },
-                        });
-
-                        tour.addSteps([
-                            {
-                                title: "Creating a Shepherd Tour",
-                                text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
-                                attachTo: {
-                                    element: "#step-0",
-                                    on: "bottom",
-                                },
-                                buttons: [
-                                    {
-                                        action() {
-                                            updateViewTutorial(db);
-
-                                            return this.hide();
-                                        },
-                                        classes: "shepherd-button-secondary",
-                                        text: "Pular tutorial",
-                                    },
-                                    {
-                                        action() {
-                                            return this.next();
-                                        },
-                                        text: "Next",
-                                    },
-                                ],
-                                id: "creating",
-                            },
-                            {
-                                title: "Creating a Shepherd Tour",
-                                text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
-                                attachTo: {
-                                    element: "#step-0",
-                                    on: "bottom",
-                                },
-                                buttons: [
-                                    {
-                                        action() {
-                                            return this.back();
-                                        },
-                                        classes: "shepherd-button-secondary",
-                                        text: "Back",
-                                    },
-                                    {
-                                        action() {
-                                            return this.next();
-                                        },
-                                        text: "Next",
-                                    },
-                                ],
-                                id: "creating",
-                            },
-                            {
-                                title: "Creating a Shepherd Tour",
-                                text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
-                                attachTo: {
-                                    element: "#step-1",
-                                    on: "bottom",
-                                },
-                                buttons: [
-                                    {
-                                        action() {
-                                            return this.back();
-                                        },
-                                        classes: "shepherd-button-secondary",
-                                        text: "Back",
-                                    },
-                                    {
-                                        action() {
-                                            return this.next();
-                                        },
-                                        text: "Next",
-                                    },
-                                ],
-                                id: "creating",
-                            },
-                            {
-                                title: "Creating a Shepherd Tour",
-                                text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
-                                attachTo: {
-                                    element: "#step-2",
-                                    on: "bottom",
-                                },
-                                buttons: [
-                                    {
-                                        action() {
-                                            return this.back();
-                                        },
-                                        classes: "shepherd-button-secondary",
-                                        text: "Back",
-                                    },
-                                    {
-                                        action() {
-                                            return this.next();
-                                        },
-                                        text: "Next",
-                                    },
-                                ],
-                                id: "creating",
-                            },
-                            {
-                                title: "Creating a Shepherd Tour",
-                                text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
-                                attachTo: {
-                                    element: "#step-3",
-                                    on: "bottom",
-                                },
-                                buttons: [
-                                    {
-                                        action() {
-                                            return this.back();
-                                        },
-                                        classes: "shepherd-button-secondary",
-                                        text: "Back",
-                                    },
-                                    {
-                                        action() {
-                                            return this.next();
-                                        },
-                                        text: "Next",
-                                    },
-                                ],
-                                id: "creating",
-                            },
-                            {
-                                title: "Creating a Shepherd Tour",
-                                text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
-                                attachTo: {
-                                    element: "#step-4",
-                                    on: "bottom",
-                                },
-                                buttons: [
-                                    {
-                                        action() {
-                                            return this.back();
-                                        },
-                                        classes: "shepherd-button-secondary",
-                                        text: "Back",
-                                    },
-                                    {
-                                        action() {
-                                            return this.next();
-                                        },
-                                        text: "Next",
-                                    },
-                                ],
-                                id: "creating",
-                                when: {
-                                    show: function () {
-                                        document.querySelector('.btn-bars-bars').click();
-                                    },
-                                },
-                            },
-                            {
-                                title: "Creating a Shepherd Tour",
-                                text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
-                                attachTo: {
-                                    element: "#step-5",
-                                    on: "bottom",
-                                },
-                                buttons: [
-                                    {
-                                        action() {
-                                            return this.back();
-                                        },
-                                        classes: "shepherd-button-secondary",
-                                        text: "Back",
-                                    },
-                                    {
-                                        action() {
-                                            return this.next();
-                                        },
-                                        text: "Next",
-                                    },
-                                ],
-                                id: "creating",
-                            },
-                            {
-                                title: "Creating a Shepherd Tour",
-                                text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
-                                attachTo: {
-                                    element: "#step-6",
-                                    on: "bottom",
-                                },
-                                buttons: [
-                                    {
-                                        action() {
-                                            go_to_page_config();
-                                            return;
-                                        },
-                                        text: "Configurações",
-                                    },
-                                ],
-                                id: "creating",
-                            },
-                        ]);
-
-                        tour.start();
-                    }
-
-                    var request = cursor.update(data);
-                }
-            }
         }
 
         function updateViewTutorial(db) {
@@ -1617,6 +1497,12 @@
             document.getElementById('tutorial-video').innerHTML = '';
         }
 
+        // var exit = document.querySelector('.shepherd-cancel-icon');
+
+        // exit.addEventListener('click', function() {
+        //     alert('click');
+        // });
+
     </script>
 
     <script>
@@ -1638,5 +1524,6 @@
             })
         })
     </script>
-  </body>
+</body>
+
 </html>

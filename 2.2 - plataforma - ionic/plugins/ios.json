@@ -33,6 +33,9 @@
     },
     "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "br.com.cordovaapp"
+    },
+    "cordova-plugin-camera": {
+      "PACKAGE_NAME": "br.com.cordovaapp"
     }
   },
   "dependent_plugins": {}

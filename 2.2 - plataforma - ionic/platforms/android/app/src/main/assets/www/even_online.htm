@@ -6,9 +6,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Even_online</title>
-  
+
     <!-- <link rel="manifest" href="manifest.json"> -->
-  
+
     <!-- un-comment this code to enable service worker
       <script>
         if ('serviceWorker' in navigator) {
@@ -17,32 +17,33 @@
             .catch(err => console.log('Error', err));
         }
       </script>-->
-  
+
     <!-- <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet"> -->
     <link rel="stylesheet" href="css/custom.css" />
     <link rel="stylesheet" href="css/custom-mobile.css" />
     <link rel="stylesheet" href="css/custom-even.css" />
     <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
-  
+
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
       <link href="css/ionic.app.css" rel="stylesheet">
       -->
-  
+
     <!-- ionic/angularjs js -->
     <!-- <script src="lib/ionic/js/ionic.bundle.js"></script> -->
-  
+
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
-  
+
     <!-- your app's js -->
     <script src="js/app.js"></script>
     <script type="text/javascript" src="js/mc.js"></script>
-  
+
     <script src="js/jquery.js"></script>
     <script src="js/jquery.mobile-1.4.5.min.js"></script>
     <script src="js/rolldate.js"></script>
     <script src="js/scrollPage.js"></script>
+    <script src="js/shepherd.js"></script>
     <style>
         .menu .ui-mini.ui-btn-icon-left:after,
         .ui-mini .ui-btn-icon-left:after,
@@ -102,6 +103,7 @@
 
         var qtdDocs_Device = 0
         var ev_email = 0
+        var openBars = false;
 
         var apagar1;
 
@@ -452,7 +454,7 @@
                                 '</div>',
                                 '</li>',
 
-                                '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
+                                '<li id="step-1" class="shadow_box box__content__funcoes" style="border-radius: 0;">',
                                 '<div class="ui-grid-a">',
                                 '<div class="ui-block-a">',
                                 '<tbody>',
@@ -509,7 +511,7 @@
                                 '</div>',
                                 '</li>',
 
-                                '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
+                                '<li id="step-1" class="shadow_box box__content__funcoes" style="border-radius: 0;">',
                                 '<div class="ui-grid-a">',
                                 '<div class="ui-block-a">',
                                 '<tbody>',
@@ -567,7 +569,7 @@
                                 '</div>',
                                 '</li>',
 
-                                '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
+                                '<li id="step-1" class="shadow_box box__content__funcoes" style="border-radius: 0;">',
                                 '<div class="ui-grid-a">',
                                 '<div class="ui-block-a">',
                                 '<tbody>',
@@ -624,7 +626,7 @@
                                 '</div>',
                                 '</li>',
 
-                                '<li class="shadow_box box__content__funcoes" style="border-radius: 0;">',
+                                '<li id="step-1" class="shadow_box box__content__funcoes" style="border-radius: 0;">',
                                 '<div class="ui-grid-a">',
                                 '<div class="ui-block-a">',
                                 '<tbody>',
@@ -766,10 +768,308 @@
                     eval(variavelx);
                     eval(variavelx2);
 
+                    var db;
+                    var request = window.indexedDB.open("db_sigmacivil", "1");
+
+                    request.onerror = function (event) {
+                        alert("Erro ao criar o banco (cod 03)");
+                    };
+
+                    request.onsuccess = function (event) {
+                        db = request.result;
+
+                        viewNotification(db);
+
+                        updateMtabConfigTutorial(db);
+
+                        db.onerror = function (event) {
+                            alert("Database error: " + event.target.errorCode);
+                        }
+                    }
+
+                    // notificacao
+                    function viewNotification(db) {
+                        var tx = db.transaction(['mtab_config'], 'readwrite');
+                        var store = tx.objectStore('mtab_config');
+                        var objectStoreRequest = store.openCursor();
+                        objectStoreRequest.onsuccess = function (event) {
+                            var cursor = event.target.result;
+                            if (cursor) {
+                                var data = cursor.value;
+
+                                if (data.notificacao) {
+                                    var xhr = new XMLHttpRequest();
+                                    xhr.open("GET", "https://www.sigmacivil.com.br/app_sc/notificacao.asp?l=" + login + "&s=" + senha + "&pag=even_online.htm" + "&versao=2.2&t=" + Math.random(), true);
+                                    xhr.addEventListener("loadend", function (evt) {
+                                        var resposta_total = this.responseText;
+
+                                        var jsontext = resposta_total.split("*");
+
+                                        var tem_notificacao = jsontext[0];
+                                        var titulo_notificacao = jsontext[1];
+                                        var descricao_notificacao = jsontext[2];
+
+                                        if (tem_notificacao == "S") {
+
+                                            cordova.plugins.notification.local.schedule({
+                                                title: titulo_notificacao,
+                                                text: descricao_notificacao,
+                                                icon: 'file://images/civil-eng.png',
+                                                foreground: true
+                                            });
+
+                                        }
+                                    });
+                                    xhr.send();
+                                }
+
+                            }
+                        }
+                    }
+                    // fim notificacao
+
+                    function updateMtabConfigTutorial(db) {
+                        var tx = db.transaction(['mtab_config'], 'readwrite');
+                        var store = tx.objectStore('mtab_config');
+                        var objectStoreRequest = store.openCursor();
+                        objectStoreRequest.onsuccess = function (event) {
+                            var cursor = event.target.result;
+                            if (cursor) {
+                                var data = cursor.value;
+
+                                if (!data.tutorial) {
+                                    var tour = new Shepherd.Tour({
+                                        useModalOverlay: true,
+                                        defaultStepOptions: {
+                                            cancelIcon: {
+                                                enabled: true,
+                                            },
+                                            classes: "shepherd-theme-custom",
+                                            scrollTo: true,
+                                            when: {
+                                                cancel: function () {
+                                                    updateViewTutorial(db);
+                                                },
+                                            },
+                                        },
+                                    });
+
+                                    tour.addSteps([
+                                        {
+                                            title: "Comprovação",
+                                            text: `<p style="text-align: left !important;">Ao acessar a atividade de manutenção que deseja comprovar insira
+                                         a data e quem é o responsável pela realização da atividade.</p>`,
+                                            attachTo: {
+                                                element: "#step-1",
+                                                on: "top-start",
+                                            },
+                                            buttons: [
+                                                {
+                                                    action() {
+                                                        reload_page_empree();
+                                                        return this.back();
+                                                    },
+                                                    classes: "shepherd-button-secondary",
+                                                    text: "Anterior",
+                                                },
+                                                {
+                                                    action() {
+                                                        return this.next();
+                                                    },
+                                                    text: "Próximo",
+                                                },
+                                            ],
+                                            scrollTo: false,
+                                            id: "creating",
+                                            scrollTo: {
+                                                behavior: 'smooth'
+                                            },
+                                        },
+                                        {
+                                            title: "Incluir docs, fotos e vídeos",
+                                            text: `<p style="text-align: left !important;">Em galeria de imagens insira fotos, vídeos, 
+                                        aúdios e comentários para comprovar e registrar a manutenção preventiva.</p>`,
+                                            attachTo: {
+                                                element: "#step-2",
+                                                on: "top-start",
+                                            },
+                                            buttons: [
+                                                {
+                                                    action() {
+                                                        return this.back();
+                                                    },
+                                                    classes: "shepherd-button-secondary",
+                                                    text: "Anterior",
+                                                },
+                                                {
+                                                    action() {
+                                                        return this.next();
+                                                    },
+                                                    text: "Próximo",
+                                                },
+                                            ],
+                                            scrollTo: {
+                                                behavior: 'smooth',
+                                            },
+                                            id: "creating",
+                                            when: {
+                                                show: function () {
+                                                    if (openBars) {
+                                                        openBars = false;
+                                                        document.querySelector('.btn-bars-bars').click();
+                                                    }
+                                                },
+                                            },
+                                        },
+                                        {
+                                            title: "Salvar manutenção",
+                                            text: `<p style="text-align: left !important;">Clique para salvar o registro de atividade de manutenção.</p>`,
+                                            attachTo: {
+                                                element: "#step-3",
+                                                on: "top-start",
+                                            },
+                                            buttons: [
+                                                {
+                                                    action() {
+                                                        return this.back();
+                                                    },
+                                                    classes: "shepherd-button-secondary",
+                                                    text: "Anterior",
+                                                },
+                                                {
+                                                    action() {
+                                                        return this.next();
+                                                    },
+                                                    text: "Próximo",
+                                                },
+                                            ],
+                                            id: "creating",
+                                            scrollTo: {
+                                                behavior: 'smooth'
+                                            },
+                                        },
+                                        {
+                                            title: "Qrcodes",
+                                            text: `<p style="text-align: left !important;">Este módulo você visualiza e registra as manutenções preventivas do seu condomínio.</p>
+                                    <ul style="text-align: left !important;">
+                                        <li>Registro de manutenções</li>
+                                        <li>Checkpoints</li>
+                                    </ul>`,
+                                            attachTo: {
+                                                element: "#step-7",
+                                                on: "bottom",
+                                            },
+                                            buttons: [
+                                                {
+                                                    action() {
+                                                        return this.back();
+                                                    },
+                                                    classes: "shepherd-button-secondary",
+                                                    text: "Anterior",
+                                                },
+                                                {
+                                                    action() {
+                                                        return this.next();
+                                                    },
+                                                    text: "Próximo",
+                                                },
+                                            ],
+                                            id: "creating",
+                                        },
+                                        {
+                                            title: "Relatórios checkpoint",
+                                            text: `<p style="text-align: left !important;">Aqui você tem o controle da quantidades 
+                                    de sistemas e componentes das áreas comuns você vistoriou, por dia durante o mês.</p>`,
+                                            attachTo: {
+                                                element: "#step-8",
+                                                on: "bottom",
+                                            },
+                                            buttons: [
+                                                {
+                                                    action() {
+                                                        return this.back();
+                                                    },
+                                                    classes: "shepherd-button-secondary",
+                                                    text: "Anterior",
+                                                },
+                                                {
+                                                    action() {
+                                                        if (!openBars) {
+                                                            openBars = true;
+                                                            document.querySelector('.btn-bars-bars').click();
+                                                        }
+                                                        return this.next();
+                                                    },
+                                                    text: "Próximo",
+                                                },
+                                            ],
+                                            id: "creating",
+                                        },
+                                        {
+                                            title: "Configurações",
+                                            text: `<p style="text-align: left !important;">Aqui você configura a plataforma conforme desejar.</p>`,
+                                            attachTo: {
+                                                element: "#step-4",
+                                                on: "bottom",
+                                            },
+                                            buttons: [
+                                                {
+                                                    action() {
+                                                        return this.back();
+                                                    },
+                                                    classes: "shepherd-button-secondary",
+                                                    text: "Anterior",
+                                                },
+                                                {
+                                                    action() {
+                                                        go_to_page_config();
+                                                        return;
+                                                    },
+                                                    text: "Próximo",
+                                                },
+                                            ],
+                                            id: "creating",
+                                            when: {
+                                                show: function () {
+                                                    window.scrollTo({
+                                                        top: 0,
+                                                        behavior: 'smooth'
+                                                    });
+                                                },
+                                                cancel: function () {
+                                                    updateViewTutorial(db);
+                                                },
+                                            },
+                                        },
+                                    ]);
+
+                                    tour.start();
+                                }
+
+                                var request = cursor.update(data);
+                            }
+                        }
+                    }
+
                 }
             });
 
             ajax2.send();
+
+            function updateViewTutorial(db) {
+                var tx = db.transaction(['mtab_config'], 'readwrite');
+                var store = tx.objectStore('mtab_config');
+                var objectStoreRequest = store.openCursor();
+                objectStoreRequest.onsuccess = function (event) {
+                    var cursor = event.target.result;
+                    if (cursor) {
+                        var data = cursor.value;
+
+                        data.tutorial = true;
+                        var request = cursor.update(data);
+                    }
+                }
+            }
 
             // capturando dados evento
 
@@ -1099,7 +1399,7 @@
         }
 
         function onFail(message) {
-            // alert('Failed because: ' + message);
+            alert('Failed because: ' + message);
         }
 
         var qual_id_prog_manut;
@@ -1508,13 +1808,13 @@
         function videocaptureSuccess(mediaFiles) {
             var i, len;
             var m_path;
-
+            
             if (!Array.isArray(mediaFiles)) {
                 mediaFiles = [
                     { fullPath: mediaFiles }
                 ];
             }
-
+            
             for (i = 0, len = mediaFiles.length; i < len; i += 1) {
                 m_path = mediaFiles[i].fullPath;
 
@@ -2330,15 +2630,15 @@
                 <img class="is-times is-disabled" src="images/times.svg" width="13" alt="Menu" />
             </h4>
             <ul class="menu-tablet-responsive" style="border: 2px solid #38c;" data-role="listview" data-mini="true">
-                <li>
+                <li id="step-4">
                     <a class="ui-btn ui-icon-gear ui-btn-icon-right ui-shadow ui-corner-all" href="#"
                         onClick="go_to_page_config()">Configurações</a>
                 </li>
-                <li>
+                <li id="step-5">
                     <a class="ui-btn ui-icon-power ui-btn-icon-right ui-shadow ui-corner-all" href="#"
                         onClick="closeApp()">Fechar app</a>
                 </li>
-                <li>
+                <li id="step-6">
                     <a style="z-index: 10" class="click" href="#" onClick="enviar_sync()">Logout</a>
                 </li>
             </ul>
@@ -2360,7 +2660,7 @@
         <!-- <div id="dados_val"></div> -->
 
         <!-- BLOCO GALERIA DE IMAGENS DO APARELHO -->
-        <li class="shadow_box_gallery" style="border-radius: 0; background: #e7d8fc; display: none;">
+        <li id="step-2" class="shadow_box_gallery" style="border-radius: 0; background: #e7d8fc; display: none;">
             <table>
                 <div class="ui-grid ui-responsive">
                     <div class="ui-block-a ui-grid-full">
@@ -2528,7 +2828,7 @@
             <table>
                 <fieldset class="ui-grid-a">
                     <div class="ui-block-a ui-responsive">
-                        <button type="button" class="ui-btn block btn-radius btn-salvar"
+                        <button id="step-3" type="button" class="ui-btn block btn-radius btn-salvar"
                             onclick="enviar_dados();">Salvar</button>
                     </div>
                     <div class="ui-block-b ui-responsive">
@@ -2549,11 +2849,11 @@
                 <img src="images/engenheiro_cogs.png" width="22" alt="Home" />
                 <p>manutenções</p>
             </button>
-            <button class="buttons-navigate" type="button" onclick="scan()">
+            <button id="step-7" class="buttons-navigate" type="button" onclick="scan()">
                 <img src="images/qr_code.png" width="22" alt="Qr_code" />
                 <p>qrcode</p>
             </button>
-            <button class="buttons-navigate" type="button" onclick="go_relat_check2()">
+            <button id="step-8" class="buttons-navigate" type="button" onclick="go_relat_check2()">
                 <img src="images/graph.png" width="22" alt="Relatório" />
                 <p>rel.checkpoint</p>
             </button>

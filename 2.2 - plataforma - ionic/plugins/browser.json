@@ -42,6 +42,9 @@
     },
     "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "br.com.sigmacivil.sc"
+    },
+    "cordova-plugin-camera": {
+      "PACKAGE_NAME": "br.com.sigmacivil.sc"
     }
   },
   "dependent_plugins": {}

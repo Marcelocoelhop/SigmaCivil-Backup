@@ -507,6 +507,64 @@
 
       document.getElementById('opc_periodo').innerHTML = op_periodo
 
+      // notificacao
+      var db;
+      var request = window.indexedDB.open("db_sigmacivil", "1");
+
+      request.onerror = function (event) {
+        alert("Erro ao criar o banco (cod 03)");
+      };
+
+      request.onsuccess = function (event) {
+        db = request.result;
+
+        viewNotification(db);
+
+        db.onerror = function (event) {
+          alert("Database error: " + event.target.errorCode);
+        }
+      }
+
+      function viewNotification(db) {
+        var tx = db.transaction(['mtab_config'], 'readwrite');
+        var store = tx.objectStore('mtab_config');
+        var objectStoreRequest = store.openCursor();
+        objectStoreRequest.onsuccess = function (event) {
+          var cursor = event.target.result;
+          if (cursor) {
+            var data = cursor.value;
+
+            if (data.notificacao) {
+              var xhr2 = new XMLHttpRequest();
+              xhr2.open("GET", "https://www.sigmacivil.com.br/app_sc/notificacao.asp?l=" + login + "&s=" + senha + "&pag=new_checkpoint_hist.htm" + "&versao=2.2&t=" + Math.random(), true);
+              xhr2.addEventListener("loadend", function (evt) {
+                var resposta_total = this.responseText;
+
+                var jsontext = resposta_total.split("*");
+
+                var tem_notificacao = jsontext[0];
+                var titulo_notificacao = jsontext[1];
+                var descricao_notificacao = jsontext[2];
+
+                if (tem_notificacao == "S") {
+
+                  cordova.plugins.notification.local.schedule({
+                    title: titulo_notificacao,
+                    text: descricao_notificacao,
+                    icon: 'file://images/civil-eng.png',
+                    foreground: true
+                  });
+
+                }
+              });
+              xhr2.send();
+            }
+
+          }
+        }
+      }
+      // fim notificacao
+
       // carregar dados das manutenções do servidor 
       var ajax = new XMLHttpRequest();
       ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp_online.asp?l=" + login + "&s=" + senha + "&versao=2.2&t=" + Math.random(), true);
@@ -611,7 +669,7 @@
             document.getElementById('dados_usuario').innerHTML = ini_ + dados + fim_;
             document.getElementById('dados_select').innerHTML = ini_select + dados_select + fim_select;
 
-            var search = '<img style="position: relative; z-index: 1; top: 25px; left: 15px;" src="images/search.png" width="15" />';
+            var search = '<img style="position: relative; z-index: 1; top: 30px; left: 15px;" src="images/search.png" width="15" />';
             document.getElementById('search').innerHTML = search;
 
             var result = "var data = google.visualization.arrayToDataTable([" + dadosGrafico + "]);"

@@ -84,6 +84,7 @@
   var id_empree;
 
   var progressValue = 0;
+  var openBars = false;
 
   document.addEventListener("deviceready", onDeviceReady, false);
 
@@ -196,15 +197,19 @@
                   enabled: true,
                 },
                 classes: "shadow-md bg-purple-dark",
-                scrollTo: false,
+                when: {
+                  cancel: function () {
+                    updateTour(db);
+                  },
+                },
               },
             });
 
             tour.addSteps([
               {
-                title: "Creating a Shepherd Tour",
-                text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
+                title: "Permissão de edição de imagens",
+                text: `<p style="text-align: left !important;">É possivel habilitar edição de fotos, assim você poderá cortar, 
+                  girar e ilustrar a imagem do registro da manutenção.</p>`,
                 attachTo: {
                   element: "#step-1",
                   on: "bottom",
@@ -212,24 +217,28 @@
                 buttons: [
                   {
                     action() {
+                      goBack();
                       return this.back();
                     },
                     classes: "shepherd-button-secondary",
-                    text: "Back",
+                    text: "Anterior",
                   },
                   {
                     action() {
                       return this.next();
                     },
-                    text: "Next",
+                    text: "Próximo",
                   },
                 ],
                 id: "creating",
+                scrollTo: {
+                  behavior: 'smooth'
+                },
               },
               {
-                title: "Creating a Shepherd Tour",
-                text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
+                title: "Permissão de uploads automáticos",
+                text: `<p style="text-align: left !important;">É possível ativar o upload de mídias autómatico, 
+                  subindo automaticamente as fotos e imagens das manutenções.</p>`,
                 attachTo: {
                   element: "#step-2",
                   on: "bottom",
@@ -240,21 +249,23 @@
                       return this.back();
                     },
                     classes: "shepherd-button-secondary",
-                    text: "Back",
+                    text: "Anterior",
                   },
                   {
                     action() {
                       return this.next();
                     },
-                    text: "Next",
+                    text: "Próximo",
                   },
                 ],
                 id: "creating",
+                scrollTo: {
+                  behavior: 'smooth'
+                },
               },
               {
-                title: "Creating a Shepherd Tour",
-                text: `Creating a Shepherd tour is easy. too!\
- Just create a \`Tour\` instance, and add as many steps as you want.`,
+                title: "Ativar Notificações",
+                text: `<p style="text-align: left !important;">Alertaremos você sobre assuntos importantes das manutenções.</p>`,
                 attachTo: {
                   element: "#step-3",
                   on: "bottom",
@@ -265,13 +276,177 @@
                       return this.back();
                     },
                     classes: "shepherd-button-secondary",
-                    text: "Back",
+                    text: "Anterior",
                   },
                   {
                     action() {
                       return this.next();
                     },
-                    text: "Next",
+                    text: "Próximo",
+                  },
+                ],
+                id: "creating",
+                scrollTo: {
+                  behavior: 'smooth'
+                },
+              },
+              {
+                title: "Upload de arquivos pendentes",
+                text: `<p style="text-align: left !important;">Aqui é possivel subir todos os arquivos pendentes de vistorias em um só clique.</p>`,
+                attachTo: {
+                  element: "#step-4",
+                  on: "bottom",
+                },
+                buttons: [
+                  {
+                    action() {
+                      return this.back();
+                    },
+                    classes: "shepherd-button-secondary",
+                    text: "Anterior",
+                  },
+                  {
+                    action() {
+                      return this.next();
+                    },
+                    text: "Próximo",
+                  },
+                ],
+                id: "creating",
+                scrollTo: {
+                  behavior: 'smooth'
+                },
+              },
+              {
+                title: "Visualizar tour",
+                text: `<p style="text-align: left !important;">Aqui você visualiza o tour quantas vezes quiser.</p>`,
+                attachTo: {
+                  element: "#step-5",
+                  on: "bottom",
+                },
+                buttons: [
+                  {
+                    action() {
+                      return this.back();
+                    },
+                    classes: "shepherd-button-secondary",
+                    text: "Anterior",
+                  },
+                  {
+                    action() {
+                      return this.next();
+                    },
+                    text: "Próximo",
+                  },
+                ],
+                id: "creating",
+                scrollTo: {
+                  behavior: 'smooth'
+                },
+              },
+              {
+                title: "Tutorial em vídeo",
+                text: `<p style="text-align: left !important;">No tutorial você aprende como realizar os registros 
+                  de manutenções do seu condomínio, na aba manutenções.</p>`,
+                attachTo: {
+                  element: "#step-6",
+                  on: "bottom",
+                },
+                buttons: [
+                  {
+                    action() {
+                      return this.back();
+                    },
+                    classes: "shepherd-button-secondary",
+                    text: "Anterior",
+                  },
+                  {
+                    action() {
+                      if (!openBars) {
+                        document.querySelector('.btn-bars-bars').click();
+                      }
+
+                      window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                      });
+
+                      return this.next();
+                    },
+                    text: "Próximo",
+                  },
+                ],
+                id: "creating",
+                scrollTo: {
+                  behavior: 'smooth'
+                },
+                when: {
+                  show: function () {
+                    if (openBars) {
+                      openBars = false;
+                      document.querySelector('.btn-bars-bars').click();
+                    }
+                  },
+                },
+              },
+              {
+                title: "Fechar app",
+                text: `<p style="text-align: left !important;">Aqui você fecha o aplicativo, sem deslogar o usuário.</p>`,
+                attachTo: {
+                  element: "#step-7",
+                  on: "bottom",
+                },
+                buttons: [
+                  {
+                    action() {
+                      return this.back();
+                    },
+                    classes: "shepherd-button-secondary",
+                    text: "Anterior",
+                  },
+                  {
+                    action() {
+                      return this.next();
+                    },
+                    text: "Próximo",
+                  },
+                ],
+                id: "creating",
+                when: {
+                  show: function () {
+                    window.scrollTo({
+                      top: 0,
+                      behavior: 'smooth'
+                    });
+                    setTimeout(function () {
+                      if (!openBars) {
+                        openBars = true;
+                        // document.querySelector('.btn-bars-bars').click();
+                      }
+                    }, 1000);
+                  },
+                },
+              },
+              {
+                title: "Logout",
+                text: `<p style="text-align: left !important;">Aqui você encerra a sessão, e para conectar novamente precisa inserir login e senha.</p>`,
+                attachTo: {
+                  element: "#step-8",
+                  on: "bottom",
+                },
+                buttons: [
+                  {
+                    action() {
+                      return this.back();
+                    },
+                    classes: "shepherd-button-secondary",
+                    text: "Anterior",
+                  },
+                  {
+                    action() {
+                      updateTour(db, true);
+                    },
+                    text: "Finalizar tour",
                   },
                 ],
                 id: "creating",
@@ -281,8 +456,28 @@
             tour.start();
           }
 
+          // data.tutorial = true;
+          var request = cursor.update(data);
+        }
+      }
+    }
+
+    function updateTour(db, redirect = false) {
+      var tx = db.transaction(['mtab_config'], 'readwrite');
+      var store = tx.objectStore('mtab_config');
+      var objectStoreRequest = store.openCursor();
+      objectStoreRequest.onsuccess = function (event) {
+        var cursor = event.target.result;
+        if (cursor) {
+          var data = cursor.value;
+
           data.tutorial = true;
           var request = cursor.update(data);
+          request.onsuccess = function (event) {
+            if (redirect) {
+              volta_uni();
+            }
+          }
         }
       }
     }
@@ -554,11 +749,11 @@
             <a class="ui-btn ui-icon-gear ui-btn-icon-right ui-shadow ui-corner-all actived" href="#"
               onClick="go_to_page_config()">Configurações</a>
           </li>
-          <li>
+          <li id="step-7">
             <a class="ui-btn ui-icon-power ui-btn-icon-right ui-shadow ui-corner-all" href="#"
               onClick="closeApp()">Fechar app</a>
           </li>
-          <li>
+          <li id="step-8">
             <a class="click" href="#" onClick="enviar_sync()">Logout</a>
           </li>
         </ul>
@@ -569,69 +764,75 @@
       <div align="center">
         <table width="100%" height="27" border="0" cellpadding="0" cellspacing="0">
           <tr>
-            <td width="20" class="menu_2">
-              <div align="center"></div>
-            </td>
             <td width="130" height="27">
               <div align="center">
                 <strong class="title-check-white">Configurações</strong>
-              </div>
-            </td>
-            <td width="20" class="menu_2">
-              <div style="position: relative; right: 12px;" align="right">
-                <a href="#transitionExample" data-transition="pop" data-rel="popup">
-                  <img src="images/question-circle2.png" width="15" alt="">
-                </a>
               </div>
             </td>
           </tr>
         </table>
       </div>
     </div>
-
-    <div data-role="popup" id="transitionExample" class="ui-content" data-theme="a">
-      <h2>Como funciona?</h2>
-      <p>Com o Checkpoint do SigmaCivil é possível registrar dia e
-        horário da presença física de algum usuário ou
-        funcionário à frente dos QRCodes de cada sistema do empreendimento.</p>
-      <ol>
-        <li>Leia os QRCodes do SigmaCivil para marcar a presença do usuário em determinado sistema e horário.
-        </li>
-        <li>Sincronize os dados para enviar essas informações ao servidor.</li>
-        <li>Acompanhe os relatórios online.</li>
-      </ol>
-    </div>
   </div>
 
   <div id="forms-configs" class="div-spacing"></div>
 
-  <div id="step-3" style="margin: 0; padding: 0 16px;">
+  <div id="step-4" style="margin: 0; padding: 0 16px;">
     <div style="display: flex; flex-direction: column;">
       <div style="margin: 0">
-        <p style="margin: 0 0 8px;" for="flip-select">Upload de todos os arquivos
+        <p class="config-title" style="margin: 0 0 8px;" for="flip-select">Upload de todos os arquivos
           pendentes:</p>
-        <small style="margin-left: 8px; color: #666;">Realize o upload de todos os arquivos</small>
+        <small style="color: #333;">Deseja realizar agora o upload de todos os arquivos de manutenções
+          pendentes?</small>
       </div>
       <button class="ui-btn ui-icon-cloud ui-btn-icon-left ui-shadow ui-corner-all btn-success" type="button"
-        onclick="uploadArquivos()">Upload de arquivos</button>
+        onclick="uploadArquivos()">Sim, realizar upload</button>
     </div>
+    <hr />
   </div>
 
-  <div class="btns_opcionais">
-    <button type="button" onclick="showTour()">
-      <img src="images/chalkboard-teacher.svg" width="25" alt="Tour" />
-      Tour pelo app
-    </button>
-    <button type="button">
-      <a href="#popupLogin" data-rel="popup" data-position-to="window" data-transition="pop">
-        <img src="images/chalkboard-teacher.svg" width="25" alt="Tour" />
-        Tutorial em vídeo
+  <div style="padding: 0 16px;">
+    <div id="step-5" class="btns_opcionais">
+      <div style="display: flex; align-items: center;">
+        <img style="margin-right: 10px;" src="images/chalkboard-teacher.png" alt="tour inicial" />
+        <p class="config-title">Realizar agora o tour inicial de como usar o app</p>
+      </div>
+      <button class="ui-btn ui-shadow ui-corner-all btn-success" type="button" onclick="showTour()">Tour</button>
+    </div>
+    <hr />
+    <div id="step-6" style="margin-bottom: 80px;" class="btns_opcionais">
+      <div style="display: flex; align-items: center;">
+        <img style="margin-right: 10px;" src="images/video-config.png" alt="tutorial" />
+        <p class="config-title">Assistir agora o tutorial em vídeo de como usar o app</p>
+      </div>
+      <a class="ui-btn ui-shadow ui-corner-all btn-success" href="#popupLogin" data-rel="popup"
+        data-position-to="window" data-transition="pop">
+        Tour vídeo
       </a>
-    </button>
-    <div data-role="popup" id="popupLogin" data-theme="a" class="ui-corner-all">
-      <video class="tutorial-video" poster="images/video.png" controls name="media">
-        <source src="https://www.sigmacivil.com.br/imagens/app_SC.mp4" type="video/mp4" />
-      </video>
+      <div data-role="popup" id="popupLogin" data-theme="a" class="ui-corner-all">
+        <video class="tutorial-video" poster="images/video.png" controls name="media">
+          <source src="https://www.sigmacivil.com.br/imagens/app_SC.mp4" type="video/mp4" />
+        </video>
+      </div>
+
+
+
+
+      <!-- <button type="button" onclick="showTour()">
+    <img src="images/chalkboard-teacher.svg" width="25" alt="Tour" />
+    Tour pelo app
+  </button>
+  <button type="button">
+    <a href="#popupLogin" data-rel="popup" data-position-to="window" data-transition="pop">
+      <img src="images/chalkboard-teacher.svg" width="25" alt="Tour" />
+      Tutorial em vídeo
+    </a>
+  </button>
+  <div data-role="popup" id="popupLogin" data-theme="a" class="ui-corner-all">
+    <video class="tutorial-video" poster="images/video.png" controls name="media">
+      <source src="https://www.sigmacivil.com.br/imagens/app_SC.mp4" type="video/mp4" />
+    </video>
+  </div> -->
     </div>
   </div>
 
@@ -1498,38 +1699,59 @@
   var formConfig = [
     '<form class="form-config">',
     '<div id="step-1" style="display: flex; align-items: center; justify-content: space-between;">',
-    '<div style="margin: 0">',
-    '<p style="padding: 0 10px 0 0; margin-bottom: 8px;" for="flip-select">Edição de imagens ao serem tiradas:</p>',
-    '<small style="margin-left: 8px; color: #666;">teste testando</small>',
+    '<div style="margin-right: 10px;">',
+
+    '<div style="display: flex; align-items: center;">',
+    '<img style="margin-right: 5px;" src="images/edit.png" alt="editar imagens" />',
+    '<p class="config-title" style="padding: 0 10px 0 0; margin-bottom: 8px;" for="flip-select">Permitir a edição de imagens?</p>',
     '</div>',
+
+    '<small style="color: #333;">Caso esteja com "sim" você poderá editar as fotos tiradas pelo app</small>',
+    '</div>',
+    '<div style="display: flex; align-items: center;">',
     '<select name="flip-select" id="flip-select" onchange="editaImagem()" class="edit-picture" data-role="slider" data-mini="true" data-track-theme="a" data-theme="a">',
-    '<option value="off">Des</option>',
-    '<option value="on" ' + localStorage.getItem('sl1') + '>Lig</option>',
+    '<option value="off">Não</option>',
+    '<option value="on" ' + localStorage.getItem('sl1') + '>Sim</option>',
     '</select>',
+    '</div>',
     '</div>',
     '<hr/>',
 
     '<div id="step-2" style="display: flex; align-items: center; justify-content: space-between;">',
     '<div style="margin: 0">',
-    '<p style="padding: 0 10px 0 0; margin-bottom: 8px;" for="flip-select">Upload de mídias automaticamente:</p>',
-    '<small style="margin-left: 8px; color: #666;">teste testando</small>',
+
+    '<div style="display: flex; align-items: center;">',
+    '<img style="margin-right: 5px;" src="images/cloud-upload-alt.png" alt="upload" />',
+    '<p class="config-title" style="padding: 0 10px 0 0; margin-bottom: 8px;" for="flip-select">Permitir o upload de mídias automaticamente?</p>',
     '</div>',
+
+    '<small style="color: #333;">Caso esteja com "sim" será feito o upload automático de todas as mídias assim que elas são capturadas pelo app</small>',
+    '</div>',
+    '<div style="display: flex; align-items: center;">',
     '<select name="flip-select" id="flip-select" onchange="editaImagem()" class="automatic-upload" data-role="slider" data-mini="true" data-track-theme="a" data-theme="a">',
-    '<option value="off">Des</option>',
-    '<option value="on" ' + localStorage.getItem('sl2') + '>Lig</option>',
+    '<option value="off">Não</option>',
+    '<option value="on" ' + localStorage.getItem('sl2') + '>Sim</option>',
     '</select>',
+    '</div>',
     '</div>',
     '<hr/>',
 
     '<div id="step-3" style="display: flex; align-items: center; justify-content: space-between;">',
     '<div style="margin: 0">',
-    '<p style="padding: 0 10px 0 0; margin-bottom: 8px;" for="flip-select">Notificações:</p>',
-    '<small style="margin-left: 8px; color: #666;">teste testando</small>',
+
+    '<div style="display: flex; align-items: center;">',
+    '<img style="margin-right: 5px;" src="images/envelope.png" alt="notificacoes" />',
+    '<p class="config-title" style="padding: 0 10px 0 0; margin-bottom: 8px;" for="flip-select">Permitir notificações?</p>',
     '</div>',
+
+    '<small style="color: #333;">Caso esteja com "sim", você receberá notificações para ajudar a lembrá-lo de realizar as manutenções</small>',
+    '</div>',
+    '<div style="display: flex; align-items: center;">',
     '<select name="flip-select" id="flip-select" onchange="editaImagem()" class="notification" data-role="slider" data-mini="true" data-track-theme="a" data-theme="a">',
-    '<option value="off">Des</option>',
-    '<option value="on" ' + localStorage.getItem('sl3') + '>Lig</option>',
+    '<option value="off">Não</option>',
+    '<option value="on" ' + localStorage.getItem('sl3') + '>Sim</option>',
     '</select>',
+    '</div>',
     '</div>',
     '</form>',
     '<hr/>',

@@ -46,13 +46,17 @@
 }
 
 .btn-success {
-    background: green !important;
+    background: #38c !important;
     color: #fff !important;
     text-shadow: none !important;
 }
 
 .actived {
     background: #d8d8d8 !important;
+}
+
+.config-title {
+    color: #061055;
 }
 
 .menu_opc {
@@ -154,41 +158,32 @@
 
 .btns_opcionais {
     display: flex;
-    padding: 0 16px;
+    justify-content: space-between;
+    align-items: center;
+    /* padding: 0 16px; */
     margin-top: 10px;
+}
+
+.btns_opcionais p {
+    width: 100% !important;
 }
 
 .btns_opcionais button {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    margin: 0 5px;
-    border: 0 !important;
-    background: #e7d8fc !important;
-    text-shadow: none !important;
-    outline: none !important;
-    padding: 0 !important;
+    align-items: center;
+    width: 150px !important;
+    align-items: center !important;
+    margin-left: 15px;
 }
 
-.btns_opcionais button a {
-    width: 100%;
-    height: 100%;
-    color: #000;
+.btns_opcionais a {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-    text-decoration: none;
-    padding: 10px;
-}
-
-.btns_opcionais button a:hover {
-    color: #000 !important;
-}
-
-.btns_opcionais img {
-    margin-bottom: 5px;
+    align-items: center !important;
+    width: 150px !important;
+    margin-left: 15px;
 }
 
 .ui-flipswitch {
