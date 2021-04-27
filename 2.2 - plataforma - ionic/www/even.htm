@@ -43,7 +43,14 @@
 <body ng-app="starter">
   <script type="text/javascript">
     window.onerror = function (message, url, lineNumber) {
-      alert("Error: " + message + " in " + url + " at line " + lineNumber);
+      navigator.notification.alert(
+        `Error: ${message} in ${url} at line ${lineNumber}`,  // message
+        function () {
+          return;
+        },         // callback
+        'Falha',            // title
+        'OK'                  // buttonName
+      );
     }
 
   </script>
@@ -1293,7 +1300,7 @@
   }
 
   var fail_up_v = function (error) {
-    alert("An error has occurred: Code = " + error.code);
+    // alert("An error has occurred: Code = " + error.code);
     alert("Erro ao upar o vídeo")
   }
   /////// fim upload video  //////////////////////
@@ -1888,16 +1895,19 @@
   }
 
   function enviar_sync() {
+    navigator.notification.confirm(
+      'Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!',
+      function (buttonIndex) {
+        if (buttonIndex === 2) {
+          return;
+        }
 
-    decisao = confirm("Confirma efetuar novo LOGIN ? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção");
-
-    if (decisao) {
-      document.form_sup.action = "del.htm";
-      document.form_sup.submit();
-
-    } else {
-    }
-
+        document.form_sup.action = "del.htm";
+        document.form_sup.submit();
+      },
+      'Logout',
+      ['OK', 'Cancelar']
+    );
   }
 
   function colocarAcento(text) {

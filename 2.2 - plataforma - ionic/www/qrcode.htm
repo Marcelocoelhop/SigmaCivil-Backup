@@ -72,7 +72,7 @@
         function () {
           return;
         },         // callback
-        'SigmaCivil',            // title
+        'Falha',            // title
         'OK'                  // buttonName
       );
     }
@@ -291,20 +291,19 @@
       <ol>
         <li>Leia os QRCodes do SigmaCivil para marcar a presença do usuário em determinado sistema e horário.
         </li>
-        <li>Sincronize os dados para enviar essas informações ao servidor.</li>
-        <li>Acompanhe os relatórios online.</li>
+        <li>Acompanhe os relatórios online pelo app ou pelo site.</li>
       </ol>
     </div>
 
     <p style="font-weight: bold;" id="nome-sistema"></p>
 
     <div class="ui-grid-a">
-      <div class="ui-block">
+      <div style="margin-bottom: 10px;" class="ui-block">
         <a href="#" class="is-not-decoration register">
           <div class="ui-bar ui-bar-a cogs-button" style="height:24px;">
             <div>
               <img src="images/cogs.png" width="35" alt="cogs">
-              <span>Registrar manutenção</span>
+              <span>Registrar a manutenção</span>
             </div>
           </div>
         </a>
@@ -324,7 +323,7 @@
           <div class="ui-bar ui-bar-a cogs-button" style="height:24px">
             <div>
               <img src="images/check-square.png" width="35" alt="cogs">
-              <span>Relatório de checkpoints</span>
+              <span>Ver relatório de checkpoints</span>
             </div>
             <span id="bot_sincro"></span>
 
@@ -410,7 +409,14 @@
     var qual_num_empree = q_num_empree
 
     if (tem_alguma_manut == "0") {
-      alert('Não há manutenções para serem registradas!');
+      navigator.notification.alert(
+        "Não há manutenções para serem registradas!",  // message
+        function () {
+          return;
+        },         // callback
+        'Alerta',            // title
+        'OK'                  // buttonName
+      );
     } else if (tem_alguma_manut == "1") {
       if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
         window.location.assign("empree.htm?l=" + login + "&s=" + senha + "&e=" + qual_num_empree + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&fil=" + removeAcento(nome_sistema));
@@ -423,7 +429,7 @@
         function () {
           go_page_qrcode(qual_id_sistema, qual_num_empree);
         },         // callback
-        'SigmaCivil',            // title
+        'Falha',            // title
         'OK'                  // buttonName
       );
     }
@@ -556,11 +562,25 @@
               );
 
             } else {
-              alert("Esse QRCode não é válido");
+              navigator.notification.alert(
+                "Esse QRCode não é válido",  // message
+                function () {
+                  return;
+                },         // callback
+                'QRCode inválido',            // title
+                'OK'                  // buttonName
+              );
             }
 
           } else {
-            alert("Desculpe, só é possível ler QRCODES");
+            navigator.notification.alert(
+              "Desculpe, só é possível ler QRCODES",  // message
+              function () {
+                return;
+              },         // callback
+              'QRCode inválido',            // title
+              'OK'                  // buttonName
+            );
           }
         } else {
           // alert("Leitura do QRCODE cancelada");
@@ -602,14 +622,18 @@
   }
 
   function go_relat_check2() {
-
     if (tem_conexao()) {
       window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + /*"&id_sist=" + id_sis +*/ "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + id_cliente + "&econst=" + e_construtora)
+    } else {
+      navigator.notification.alert(
+        'Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.',  // message
+        function () {
+          return;
+        },
+        'Falha na conexão',
+        'OK'
+      );
     }
-    else {
-      alert('Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.');
-    }
-
   }
 
   function tem_conexao() {
@@ -625,39 +649,18 @@
 
   function enviar_sync() {
     navigator.notification.confirm(
-      'Confirma que deseja se deslogar do SigmaCivil?',
+      'Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!',
       function (buttonIndex) {
         if (buttonIndex === 2) {
           return;
         }
 
-        navigator.notification.confirm(
-          'Tem certeza que deseja sair do app SigmaCivil? Todos os seus arquivos como fotos e vídeos serão apagados deste dispositivo! Confirmar?',
-          function (buttonIndex) {
-            if (buttonIndex === 2) {
-              return;
-            }
-
-            document.form_sup.action = "del.htm";
-            document.form_sup.submit();
-          },
-          'SigmaCivil',
-          ['OK', 'Cancelar']
-        );
+        document.form_sup.action = "del.htm";
+        document.form_sup.submit();
       },
-      'SigmaCivil',
+      'Logout',
       ['OK', 'Cancelar']
     );
-
-    // decisao = confirm("Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!");
-
-    // if (decisao) {
-    // 	document.form_sup.action = "del.htm";
-    // 	document.form_sup.submit();
-
-    // } else {
-
-    // }
   }
 
   function sincronizar() {
@@ -665,7 +668,14 @@
     var status_sync = "";
 
     if (navigator.connection.type == 0 || navigator.connection.type == 'none') {
-      alert("Sem conexão com internet! Não é possível sincronizar!");
+      navigator.notification.alert(
+        'Sem conexão com internet! Não é possível sincronizar!',  // message
+        function () {
+          return;
+        },
+        'Falha na conexão',
+        'OK'
+      );
     } else {
       var ajax = new XMLHttpRequest();
       ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/sincronizar_checkpoint.asp?retor=" + encodeURIComponent(dados_checkpoint) + "&l=" + login + "&s=" + senha, true);
@@ -701,56 +711,6 @@
       });
 
       ajax.send();
-
-
-
-
-
-
-
-      /*var ajax = new XMLHttpRequest();
-      ajax.open("GET", "http://www.sigmacivil.com.br/app_sc/sincronizar_checkpoint.asp?retor=" + dados_checkpoint + "&l=" + login + "&s=" + senha, true);
-      ajax.onreadystatechange = function () {
-
-        if (ajax.readyState == 4) {//Request complete !!
-          if (ajax.status == 200 || ajax.status == 0) { // OK response
-            var resposta_total = ajax.responseText;
-            if (resposta_total == 'sim') {
-              var db;
-              var request = window.indexedDB.open("db_sigmacivil", "1");
-              request.onerror = function (event) {
-                alert("Erro ao criar o banco (cod 04)");
-              };
-
-              request.onsuccess = function (event) {
-                db = request.result;
-
-                executarRemoverDadosCheckpoint(db);
-
-                db.onerror = function (event) {
-                  alert("Database error: " + event.target.error);
-                }
-              };
-
-              function executarRemoverDadosCheckpoint(db) {
-                var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
-                var store = tx.objectStore('mtab_checkpoint');
-
-                var objectStoreRequest = store.clear();
-                objectStoreRequest.onsuccess = function (event) {
-                  go_page_qrcode(id_sis, num_empree);
-                }
-              }
-            }
-
-          }
-          else {
-            alert("Problemas com sua conexao internet. Erro: 0145");
-          }
-        }
-      }
-      ajax.send();*/
-
     } //checa internet
   }
 

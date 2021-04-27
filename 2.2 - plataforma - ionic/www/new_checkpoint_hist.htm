@@ -198,8 +198,14 @@
   <script type="text/javascript">
 
     window.onerror = function (message, url, lineNumber) {
-      alert(`Erro: ${message} em ${url} na linha ${lineNumber}. Por favor, tente novamente.`);
-      enviar();
+      navigator.notification.alert(
+        `Error: ${message} in ${url} at line ${lineNumber}`,  // message
+        function () {
+          return;
+        },         // callback
+        'Falha',            // title
+        'OK'                  // buttonName
+      );
     }
 
     var num_empree = getquerystring("e");
@@ -852,11 +858,25 @@
                 );
 
               } else {
-                alert("Esse QRCode não é válido");
+                navigator.notification.alert(
+                  "Esse QRCode não é válido",  // message
+                  function () {
+                    return;
+                  },         // callback
+                  'QRCode inválido',            // title
+                  'OK'                  // buttonName
+                );
               }
 
             } else {
-              alert("Desculpe, só é possível ler QRCODES");
+              navigator.notification.alert(
+                "Desculpe, só é possível ler QRCODES",  // message
+                function () {
+                  return;
+                },         // callback
+                'QRCode inválido',            // title
+                'OK'                  // buttonName
+              );
             }
           } else {
             // alert("Leitura do QRCODE cancelada");
@@ -886,39 +906,18 @@
 
     function enviar_sync() {
       navigator.notification.confirm(
-        'Confirma que deseja se deslogar do SigmaCivil?',
+        'Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!',
         function (buttonIndex) {
           if (buttonIndex === 2) {
             return;
           }
 
-          navigator.notification.confirm(
-            'Tem certeza que deseja sair do app SigmaCivil? Todos os seus arquivos como fotos e vídeos serão apagados deste dispositivo! Confirmar?',
-            function (buttonIndex) {
-              if (buttonIndex === 2) {
-                return;
-              }
-
-              document.form_sup.action = "del.htm";
-              document.form_sup.submit();
-            },
-            'SigmaCivil',
-            ['OK', 'Cancelar']
-          );
+          document.form_sup.action = "del.htm";
+          document.form_sup.submit();
         },
-        'SigmaCivil',
+        'Logout',
         ['OK', 'Cancelar']
       );
-
-      // decisao = confirm("Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!");
-
-      // if (decisao) {
-      // 	document.form_sup.action = "del.htm";
-      // 	document.form_sup.submit();
-
-      // } else {
-
-      // }
     }
 
     function go_page_check() {

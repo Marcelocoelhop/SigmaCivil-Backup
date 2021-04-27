@@ -74,7 +74,7 @@
       function () {
         return;
       },         // callback
-      'SigmaCivil',            // title
+      'Falha',            // title
       'OK'                  // buttonName
     );
   }
@@ -778,36 +778,39 @@
   <div id="forms-configs" class="div-spacing"></div>
 
   <div id="step-4" style="margin: 0; padding: 0 16px;">
-    <div style="display: flex; flex-direction: column;">
-      <div style="margin: 0">
-        <p class="config-title" style="margin: 0 0 8px;" for="flip-select">Upload de todos os arquivos
-          pendentes:</p>
-        <small style="color: #333;">Deseja realizar agora o upload de todos os arquivos de manutenções
-          pendentes?</small>
+    <div class="btns_opcionais" style="display: flex; justify-content: space-between; align-items: center; margin: 0;">
+      <div style="margin: 0; width: 100% !important;">
+        <div style="display: flex; align-items: center;">
+          <img style="margin-right: 10px;" src="images/upload-config.png" width="21" height="21" alt="Upload" />
+          <p class="config-title" style="margin: 0 0 8px;" for="flip-select">Realizar o upload de todos os arquivos
+            pendentes?</p>
+        </div>
+        <small style="color: #333;">Deseja realizar agora o upload para o servidor do SigmaCivil de todos os arquivos de
+          manutenções preventivas que ainda não foram enviados?</small>
       </div>
-      <button class="ui-btn ui-icon-cloud ui-btn-icon-left ui-shadow ui-corner-all btn-success" type="button"
-        onclick="uploadArquivos()">Sim, realizar upload</button>
+      <a type="button" style="margin-left: 16px;" class="ui-btn ui-shadow ui-corner-all btn-success"
+        onclick="uploadArquivos()">Sim</a>
     </div>
     <hr />
   </div>
 
   <div style="padding: 0 16px;">
     <div id="step-5" class="btns_opcionais">
-      <div style="display: flex; align-items: center;">
+      <div style="display: flex; align-items: center; width: 100%;">
         <img style="margin-right: 10px;" src="images/chalkboard-teacher.png" alt="tour inicial" />
         <p class="config-title">Realizar agora o tour inicial de como usar o app</p>
       </div>
-      <button class="ui-btn ui-shadow ui-corner-all btn-success" type="button" onclick="showTour()">Tour</button>
+      <a class="ui-btn ui-shadow ui-corner-all btn-success" onclick="showTour()">Tour</a>
     </div>
     <hr />
     <div id="step-6" style="margin-bottom: 80px;" class="btns_opcionais">
-      <div style="display: flex; align-items: center;">
+      <div style="display: flex; align-items: center; width: 100%;">
         <img style="margin-right: 10px;" src="images/video-config.png" alt="tutorial" />
         <p class="config-title">Assistir agora o tutorial em vídeo de como usar o app</p>
       </div>
       <a class="ui-btn ui-shadow ui-corner-all btn-success" href="#popupLogin" data-rel="popup"
         data-position-to="window" data-transition="pop">
-        Tour vídeo
+        Vídeo
       </a>
       <div data-role="popup" id="popupLogin" data-theme="a" class="ui-corner-all">
         <video class="tutorial-video" poster="images/video.png" controls name="media">
@@ -890,7 +893,14 @@
 
   function uploadArquivos() {
     if (!tem_conexao()) {
-      alert("Essa ação só pode ser realizada com conexão internet!");
+      navigator.notification.alert(
+        "Essa ação só pode ser realizada com conexão internet!",  // message
+        function () {
+          return;
+        },         // callback
+        'Alerta',            // title
+        'OK'                  // buttonName
+      );
       return;
     }
 
@@ -1886,11 +1896,25 @@
               );
 
             } else {
-              alert("Esse QRCode não é válido");
+              navigator.notification.alert(
+                "Esse QRCode não é válido",  // message
+                function () {
+                  return;
+                },         // callback
+                'QRCode inválido',            // title
+                'OK'                  // buttonName
+              );
             }
 
           } else {
-            alert("Desculpe, só é possível ler QRCODES");
+            navigator.notification.alert(
+              "Desculpe, só é possível ler QRCODES",  // message
+              function () {
+                return;
+              },         // callback
+              'QRCode inválido',            // title
+              'OK'                  // buttonName
+            );
           }
         } else {
           // alert("Leitura do QRCODE cancelada");
@@ -2000,7 +2024,14 @@
     if (tem_conexao()) {
       window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + /*"&id_sist=" + id_sis +*/ "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + id_cliente + "&econst=" + e_construtora)
     } else {
-      alert('Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.');
+      navigator.notification.alert(
+        'Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.',  // message
+        function () {
+          return;
+        },
+        'Falha na conexão',
+        'OK'
+      );
     }
   }
 
@@ -2012,39 +2043,18 @@
 
   function enviar_sync() {
     navigator.notification.confirm(
-      'Confirma que deseja se deslogar do SigmaCivil?',
+      'Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!',
       function (buttonIndex) {
         if (buttonIndex === 2) {
           return;
         }
 
-        navigator.notification.confirm(
-          'Tem certeza que deseja sair do app SigmaCivil? Todos os seus arquivos como fotos e vídeos serão apagados deste dispositivo! Confirmar?',
-          function (buttonIndex) {
-            if (buttonIndex === 2) {
-              return;
-            }
-
-            document.form_sup.action = "del.htm";
-            document.form_sup.submit();
-          },
-          'SigmaCivil',
-          ['OK', 'Cancelar']
-        );
+        document.form_sup.action = "del.htm";
+        document.form_sup.submit();
       },
-      'SigmaCivil',
+      'Logout',
       ['OK', 'Cancelar']
     );
-
-    // decisao = confirm("Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!");
-
-    // if (decisao) {
-    // 	document.form_sup.action = "del.htm";
-    // 	document.form_sup.submit();
-
-    // } else {
-
-    // }
   }
 
   function closeApp() {
@@ -2057,7 +2067,7 @@
 
         navigator.app.exitApp();
       },
-      'SigmaCivil',
+      'Fechar app',
       ['OK', 'Cancelar']
     );
   }

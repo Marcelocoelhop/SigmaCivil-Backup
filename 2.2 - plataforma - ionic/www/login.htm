@@ -80,12 +80,12 @@
           <form name="form1" action="" method="get">
   
             <label for="usuario">Usuário:</label>
-            <input id="usuario" name="login" type="text" placeholder="Usuário..." required>
+            <input id="login" name="login" type="text" placeholder="Usuário..." required>
   
             <label for="usuario">Senha:</label>
             <input id="senha" name="senha" type="password" placeholder="Senha..." required>
   
-            <input type="button" value="Acessar" onClick="validar()">
+            <input type="button" value="Acessar" onclick="validar()">
   
           </form>
   
@@ -100,9 +100,10 @@
 <script>
 
   function validar() {
-    // document.form1.action = "i_empree.htm";
-    document.form1.action = "i_empree.htm";
-    document.form1.submit();
+    var login = document.getElementById('login').value;
+    var senha = document.getElementById('senha').value;
+
+    window.location.assign("i_empree.htm?login=" + login.trim() + "&senha=" + senha);
   }
 
 </script>

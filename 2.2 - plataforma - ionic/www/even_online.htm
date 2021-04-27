@@ -117,8 +117,14 @@
 
         // FUNÇÃO QUE APRESENTA O ERRO NA APLICAÇÃO
         window.onerror = function (message, url, lineNumber) {
-            alert(`Erro: ${message} em ${url} na linha ${lineNumber}. Por favor, tente novamente.`);
-            reload_page();
+            navigator.notification.alert(
+                `Error: ${message} in ${url} at line ${lineNumber}`,  // message
+                function () {
+                    return;
+                },         // callback
+                'Falha',            // title
+                'OK'                  // buttonName
+            );
         }
 
         // INICIALIZA O PROCESSAMENTO DA APLICAÇÃO
@@ -1133,9 +1139,6 @@
                         var rrr_status_caminho_texto = ""
                     }
 
-                    // alert(rrr_caminho_imagens);
-                    // alert(rrr_status_caminho_imagens);
-
                     var todas_imagens = ""
                     var todas_status_imagens = ""
                     if (rrr_caminho_imagens == null || rrr_caminho_imagens == "") {
@@ -1330,19 +1333,13 @@
                                 upload_imagem(qtd_tam_ti - 1);
                             }
 
-                            // alert(qtd_tam_ti_audio);
-
                             if (uploadAutomatic && qtd_tam_ti_audio > 0) {
                                 upload_audio();
                             }
 
-                            // alert(qtd_tam_ti_video);
-
                             if (uploadAutomatic && qtd_tam_ti_video > 0) {
                                 upload_video();
                             }
-
-                            // alert(qtd_tam_ti_texto);
 
                             if (uploadAutomatic && qtd_tam_ti_texto > 0) {
                                 upload_texto();
@@ -1367,11 +1364,25 @@
 
             // RESTRIÇÕES DE DATAS
             if (datadiff2(Date.now(), d_min) > 0) {
-                alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
-                return
+                navigator.notification.alert(
+                    "Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!",  // message
+                    function () {
+                        return;
+                    },         // callback
+                    'Alerta',            // title
+                    'OK'                  // buttonName
+                );
+                return;
             } else if (datadiff(Date.now(), d_max) < 0) {
-                alert("Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!")
-                return
+                navigator.notification.alert(
+                    "Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!",  // message
+                    function () {
+                        return;
+                    },         // callback
+                    'Alerta',            // title
+                    'OK'                  // buttonName
+                );
+                return;
             }
 
             navigator.notification.confirm(
@@ -1441,11 +1452,6 @@
                     status_texto_upl: ""
                 }
             ];
-
-            //alert(id_prog_manut)
-            // alert(dia_ev)
-            // alert(mes_ev)
-            // alert(ano_ev)
 
             function consultaManutEvento2(db, manutsEvento_imagem) {
                 var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
@@ -1676,7 +1682,7 @@
                             upload_imagem(q_id);
                         }
                     },
-                    'SigmaCivil',
+                    'Falha',
                     ['Cancelar', 'Tentar novamente']
                 );
             }
@@ -1762,7 +1768,7 @@
                         consultaConfig();
                     }
                 },
-                'SigmaCivil',
+                'Falha',
                 ['Cancelar', 'Tentar novamente']
             );
         }
@@ -1776,11 +1782,25 @@
 
             // RESTRIÇÕES DE DATAS
             if (datadiff2(Date.now(), d_min) > 0) {
-                alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
-                return
+                navigator.notification.alert(
+                    "Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!",  // message
+                    function () {
+                        return;
+                    },         // callback
+                    'Alerta',            // title
+                    'OK'                  // buttonName
+                );
+                return;
             } else if (datadiff(Date.now(), d_max) < 0) {
-                alert("Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!")
-                return
+                navigator.notification.alert(
+                    "Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!",  // message
+                    function () {
+                        return;
+                    },         // callback
+                    'Alerta',            // title
+                    'OK'                  // buttonName
+                );
+                return;
             }
 
             navigator.notification.confirm(
@@ -1808,13 +1828,13 @@
         function videocaptureSuccess(mediaFiles) {
             var i, len;
             var m_path;
-            
+
             if (!Array.isArray(mediaFiles)) {
                 mediaFiles = [
                     { fullPath: mediaFiles }
                 ];
             }
-            
+
             for (i = 0, len = mediaFiles.length; i < len; i += 1) {
                 m_path = mediaFiles[i].fullPath;
 
@@ -2010,7 +2030,7 @@
                             upload_video();
                         }
                     },
-                    'SigmaCivil',
+                    'Falha',
                     ['Cancelar', 'Tentar novamente']
                 );
             }
@@ -2089,7 +2109,7 @@
                         consultaConfig();
                     }
                 },
-                'SigmaCivil',
+                'Falha',
                 ['Cancelar', 'Tentar novamente']
             );
         }
@@ -2104,11 +2124,25 @@
 
             // RESTRIÇÕES DE DATAS
             if (datadiff2(Date.now(), d_min) > 0) {
-                alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
-                return
+                navigator.notification.alert(
+                    "Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!",  // message
+                    function () {
+                        return;
+                    },         // callback
+                    'Alerta',            // title
+                    'OK'                  // buttonName
+                );
+                return;
             } else if (datadiff(Date.now(), d_max) < 0) {
-                alert("Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!")
-                return
+                navigator.notification.alert(
+                    "Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!",  // message
+                    function () {
+                        return;
+                    },         // callback
+                    'Alerta',            // title
+                    'OK'                  // buttonName
+                );
+                return;
             }
 
             navigator.device.capture.captureAudio(captureSuccess, captureError, { limit: 1 });
@@ -2342,7 +2376,7 @@
                             upload_audio();
                         }
                     },
-                    'SigmaCivil',
+                    'Falha',
                     ['Cancelar', 'Tentar novamente']
                 );
             }
@@ -2420,7 +2454,7 @@
                         consultaConfig();
                     }
                 },
-                'SigmaCivil',
+                'Falha',
                 ['Cancelar', 'Tentar novamente']
             );
         }
@@ -2458,12 +2492,17 @@
                         if (cursor) {
                             var data = cursor.value;
 
-                            if (cursor.value.status_texto_upl != '1') {
-                                var aux_caminho_texto = data.caminho_texto;
-                                up_loadTexto(aux_caminho_texto);
-                            } else {
-                                var aux_caminho_texto = data.caminho_texto;
-                                up_loadTexto(aux_caminho_texto);
+                            var aux_caminho_texto = document.getElementById('textarea_' + id_prog_manut).value
+
+                            data.caminho_texto = aux_caminho_texto;
+
+                            var request = cursor.update(data);
+                            request.onsuccess = function (event) {
+                                if (data.status_texto_upl != '1') {
+                                    up_loadTexto(aux_caminho_texto);
+                                } else {
+                                    up_loadTexto(aux_caminho_texto);
+                                }
                             }
                         }
                     }
@@ -2476,7 +2515,7 @@
                             upload_texto();
                         }
                     },
-                    'SigmaCivil',
+                    'Falha',
                     ['Cancelar', 'Tentar novamente']
                 );
             }
@@ -2548,7 +2587,7 @@
                                     consultaConfig();
                                 }
                             },
-                            'SigmaCivil',
+                            'Falha',
                             ['Cancelar', 'Tentar novamente']
                         );
                     }
@@ -2571,7 +2610,7 @@
                             consultaConfig();
                         }
                     },
-                    'SigmaCivil',
+                    'Falha',
                     ['Cancelar', 'Tentar novamente']
                 );
             }
@@ -2733,7 +2772,7 @@
                     <a href="#overlay" data-transition="slideup"
                         style="background: #4793d0; text-shadow: none; color: #fff; position: relative; top: 0;"
                         class="ui-btn ui-icon-camera ui-btn-icon-left ui-corner-all" data-rel="popup">Galeria de
-                        imagens servidor</a>
+                        imagens no SigmaCivil</a>
                     <div data-role="popup" id="overlay" class="ui-content" data-theme="a">
                         <a data-rel="back" class="ui-corner-all ui-shadow">
                             <button type="button"
@@ -2955,14 +2994,27 @@
     function atualizar_texto(qual) {
         // RESTRIÇÕES DE DATAS
         if (datadiff2(Date.now(), d_min) > 0) {
-            alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
-            return
+            navigator.notification.alert(
+                "Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!",  // message
+                function () {
+                    return;
+                },         // callback
+                'Alerta',            // title
+                'OK'                  // buttonName
+            );
+            return;
         } else if (datadiff(Date.now(), d_max) < 0) {
-            alert("Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!")
-            return
+            navigator.notification.alert(
+                "Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!",  // message
+                function () {
+                    return;
+                },         // callback
+                'Alerta',            // title
+                'OK'                  // buttonName
+            );
+            return;
         }
 
-        // var db2 = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000);
         var quale;
 
         qual_id_prog_manut = qual;
@@ -3149,9 +3201,10 @@
                 if (cursor) {
                     var data = cursor.value;
 
-                    data.caminho_texto = quale;
-
-                    data.status_texto_upl = "0";
+                    if (data.caminho_texto != quale) {
+                        data.caminho_texto = quale;
+                        data.status_texto_upl = "0";
+                    }
 
                     var request = cursor.update(data);
                     request.onsuccess = function (event) {
@@ -3289,11 +3342,25 @@
                             );
 
                         } else {
-                            alert("Esse QRCode não é válido");
+                            navigator.notification.alert(
+                                "Esse QRCode não é válido",  // message
+                                function () {
+                                    return;
+                                },         // callback
+                                'QRCode inválido',            // title
+                                'OK'                  // buttonName
+                            );
                         }
 
                     } else {
-                        alert("Desculpe, só é possível ler QRCODES");
+                        navigator.notification.alert(
+                            "Desculpe, só é possível ler QRCODES",  // message
+                            function () {
+                                return;
+                            },         // callback
+                            'QRCode inválido',            // title
+                            'OK'                  // buttonName
+                        );
                     }
                 } else {
                     // alert("Leitura do QRCODE cancelada");
@@ -3310,7 +3377,47 @@
     }
 
     function go_to_page_config() {
-        window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(mes_ev) + "&qa=" + parseInt(ano_ev) + "&idc=" + id_cliente + "&econst=" + e_construtora);
+        var quale = document.getElementById('textarea_' + id_prog_manut).value;
+
+        var db;
+        var request = window.indexedDB.open("db_sigmacivil", "1");
+
+        request.onerror = function (event) {
+            alert("Erro ao criar o banco (cod 18)");
+        };
+
+        request.onsuccess = function (event) {
+            db = request.result;
+
+            updateManutEventoTextoEmpreeConfig(db);
+
+            db.onerror = function (event) {
+                alert("Database error text empree config: " + event.target.errorCode);
+            }
+        }
+
+        function updateManutEventoTextoEmpreeConfig(db) {
+            var tx3 = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+            var store3 = tx3.objectStore('mtab_prog_manut_evento');
+            var index = store3.index('comparar');
+            var whereEquals = IDBKeyRange.only([id_prog_manut, dia_ev, mes_ev, ano_ev]);
+            index.openCursor(whereEquals).onsuccess = function (event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    var data = cursor.value;
+
+                    if (data.caminho_texto != quale) {
+                        data.caminho_texto = quale;
+                        data.status_texto_upl = "0";
+                    }
+
+                    var request = cursor.update(data);
+                    request.onsuccess = function (event) {
+                        window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(mes_ev) + "&qa=" + parseInt(ano_ev) + "&idc=" + id_cliente + "&econst=" + e_construtora);
+                    }
+                }
+            }
+        }
     }
 
     function reload_page() {
@@ -3345,14 +3452,19 @@
     }
 
     function enviar_sync() {
+        navigator.notification.confirm(
+            'Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!',
+            function (buttonIndex) {
+                if (buttonIndex === 2) {
+                    return;
+                }
 
-        decisao = confirm("Confirmar efetuação de um novo login? Será necessário se logar novamente em qualquer empreendimento atualizando o plano de manutenção!");
-
-        if (decisao) {
-            document.form_sup.action = "del.htm";
-            document.form_sup.submit();
-        }
-
+                document.form_sup.action = "del.htm";
+                document.form_sup.submit();
+            },
+            'Logout',
+            ['OK', 'Cancelar']
+        );
     }
 
     //////////////////////
@@ -3475,20 +3587,68 @@
                 }
 
                 if (data.value == 0) {
-                    alert('Obrigatório o preenchimento da data da realização da manutenção!')
-                    FocusInput(data)
+                    navigator.notification.alert(
+                        'Obrigatório o preenchimento da data da realização da manutenção!',
+                        function () {
+                            FocusInput(data);
+                        },
+                        'Alerta',
+                        'OK'
+                    );
                 } else if (datadiff2(Date.now(), d_min) > 0) {
-                    alert("Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + "!")
+                    navigator.notification.alert(
+                        "Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + "!",  // message
+                        function () {
+                            return;
+                        },
+                        'Alerta',
+                        'OK'
+                    );
                 } else if (datadiff(Date.now(), d_max) < 0) {
-                    alert("Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + "!")
+                    navigator.notification.alert(
+                        "Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + "!",  // message
+                        function () {
+                            return;
+                        },
+                        'Alerta',
+                        'OK'
+                    );
                 } else if (datadiff2(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), d_min) > 0) {
-                    alert("Essa manutenção só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
+                    navigator.notification.alert(
+                        "Essa manutenção só pode ser realizada a partir do dia " + dateToEN(d_min) + "!",  // message
+                        function () {
+                            return;
+                        },
+                        'Alerta',
+                        'OK'
+                    );
                 } else if (datadiff(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), d_max) < 0) {
-                    alert("Essa manutenção não pode ser realizada após o dia " + dateToEN(d_max) + "!")
+                    navigator.notification.alert(
+                        "Essa manutenção não pode ser realizada após o dia " + dateToEN(d_max) + "!",  // message
+                        function () {
+                            return;
+                        },
+                        'Alerta',
+                        'OK'
+                    );
                 } else if (datadiff(transf_data_num(dateToEN2(document.getElementById('in_data_realizacao').value)), data_hoje_formatada) < 0) {
-                    alert("Essa manutenção não pode ser realizada após o dia de hoje!")
+                    navigator.notification.alert(
+                        "Essa manutenção não pode ser realizada após o dia de hoje!",  // message
+                        function () {
+                            return;
+                        },
+                        'Alerta',
+                        'OK'
+                    );
                 } else if (nivel_manut == 2 && qt_docs == 0) {
-                    alert('Esta manutenção precisa de pelo menos 1 documento comprovatório anexado!')
+                    navigator.notification.alert(
+                        'Esta manutenção precisa de pelo menos 1 documento comprovatório anexado!',  // message
+                        function () {
+                            return;
+                        },
+                        'Alerta',
+                        'OK'
+                    );
                 } else {
                     if (nivel_manut == 1 && qt_docs == 0) {
                         var prosseguir = confirm('É importante anexar um documento que comprove esta manutenção. Tem certeza que deseja prosseguir sem anexar um comprovante?')
@@ -3508,12 +3668,24 @@
                         ajax3.addEventListener("loadend", function (evt) {
                             var resposta_total = this.responseText;
                             if (tipo == "alt") {
-                                alert("Alteração realizada com sucesso!")
+                                navigator.notification.alert(
+                                    "Alteração realizada com sucesso!",  // message
+                                    function () {
+                                        atualizar_texto_empree(id_prog_manut);
+                                    },
+                                    'Sucesso!',
+                                    'OK'
+                                );
                             } else {
-                                alert("Manutenção realizada com sucesso!")
+                                navigator.notification.alert(
+                                    "Manutenção realizada com sucesso!",  // message
+                                    function () {
+                                        atualizar_texto_empree(id_prog_manut);
+                                    },
+                                    'Sucesso!',
+                                    'OK'
+                                );
                             }
-
-                            atualizar_texto_empree(id_prog_manut);
                         });
 
                         ajax3.send();
@@ -3529,9 +3701,23 @@
                 }
 
                 if (datadiff2(Date.now(), d_min) > 0) {
-                    alert("Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + '!')
+                    navigator.notification.alert(
+                        "Essa manutenção só pode ser informada a partir do dia " + dateToEN(d_min) + '!',  // message
+                        function () {
+                            return;
+                        },
+                        'Alerta',
+                        'OK'
+                    );
                 } else if (datadiff(Date.now(), d_max) <= 0) {
-                    alert("Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + '!')
+                    navigator.notification.alert(
+                        "Essa manutenção não pode ser informada após o dia " + dateToEN(d_max) + '!',  // message
+                        function () {
+                            return;
+                        },
+                        'Alerta',
+                        'OK'
+                    );
                 } else {
                     if (qtdDocs_Device > 0) {
                         if (qtdDocs_Device > 1) {
@@ -3545,9 +3731,14 @@
                     ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/salvar_manut.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&econst=" + e_construtora + "&idpm=" + id_prog_manut + "&d=" + dia_ev + "&m=" + mes_ev + "&a=" + ano_ev + "&d_data_realiz=" + document.getElementById('in_data_realizacao').value + "&d_forn=" + document.getElementById('valores').value + "&d_custoReal=" + document.getElementById('in_dado_custo_real').value + "&d_custoEstim=" + document.getElementById('in_dado_custo_estimado').value + "&d_obsCondo=" + removeAcento(document.getElementById('txt_dado_condominio').value) + "&d_obsConstr=" + removeAcento(document.getElementById('txt_dado_construtora').value) + "&tipo=" + tipo + "&versao=2.2&env_em=" + ev_email + "&segur=" + crypt_segur + "&t=" + Math.random(), false);
                     ajax3.addEventListener("loadend", function (evt) {
                         var resposta_total = this.responseText;
-                        alert("Alterações realizadas com sucesso!")
-
-                        atualizar_texto_empree(id_prog_manut);
+                        navigator.notification.alert(
+                            "Alteração realizada com sucesso!",  // message
+                            function () {
+                                atualizar_texto_empree(id_prog_manut);
+                            },
+                            'Sucesso!',
+                            'OK'
+                        );
                     });
 
                     ajax3.send();
@@ -3562,7 +3753,7 @@
                         enviar_dados();
                     }
                 },
-                'SigmaCivil',
+                'Falha',
                 ['Cancelar', 'Tentar novamente']
             );
         }
@@ -3574,22 +3765,80 @@
             if (e_construtora == 0) {
                 var trash = document.querySelector('.all_trash');
 
-                var res = confirm('Tem certeza que deseja excluir este arquivo?');
-                if (res == true) {
-                    if (datadiff2(Date.now(), d_min) > 0 || datadiff(Date.now(), d_max) < 0) {
-                        alert("A exclusão deste arquivo só pode ser realizada entre o período " + dateToEN(d_min) + ' a ' + dateToEN(d_max) + '!')
-                    } else if (nivel_manut == 2 && qt_docs == 1) {
-                        alert('Não é possível a exclusão, pois esta manutenção precisa de pelo menos 1 documento comprovatório anexado!')
-                    } else {
-                        var deletar_arq = "S";
-                        if (nivel_manut == 1 && qt_docs == 1) {
-                            prosseguir = confirm('É importante anexar um documento que comprove esta manutenção. Tem certeza que deseja prosseguir sem anexar um comprovante?')
-                            if (prosseguir == false) {
-                                deletar_arq = "N"
-                            }
+                navigator.notification.confirm(
+                    'Tem certeza que deseja excluir este arquivo do servidor do SigmaCivil?',
+                    function (buttonIndex) {
+                        if (buttonIndex === 1) {
+                            return;
                         }
-                        if (deletar_arq == "S") {
 
+                        if (datadiff2(Date.now(), d_min) > 0 || datadiff(Date.now(), d_max) < 0) {
+                            navigator.notification.alert(
+                                "A exclusão deste arquivo só pode ser realizada entre o período " + dateToEN(d_min) + ' a ' + dateToEN(d_max) + '!',  // message
+                                function () {
+                                    return;
+                                },
+                                'Alerta',
+                                'OK'
+                            );
+                        } else if (nivel_manut == 2 && qt_docs == 1) {
+                            navigator.notification.alert(
+                                'Não é possível a exclusão, pois esta manutenção precisa de pelo menos 1 documento comprovatório anexado!',  // message
+                                function () {
+                                    return;
+                                },
+                                'Alerta',
+                                'OK'
+                            );
+                        } else {
+                            var deletar_arq = "S";
+                            if (nivel_manut == 1 && qt_docs == 1) {
+                                prosseguir = confirm('É importante anexar um documento que comprove esta manutenção. Tem certeza que deseja prosseguir sem anexar um comprovante?')
+                                if (prosseguir == false) {
+                                    deletar_arq = "N"
+                                }
+                            }
+                            if (deletar_arq == "S") {
+
+                                var verific1 = 3 * parseInt(id_empree) + 3 * parseInt(id_cliente)
+                                var verific2 = Math.abs(6 * parseInt(id_empree) - 3 * parseInt(id_cliente))
+                                var verific3 = Math.abs(3 * parseInt(id_empree) + 2 * parseInt(id_cliente))
+                                var verif_fim = verific1 + "S" + verific2 + "C" + verific3
+
+                                var ajax3 = new XMLHttpRequest();
+                                ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.2");
+                                ajax3.addEventListener("loadend", function (evt) {
+                                    var resposta_total = this.responseText;
+                                    reload_page_even();
+                                });
+
+                                ajax3.send();
+
+                            }
+
+                        }
+                    },
+                    'Excluir arquivo',
+                    ['Cancelar', 'OK']
+                );
+            } else if (e_construtora == 1) {
+                navigator.notification.confirm(
+                    'Tem certeza que deseja excluir este arquivo?',
+                    function (buttonIndex) {
+                        if (buttonIndex === 1) {
+                            return;
+                        }
+
+                        if (datadiff2(Date.now(), d_min) > 0 || datadiff(Date.now(), d_max) < 0) {
+                            navigator.notification.alert(
+                                "A exclusão deste arquivo só pode ser realizada no período de " + dateToEN(d_min) + ' a ' + dateToEN(d_max) + '!',  // message
+                                function () {
+                                    return;
+                                },
+                                'Alerta',
+                                'OK'
+                            );
+                        } else {
                             var verific1 = 3 * parseInt(id_empree) + 3 * parseInt(id_cliente)
                             var verific2 = Math.abs(6 * parseInt(id_empree) - 3 * parseInt(id_cliente))
                             var verific3 = Math.abs(3 * parseInt(id_empree) + 2 * parseInt(id_cliente))
@@ -3603,34 +3852,11 @@
                             });
 
                             ajax3.send();
-
                         }
-
-                    }
-                }
-            } else if (e_construtora == 1) {
-                var res = confirm('Tem certeza que deseja excluir este arquivo?');
-                if (res == true) {
-                    if (datadiff2(Date.now(), d_min) > 0 || datadiff(Date.now(), d_max) < 0) {
-                        alert("A exclusão deste arquivo só pode ser realizada no período de " + dateToEN(d_min) + ' a ' + dateToEN(d_max) + '!')
-                    } else {
-
-                        var verific1 = 3 * parseInt(id_empree) + 3 * parseInt(id_cliente)
-                        var verific2 = Math.abs(6 * parseInt(id_empree) - 3 * parseInt(id_cliente))
-                        var verific3 = Math.abs(3 * parseInt(id_empree) + 2 * parseInt(id_cliente))
-                        var verif_fim = verific1 + "S" + verific2 + "C" + verific3
-
-                        var ajax3 = new XMLHttpRequest();
-                        ajax3.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_excluir_arq.asp?l=" + login + "&s=" + senha + "&e=" + id_empree + "&c=" + id_cliente + "&e_const=" + e_construtora + "&seg=" + verif_fim + "&cam=" + q_cam + "&versao=2.2");
-                        ajax3.addEventListener("loadend", function (evt) {
-                            var resposta_total = this.responseText;
-                            reload_page_even();
-                        });
-
-                        ajax3.send();
-
-                    }
-                }
+                    },
+                    'Excluir arquivo',
+                    ['Cancelar', 'OK']
+                );
             }
         } else {
             navigator.notification.confirm(
@@ -3640,7 +3866,7 @@
                         apagar_fot_vid_aud_tex(q_cam);
                     }
                 },
-                'SigmaCivil',
+                'Falha',
                 ['Cancelar', 'Tentar novamente']
             );
         }
@@ -3726,7 +3952,14 @@
         if (tem_conexao()) {
             window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + /*"&id_sist=" + id_sis +*/ "&l=" + login + "&s=" + senha + "&qm=" + parseInt(mes_ev) + "&qa=" + parseInt(ano_ev) + "&idc=" + id_cliente + "&econst=" + e_construtora)
         } else {
-            alert('Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.');
+            navigator.notification.alert(
+                'Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.',  // message
+                function () {
+                    return;
+                },
+                'Falha na conexão',
+                'OK'
+            );
         }
     }
 
@@ -3739,30 +3972,13 @@
     function scrollDate() {
         if (getMobileOperatingSystem() == "iOS") {
             document.querySelector('.date_ios').click();
-            //document.querySelector('.date_ios').onclick = function() {
-            //alert('ponto 8')
-            // var options = {
-            //     date: new Date(),
-            //     mode: 'date'
-            // };
 
-            // function onSuccess(date) {
-            //     var mes_atual = date.getMonth() + 1;
-            //     document.querySelector('.date_ios').value = date.getDate() + '/' + mes_atual + '/' + date.getFullYear();
-            // }
-
-            // function onError(error) { // Android only
-            //     // alert('Error: ' + error);
-            // }
-
-            // datePicker.show(options, onSuccess, onError);
             new Rolldate({
                 el: '.date_ios',
                 format: 'DD/MM/YYYY',
                 beginYear: 2016,
                 endYear: 2040
             })
-            //};
         }
     }
 
@@ -3771,12 +3987,26 @@
         var textarea = document.querySelector('.textarea_obs');
         if (datadiff2(Date.now(), d_min) > 0) {
             textarea.setAttribute("readonly", "readonly");
-            alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
-            return
+            navigator.notification.alert(
+                "Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!",
+                function () {
+                    return;
+                },
+                'Alerta',
+                'OK'
+            );
+            return;
         } else if (datadiff(Date.now(), d_max) < 0) {
             textarea.setAttribute("readonly", "readonly");
-            alert("Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!")
-            return
+            navigator.notification.alert(
+                "Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!",
+                function () {
+                    return;
+                },
+                'Alerta',
+                'OK'
+            );
+            return;
         }
     }
 
@@ -3785,12 +4015,26 @@
         var textarea = document.querySelector('.condominio_obs');
         if (datadiff2(Date.now(), d_min) > 0) {
             textarea.setAttribute("readonly", "readonly");
-            alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
-            return
+            navigator.notification.alert(
+                "Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!",
+                function () {
+                    return;
+                },
+                'Alerta',
+                'OK'
+            );
+            return;
         } else if (datadiff(Date.now(), d_max) < 0) {
             textarea.setAttribute("readonly", "readonly");
-            alert("Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!")
-            return
+            navigator.notification.alert(
+                "Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!",
+                function () {
+                    return;
+                },
+                'Alerta',
+                'OK'
+            );
+            return;
         }
     }
 
@@ -3799,12 +4043,26 @@
         var textarea = document.querySelector('.construtora_obs');
         if (datadiff2(Date.now(), d_min) > 0) {
             textarea.setAttribute("readonly", "readonly");
-            alert("Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!")
-            return
+            navigator.notification.alert(
+                "Essa ação só pode ser realizada a partir do dia " + dateToEN(d_min) + "!",
+                function () {
+                    return;
+                },
+                'Alerta',
+                'OK'
+            );
+            return;
         } else if (datadiff(Date.now(), d_max) < 0) {
             textarea.setAttribute("readonly", "readonly");
-            alert("Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!")
-            return
+            navigator.notification.alert(
+                "Essa ação não pode ser realizada após o dia " + dateToEN(d_max) + "!",
+                function () {
+                    return;
+                },
+                'Alerta',
+                'OK'
+            );
+            return;
         }
     }
 
@@ -3838,7 +4096,7 @@
 
                 navigator.app.exitApp();
             },
-            'SigmaCivil',
+            'Fechar app',
             ['OK', 'Cancelar']
         );
     }

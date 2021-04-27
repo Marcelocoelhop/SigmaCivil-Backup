@@ -113,10 +113,15 @@
     <!-- Fim Menu bottom -->
 
     <script type="text/javascript">
-
         window.onerror = function (message, url, lineNumber) {
-            alert(`Erro: ${message} em ${url} na linha ${lineNumber}. Por favor, tente novamente`);
-            // enviar();
+            navigator.notification.alert(
+                `Error: ${message} in ${url} at line ${lineNumber}`,  // message
+                function () {
+                    return;
+                },         // callback
+                'Falha',            // title
+                'OK'                  // buttonName
+            );
         }
 
         var num_empree = getquerystring("e");
@@ -520,13 +525,25 @@
                 var q_mensagem = parte_resultado[2]
 
                 if (bloqueio == "2") {
-                    alert(q_mensagem)
-                    window.location.href = "login.htm"
+                    navigator.notification.alert(
+                        q_mensagem,  // message
+                        function () {
+                            window.location.href = "login.htm"
+                            return;
+                        },         // callback
+                        'SigmaCivil',            // title
+                        'OK'                  // buttonName
+                    );
                 }
 
                 if (bloqueio == "1" || bloqueio == "0") {
                     if (bloqueio == "1") {
-                        alert(q_mensagem)
+                        navigator.notification.alert(
+                            q_mensagem,  // message
+                            function () { },         // callback
+                            'SigmaCivil',            // title
+                            'OK'                  // buttonName
+                        );
                     }
 
                     if (status_sync_serv != "nada") {
@@ -555,10 +572,23 @@
                                 if (cursor) {
                                     status_sync = cursor.value.status_sync;
                                     if (status_sync_serv != status_sync) {
-                                        var r = confirm("Houve uma atualização no seu Programa de Manutenção e é necessário sincronizá-lo com este aplicativo. Somente serão apagadas imagens/videos deste app que ainda não foram enviados para o servidor. Confirma a atualização ?");
-                                        if (r == true) {
-                                            window.location.assign("del.htm");
-                                        }
+                                        navigator.notification.confirm(
+                                            'Houve uma atualização no seu Programa de Manutenção e é necessário sincronizá-lo com este aplicativo. Somente serão apagadas imagens/videos deste app que ainda não foram enviados para o servidor. Confirma a atualização?',
+                                            function (buttonIndex) {
+                                                if (buttonIndex === 2) {
+                                                    return;
+                                                }
+
+                                                window.location.assign("del.htm");
+                                            },
+                                            'Atenção!',
+                                            ['OK', 'Cancelar']
+                                        );
+
+                                        // var r = confirm("Houve uma atualização no seu Programa de Manutenção e é necessário sincronizá-lo com este aplicativo. Somente serão apagadas imagens/videos deste app que ainda não foram enviados para o servidor. Confirma a atualização ?");
+                                        // if (r == true) {
+                                        //     window.location.assign("del.htm");
+                                        // }
 
                                     }
                                 }
@@ -791,7 +821,6 @@
 
                                         data_maxima_alteracao = (aux_mes + '/' + '1' + '/' + aux_ano);
                                         data_maxima_alteracao = new Date(data_maxima_alteracao)
-                                        //alert('data_maxima_alteracao: ' + data_maxima_alteracao)
 
                                         data_maxima_alteracao.setDate(data_maxima_alteracao.getDate() - 1);
                                         var mes_auxiliar = data_maxima_alteracao.getMonth() + 1
@@ -1160,15 +1189,19 @@
         }
 
         function enviar_sync() {
-            decisao = confirm("Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!");
+            navigator.notification.confirm(
+                'Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!',
+                function (buttonIndex) {
+                    if (buttonIndex === 2) {
+                        return;
+                    }
 
-            if (decisao) {
-                document.form_sup.action = "del.htm";
-                document.form_sup.submit();
-
-            } else {
-
-            }
+                    document.form_sup.action = "del.htm";
+                    document.form_sup.submit();
+                },
+                'Logout',
+                ['OK', 'Cancelar']
+            );
         }
 
         function dateToEN(date) {
@@ -1374,11 +1407,25 @@
                                     }
                                 );
                             } else {
-                                alert("Esse QRCode não é válido");
+                                navigator.notification.alert(
+                                    "Esse QRCode não é válido",  // message
+                                    function () {
+                                        return;
+                                    },         // callback
+                                    'QRCode inválido',            // title
+                                    'OK'                  // buttonName
+                                );
                             }
 
                         } else {
-                            alert("Desculpe, só é possível ler QRCODES");
+                            navigator.notification.alert(
+                                "Desculpe, só é possível ler QRCODES",  // message
+                                function () {
+                                    return;
+                                },         // callback
+                                'QRCode inválido',            // title
+                                'OK'                  // buttonName
+                            );
                         }
                     } else {
                         // alert("Leitura do QRCODE cancelada");
@@ -1462,7 +1509,14 @@
             if (tem_conexao()) {
                 window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + /*"&id_sist=" + id_sis +*/ "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + qual_id_cliente + "&econst=" + q_e_construtora);
             } else {
-                alert('Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.');
+                navigator.notification.alert(
+                    'Você está sem conexão com a internet. Para visualizar o relatório online é necessário estar conectado. Favor se conectar.',  // message
+                    function () {
+                        return;
+                    },
+                    'Falha na conexão',
+                    'OK'
+                );
             }
         }
 
@@ -1482,26 +1536,20 @@
             navigator.notification.confirm(
                 'Tem certeza que deseja sair do app SigmaCivil?',
                 function (buttonIndex) {
-                    if (buttonIndex === 2) {
+                    if (buttonIndex === 1) {
                         return;
                     }
 
                     navigator.app.exitApp();
                 },
-                'SigmaCivil',
-                ['OK', 'Cancelar']
+                'Fechar app',
+                ['Cancelar', 'OK']
             );
         }
 
         function closeTutorial() {
             document.getElementById('tutorial-video').innerHTML = '';
         }
-
-        // var exit = document.querySelector('.shepherd-cancel-icon');
-
-        // exit.addEventListener('click', function() {
-        //     alert('click');
-        // });
 
     </script>
 
