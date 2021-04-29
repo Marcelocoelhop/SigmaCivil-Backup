@@ -3415,6 +3415,8 @@
                     request.onsuccess = function (event) {
                         window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(mes_ev) + "&qa=" + parseInt(ano_ev) + "&idc=" + id_cliente + "&econst=" + e_construtora);
                     }
+                } else {
+                    window.location.assign("configuracoes.htm?e=" + num_empree + "&l=" + login + "&s=" + senha + "&qm=" + parseInt(mes_ev) + "&qa=" + parseInt(ano_ev) + "&idc=" + id_cliente + "&econst=" + e_construtora);
                 }
             }
         }
@@ -3889,7 +3891,8 @@
     }
 
     function removeAcento(text) {
-        // text = text.toLowerCase();
+        // espaço
+        text = text.replace(/ /g, '@*E1@E')
 
         // a
         text = text.replace(/Á/g, '@*L1@A')

@@ -150,6 +150,8 @@
         document.getElementById("parte_load_content").style.display = "none";
         document.getElementById("parte_load").style.display = "none";
 
+        totalArqs = 0;
+
         cordova.plugins.notification.local.clear();
       }
 
@@ -673,6 +675,7 @@
               var cada_vet_evento = vetor_consulta_evento.split(';')
 
               for (i = 0; i < objEvento.dados_emp.length; i++) {
+                // alert('chegou aqui primeiro')
                 string_auxiliar += " <br>-------CADA evento-----%%%%%%%%%%%%%%-------------  ev=" + objEvento.dados_emp[i].ev + "- up=" + objEvento.dados_emp[i].up + "---------FIM evento------------<br>"
 
                 var ev = objEvento.dados_emp[i].ev
@@ -692,6 +695,96 @@
 
                 attrs.push(obj_config);
 
+              }
+
+              var db;
+              var request = window.indexedDB.open("db_sigmacivil", "1");
+
+              request.onerror = function (event) {
+                alert("Erro ao criar o banco (cod 01)");
+              };
+
+              request.onsuccess = function (event) {
+                db = request.result;
+
+                var ipm_ = "";
+                var dia_ = "";
+                var mes_ = "";
+                var ano_ = "";
+
+                for (var i = 0; i < attrs.length; i++) {
+                  ipm_ = attrs[i].id_prog_manut;
+                  dia_ = attrs[i].dia_ev;
+                  mes_ = attrs[i].mes_ev;
+                  ano_ = attrs[i].ano_ev;
+
+                  var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+                  var store = tx.objectStore('mtab_prog_manut_evento');
+                  var index = store.index('comparar');
+                  var whereEquals = IDBKeyRange.only([ipm_, dia_, mes_, ano_]);
+                  var objectStoreRequest = index.openCursor(whereEquals);
+                  objectStoreRequest.onsuccess = function (event) {
+                    var cursor = event.target.result;
+
+                    // alert('chegou bem aqui');
+
+                    var tam_ti;
+
+                    if (cursor) {
+                      var data = cursor.value;
+
+                      var rrr_caminho_imagens = data.caminho_imagens;
+                      var rrr_status_caminho_video = data.status_video_upl;
+                      var rrr_status_caminho_audio = data.status_audio_upl;
+                      var rrr_status_caminho_texto = data.status_texto_upl;
+
+                      var caminho_texto = data.caminho_texto;
+
+                      var rrr_status_caminho_imagens = data.status_imagens_upl;
+
+                      var todas_imagens = ""
+                      var todas_status_imagens = ""
+                      if (rrr_caminho_imagens == null || rrr_caminho_imagens == "") {
+                        tam_ti = 0;
+                      }
+                      else {
+                        todas_imagens = rrr_caminho_imagens.split("**");
+                        todas_status_imagens = rrr_status_caminho_imagens.split("**");
+                        tam_ti = todas_imagens.length;
+                      }
+
+                      for (k = 0; k < tam_ti; k++) {
+                        if (todas_status_imagens[k] == '0') {
+                          // alert('Arqs + 1 imagem');
+                          totalArqs += 1;
+                        }
+                      }
+
+                      if (rrr_status_caminho_video == '0') {
+                        // alert('Arqs + 1 video');
+                        totalArqs += 1;
+                      }
+
+                      if (rrr_status_caminho_audio == '0') {
+                        // alert('Arqs + 1 audio');
+                        totalArqs += 1;
+                      }
+
+                      if (rrr_status_caminho_texto == '0') {
+                        // alert('Arqs + 1 texto');
+                        // alert('caminho_texto: ' + caminho_texto);
+                        if (caminho_texto) {
+                          // alert('entrou aqui 1');
+                          totalArqs += 1;
+                        }
+                      }
+                    }
+                  }
+                }
+
+                db.onerror = function (event) {
+                  alert("Database error: " + event.target.errorCode);
+                }
               }
 
             }
@@ -904,6 +997,18 @@
       return;
     }
 
+    if (totalArqs == 0) {
+      navigator.notification.alert(
+        "Não há arquivos para realizar upload!",  // message
+        function () {
+          return;
+        },         // callback
+        'Alerta',            // title
+        'OK'                  // buttonName
+      );
+      return;
+    }
+
     var db;
     var request = window.indexedDB.open("db_sigmacivil", "1");
 
@@ -978,7 +1083,7 @@
 
           if (todas_status_imagens[k] == '0') {
             aux_image_upload = 'upload.png';
-            totalArqs += 1;
+            // totalArqs += 1;
 
             upload_imagem(k, id_prog_manut, dia_ev, mes_ev, ano_ev);
           }
@@ -994,7 +1099,7 @@
 
         if (rrr_status_caminho_video == '0') {
           aux_image_upload = 'upload.png';
-          totalArqs += 1;
+          // totalArqs += 1;
 
           upload_video(id_prog_manut, dia_ev, mes_ev, ano_ev);
         }
@@ -1004,7 +1109,7 @@
 
         if (rrr_status_caminho_audio == '0') {
           aux_image_upload = "upload.png";
-          totalArqs += 1;
+          // totalArqs += 1;
 
           upload_audio(id_prog_manut, dia_ev, mes_ev, ano_ev);
         }
@@ -1014,7 +1119,7 @@
 
         if (rrr_status_caminho_texto == '0') {
           aux_image_upload = 'upload.png';
-          totalArqs += 1;
+          // totalArqs += 1;
 
           upload_texto(id_prog_manut, dia_ev, mes_ev, ano_ev);
         }
@@ -1561,6 +1666,10 @@
     document.getElementById("parte_load").style.display = "flex";
     window.location.href = "#ancora123"
 
+    // Display percentage in the UI
+    document.getElementById("progress-value").innerHTML = `100%`;
+    progressValue = 100;
+
     var data = 'tx=' + encodeURIComponent(textoURL) + '&ipm=' + id_prog_manut + '&d=' + dia_ev + '&m=' + mes_ev + '&a=' + ano_ev + "&econst=" + e_construtora + "&idc=" + id_cliente;
     var ajax = new XMLHttpRequest();
     if (tem_conexao()) {
@@ -2053,7 +2162,7 @@
         document.form_sup.submit();
       },
       'Logout',
-      ['OK', 'Cancelar']
+      ['Cancelar', 'OK']
     );
   }
 
@@ -2068,7 +2177,7 @@
         navigator.app.exitApp();
       },
       'Fechar app',
-      ['OK', 'Cancelar']
+      ['Cancelar', 'OK']
     );
   }
 

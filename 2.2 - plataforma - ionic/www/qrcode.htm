@@ -77,9 +77,25 @@
       );
     }
 
+    var num_empree = getquerystring("e");
+
+    var login = getquerystring("l");
+    var senha = getquerystring("s");
+
+    var q_mes = getquerystring("qm")
+    var q_ano = getquerystring("qa")
+
+    var id_cliente = getquerystring("idc");
+    var e_construtora = getquerystring("econst");
+
+    var id_sis = getquerystring("id_sis");
+
     var dados_checkpoint = "";
     var id_cliente;
     var id_empree;
+
+    var nome_sistema = ""
+    var tem_alguma_manut = "";
 
     document.addEventListener("deviceready", onDeviceReady, false);
 
@@ -224,6 +240,25 @@
         }
       }
 
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_sist_checkpoint.asp?id_sis=" + id_sis + "&l=" + login + "&s=" + senha + "&versao=2.2&t=" + Math.random(), true)
+      xhr.addEventListener("loadend", function (evt) {
+        var resposta = this.responseText;
+        var pedaco = resposta.split('*//*');
+
+        tem_alguma_manut = pedaco[0];
+
+        nome_sistema = pedaco[1];
+
+        if (nome_sistema == 'nada') {
+          document.getElementById('nome-sistema').innerHTML = '';
+        } else {
+          document.getElementById('nome-sistema').innerHTML = nome_sistema;
+        }
+      });
+
+      xhr.send();
+
     }
 
   </script>
@@ -361,45 +396,8 @@
 </html>
 
 <script>
-
-  var num_empree = getquerystring("e");
-
-  var login = getquerystring("l");
-  var senha = getquerystring("s");
-
-  var q_mes = getquerystring("qm")
-  var q_ano = getquerystring("qa")
-
-  var id_cliente = getquerystring("idc");
-  var e_construtora = getquerystring("econst");
-
-  var id_sis = getquerystring("id_sis");
-
-  //////////////////////////////////////	
-
-  var nome_sistema = ""
-  var tem_alguma_manut = "";
-
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_sist_checkpoint.asp?id_sis=" + id_sis + "&l=" + login + "&s=" + senha, true)
-  xhr.addEventListener("loadend", function (evt) {
-    var response = this.responseText;
-    var pedaco = response.split('*//*');
-
-    tem_alguma_manut = pedaco[0];
-
-    nome_sistema = pedaco[1];
-
-    if (nome_sistema == 'nada') {
-      document.getElementById('nome-sistema').innerHTML = '';
-    } else {
-      document.getElementById('nome-sistema').innerHTML = nome_sistema;
-    }
-  });
-
-  xhr.send();
-
   var registrar_manut = document.querySelector('.register');
+  
   registrar_manut.addEventListener('click', function () {
     go_to_page(id_sis, num_empree);
   });
