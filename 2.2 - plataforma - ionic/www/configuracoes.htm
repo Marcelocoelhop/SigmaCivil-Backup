@@ -97,6 +97,27 @@
   var vetor_dados_manutencao = "";
 
   function iniciar() {
+    var modal = document.getElementById("myModal");
+    var span = document.getElementsByClassName("close")[0];
+
+    var btn_declinar = document.querySelector('.btn-declinar');
+    var btn_termo = document.querySelector('.btn-termo');
+
+    span.onclick = function () {
+      modal.style.display = "none";
+    }
+
+    btn_termo.onclick = function () {
+      modal.style.display = "flex";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
     window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
     window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
     window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
@@ -165,6 +186,20 @@
       }
     }, 5000);
 
+    var conteudo_termo = document.querySelector('.text-content');
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://www.sigmacivil.com.br/politica_e_termos.htm?t=" + Math.random(), true);
+    xhr.addEventListener("loadend", function (evt) {
+      var resposta_total = this.responseText;
+
+      var response = resposta_total.replace(/table/g, 'div');
+      var data = response.replace(/img/g, 'div');
+
+      conteudo_termo.innerHTML = data;
+    });
+    xhr.send();
+
     var db;
     var request = window.indexedDB.open("db_sigmacivil", "1");
 
@@ -210,8 +245,8 @@
             tour.addSteps([
               {
                 title: "Permissão de edição de imagens",
-                text: `<p style="text-align: left !important;">É possivel habilitar edição de fotos, assim você poderá cortar, 
-                  girar e ilustrar a imagem do registro da manutenção.</p>`,
+                text: `<p style="text-align: left !important;">É possivel habilitar edição de fotos, assim você poderá cortar
+                   e ampliar a imagem do registro da manutenção.</p>`,
                 attachTo: {
                   element: "#step-1",
                   on: "bottom",
@@ -431,7 +466,7 @@
               },
               {
                 title: "Logout",
-                text: `<p style="text-align: left !important;">Aqui você encerra a sessão, e para conectar novamente precisa inserir login e senha.</p>`,
+                text: `<p style="text-align: left !important;">Aqui você encerra a sessão, e para conectar novamente precisará inserir login e senha.</p>`,
                 attachTo: {
                   element: "#step-8",
                   on: "bottom",
@@ -805,6 +840,25 @@
 </script>
 
 <body ng-app="starter">
+  <div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div style="height: 70%;" class="modal-text">
+        <p class="text-content"></p>
+      </div>
+      <div class="modal-buttons">
+        <div>
+          <button style="margin-top: 15px; margin-right: 0; background: #b10b0b;" type="button" class="btn-declinar"
+            onclick="validar('N_APP')">Declinar</button>
+          <!-- <button type="button" class="btn-aceitar" onclick="validar('S_APP')" disabled>Aceitar</button> -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
   <div id="parte_load_content"
     style="width: 100%; display: none; height: 100%; position: absolute; background: rgba(0,0,0,.7); z-index: 150;">
   </div>
@@ -896,7 +950,7 @@
       <a class="ui-btn ui-shadow ui-corner-all btn-success" onclick="showTour()">Tour</a>
     </div>
     <hr />
-    <div id="step-6" style="margin-bottom: 80px;" class="btns_opcionais">
+    <div id="step-6" class="btns_opcionais">
       <div style="display: flex; align-items: center; width: 100%;">
         <img style="margin-right: 10px;" src="images/video-config.png" alt="tutorial" />
         <p class="config-title">Assistir agora o tutorial em vídeo de como usar o app</p>
@@ -910,25 +964,14 @@
           <source src="https://www.sigmacivil.com.br/imagens/app_SC.mp4" type="video/mp4" />
         </video>
       </div>
-
-
-
-
-      <!-- <button type="button" onclick="showTour()">
-    <img src="images/chalkboard-teacher.svg" width="25" alt="Tour" />
-    Tour pelo app
-  </button>
-  <button type="button">
-    <a href="#popupLogin" data-rel="popup" data-position-to="window" data-transition="pop">
-      <img src="images/chalkboard-teacher.svg" width="25" alt="Tour" />
-      Tutorial em vídeo
-    </a>
-  </button>
-  <div data-role="popup" id="popupLogin" data-theme="a" class="ui-corner-all">
-    <video class="tutorial-video" poster="images/video.png" controls name="media">
-      <source src="https://www.sigmacivil.com.br/imagens/app_SC.mp4" type="video/mp4" />
-    </video>
-  </div> -->
+    </div>
+    <hr />
+    <div id="step-9" style="margin-bottom: 80px;" class="btns_opcionais">
+      <div style="display: flex; align-items: center; width: 100%;">
+        <img style="margin-right: 10px;" src="images/file-config.png" alt="Política de privacidade" />
+        <p class="config-title">Visualizar termo de política de privacidade</p>
+      </div>
+      <a class="ui-btn ui-shadow ui-corner-all btn-success btn-termo">Termo</a>
     </div>
   </div>
 
@@ -2129,6 +2172,33 @@
     return text;
   }
 
+  function validar(sta) {
+    if (sta == 'N_APP') {
+      navigator.notification.confirm(
+        'Tem certeza que você deseja não aceitar as condições? Isso vai impedir que você utilize o SigmaCivil!',
+        function (buttonIndex) {
+          if (buttonIndex === 1) {
+            return;
+          }
+
+          var xhr2 = new XMLHttpRequest();
+          xhr2.open("GET", "https://www.sigmacivil.com.br/app_sc/marcar_aceite_termos.asp?l=" + login + "&s=" + senha + "&sta=" + sta, true);
+          xhr2.addEventListener("loadend", function (evt) {
+            var resposta_total = this.responseText;
+
+            if (resposta_total == 'OK') {
+              window.location.href = "del.htm";
+            }
+          });
+
+          xhr2.send();
+        },
+        'Atenção!',
+        ['Cancelar', 'OK']
+      );
+    }
+  }
+
   function go_relat_check2() {
     if (tem_conexao()) {
       window.location.assign("new_checkpoint_hist.htm?e=" + num_empree + /*"&id_sist=" + id_sis +*/ "&l=" + login + "&s=" + senha + "&qm=" + parseInt(q_mes) + "&qa=" + parseInt(q_ano) + "&idc=" + id_cliente + "&econst=" + e_construtora)
@@ -2154,7 +2224,7 @@
     navigator.notification.confirm(
       'Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!',
       function (buttonIndex) {
-        if (buttonIndex === 2) {
+        if (buttonIndex === 1) {
           return;
         }
 
@@ -2170,7 +2240,7 @@
     navigator.notification.confirm(
       'Tem certeza que deseja sair do app SigmaCivil?',
       function (buttonIndex) {
-        if (buttonIndex === 2) {
+        if (buttonIndex === 1) {
           return;
         }
 

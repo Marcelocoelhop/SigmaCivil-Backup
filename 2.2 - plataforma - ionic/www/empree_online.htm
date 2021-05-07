@@ -845,7 +845,7 @@
                                     aux_dias2 = datadiff(Date.now(), data_maxima_alteracao)
 
                                     if (aux_dias1 > 0) {
-                                        imagem1 = '<img src="images/hand-paper.svg" width="24" class="is-opacity">'
+                                        imagem1 = '<img src="images/hand-paper.svg" width="24" height="26" class="is-opacity">'
                                         color1 = "#cccccc"
                                     } else if (aux_dias1 <= 0 && aux_dias_ev > 0) {
                                         imagem1 = '<img src="images/danger.svg" width="25" />'
@@ -1193,7 +1193,7 @@
             navigator.notification.confirm(
                 'Deseja efetuar novo login? Será possível se logar novamente em qualquer empreendimento atualizando o Plano de Manutenção!',
                 function (buttonIndex) {
-                    if (buttonIndex === 2) {
+                    if (buttonIndex === 1) {
                         return;
                     }
 

@@ -20,6 +20,7 @@
   <!-- <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet"> -->
   <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
+  <link rel="stylesheet" href="css/custom.css" />
 
   <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
@@ -40,6 +41,28 @@
 </head>
 
 <body ng-app="starter">
+  <div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div class="modal-text">
+        <p class="text-content"></p>
+      </div>
+      <div class="modal-buttons">
+        <label for="termo">
+          <input id="termo-aceite" type="checkbox" onclick="aceiteTermo()" />
+          Concordo e aceito com os termos da política de privacidade.
+        </label>
+        <div>
+          <button type="button" class="btn-declinar" onclick="validar('N_APP')">Declinar</button>
+          <button type="button" class="btn-aceitar" onclick="validar('S_APP')" disabled>Aceitar</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
   <script type="text/javascript">
     window.onerror = function (message, url, lineNumber) {
       navigator.notification.alert(
@@ -54,6 +77,32 @@
 
     var login = getquerystring("login");
     var senha = getquerystring("senha");
+
+    var modal = document.getElementById("myModal");
+
+    var span = document.getElementsByClassName("close")[0];
+
+    var termo_aceite = document.getElementById("termo-aceite");
+    var btn_aceitar = document.querySelector('.btn-aceitar');
+
+    span.onclick = function () {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    function aceiteTermo() {
+      if (termo_aceite.checked) {
+        btn_aceitar.removeAttribute('disabled');
+      } else {
+        btn_aceitar.setAttribute('disabled', 'disabled');
+      }
+    }
 
     var num_empree;
     var logou;
@@ -80,6 +129,20 @@
         alert("Seu navegador não suporta uma versão estável do IndexedDB. Alguns recursos não estarão disponíveis.");
       }
 
+      var conteudo_termo = document.querySelector('.text-content');
+
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "https://www.sigmacivil.com.br/politica_e_termos.htm?t=" + Math.random(), true);
+      xhr.addEventListener("loadend", function (evt) {
+        var resposta_total = this.responseText;
+
+        var response = resposta_total.replace(/table/g, 'div');
+        var data = response.replace(/img/g, 'div');
+
+        conteudo_termo.innerHTML = data;
+      });
+      xhr.send();
+
       var ajax = new XMLHttpRequest();
       ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp.asp?l=" + login + "&s=" + senha + "&versao=2.2&t=" + Math.random(), true);
       ajax.addEventListener("loadend", function (evt) {
@@ -97,6 +160,7 @@
         status_sync = getLogin.status_sync;
 
         if (logou == "S") {
+          modal.style.display = "flex";
 
           var getEmpree = jsontext[1];
           var objEmpree = JSON.parse(getEmpree);
@@ -262,20 +326,63 @@
             var store = tx.objectStore('mtab_checkpoint');
 
             var objectStoreRequest = store.clear();
-            objectStoreRequest.onsuccess = function (event) {
-              go_to();
-            }
           }
 
           ///////////////  FIM tabela programa_manutenção //////////////	  
 
         } else {  //nao logou
-          window.location.assign("login.htm");
+          navigator.notification.alert(
+            'Login ou senha incorretos!',
+            function () {
+              window.location.assign("login.htm");
+            },
+            'Alerta',
+            'OK'
+          );
         }
       });
 
       ajax.send();
 
+    }
+
+    function validar(sta) {
+      if (sta == 'N_APP') {
+        navigator.notification.confirm(
+          'Tem certeza que você deseja não aceitar as condições? Isso vai impedir que você utilize o SigmaCivil!',
+          function (buttonIndex) {
+            if (buttonIndex === 1) {
+              return;
+            }
+
+            var xhr2 = new XMLHttpRequest();
+            xhr2.open("GET", "https://www.sigmacivil.com.br/app_sc/marcar_aceite_termos.asp?l=" + login + "&s=" + senha + "&sta=" + sta, true);
+            xhr2.addEventListener("loadend", function (evt) {
+              var resposta_total = this.responseText;
+
+              if (resposta_total == 'OK') {
+                window.location.href = "del.htm";
+              }
+            });
+
+            xhr2.send();
+          },
+          'Atenção!',
+          ['Cancelar', 'OK']
+        );
+      } else if (sta == 'S_APP') {
+        var xhr2 = new XMLHttpRequest();
+        xhr2.open("GET", "https://www.sigmacivil.com.br/app_sc/marcar_aceite_termos.asp?l=" + login + "&s=" + senha + "&sta=" + sta, true);
+        xhr2.addEventListener("loadend", function (evt) {
+          var resposta_total = this.responseText;
+
+          if (resposta_total == 'OK') {
+            go_to();
+          }
+        });
+
+        xhr2.send();
+      }
     }
 
     function tem_conexao() {
