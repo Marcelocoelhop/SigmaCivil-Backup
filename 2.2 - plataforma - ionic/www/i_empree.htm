@@ -86,14 +86,7 @@
     var btn_aceitar = document.querySelector('.btn-aceitar');
 
     span.onclick = function () {
-      modal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
+      window.location.href = "login.htm";
     }
 
     function aceiteTermo() {
@@ -140,9 +133,13 @@
         var data = response.replace(/img/g, 'div');
 
         conteudo_termo.innerHTML = data;
+        modal.style.display = "flex";
       });
-      xhr.send();
 
+      xhr.send();
+    }
+
+    function criarRemoverDadosTabela() {
       var ajax = new XMLHttpRequest();
       ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp.asp?l=" + login + "&s=" + senha + "&versao=2.2&t=" + Math.random(), true);
       ajax.addEventListener("loadend", function (evt) {
@@ -160,8 +157,6 @@
         status_sync = getLogin.status_sync;
 
         if (logou == "S") {
-          modal.style.display = "flex";
-
           var getEmpree = jsontext[1];
           var objEmpree = JSON.parse(getEmpree);
 
@@ -326,6 +321,9 @@
             var store = tx.objectStore('mtab_checkpoint');
 
             var objectStoreRequest = store.clear();
+            objectStoreRequest.onsuccess = function (event) {
+              go_to();
+            }
           }
 
           ///////////////  FIM tabela programa_manutenção //////////////	  
@@ -343,7 +341,6 @@
       });
 
       ajax.send();
-
     }
 
     function validar(sta) {
@@ -361,7 +358,7 @@
               var resposta_total = this.responseText;
 
               if (resposta_total == 'OK') {
-                window.location.href = "del.htm";
+                window.location.href = "login.htm";
               }
             });
 
@@ -377,7 +374,7 @@
           var resposta_total = this.responseText;
 
           if (resposta_total == 'OK') {
-            go_to();
+            criarRemoverDadosTabela();
           }
         });
 
