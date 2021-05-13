@@ -99,6 +99,7 @@
 
     var num_empree;
     var logou;
+    var jsontext;
 
     document.addEventListener("deviceready", onDeviceReady, false);
 
@@ -133,214 +134,214 @@
         var data = response.replace(/img/g, 'div');
 
         conteudo_termo.innerHTML = data;
-        modal.style.display = "flex";
+
+        var ajax = new XMLHttpRequest();
+        ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp.asp?l=" + login + "&s=" + senha + "&versao=2.2&t=" + Math.random(), true);
+        ajax.addEventListener("loadend", function (evt) {
+          var resposta_total = this.responseText;
+          jsontext = resposta_total.split("*")
+
+          var getLogin = JSON.parse(jsontext[0]);
+
+          logou = getLogin.logou;
+          qual_id_cliente = getLogin.id_cliente;
+          num_empree = getLogin.id_empree;
+          nome_empree = getLogin.nome_empree;
+          q_e_construtora = getLogin.e_construtora;
+          data_implantacao_sc = getLogin.data_implantacao_sc;
+          status_sync = getLogin.status_sync;
+
+          if (logou == "S") {
+            modal.style.display = "flex";
+          } else {  //nao logou
+            navigator.notification.alert(
+              'Login ou senha incorretos!',
+              function () {
+                window.location.assign("login.htm");
+              },
+              'Alerta',
+              'OK'
+            );
+          }
+        });
+
+        ajax.send();
       });
 
       xhr.send();
     }
 
     function criarRemoverDadosTabela() {
-      var ajax = new XMLHttpRequest();
-      ajax.open("GET", "https://www.sigmacivil.com.br/app_sc/consult_emp.asp?l=" + login + "&s=" + senha + "&versao=2.2&t=" + Math.random(), true);
-      ajax.addEventListener("loadend", function (evt) {
-        var resposta_total = this.responseText;
-        var jsontext = resposta_total.split("*")
+      var getEmpree = jsontext[1];
+      var objEmpree = JSON.parse(getEmpree);
 
-        var getLogin = JSON.parse(jsontext[0]);
+      var db;
+      var request = window.indexedDB.open("db_sigmacivil", "1");
 
-        logou = getLogin.logou;
-        qual_id_cliente = getLogin.id_cliente;
-        num_empree = getLogin.id_empree;
-        nome_empree = getLogin.nome_empree;
-        q_e_construtora = getLogin.e_construtora;
-        data_implantacao_sc = getLogin.data_implantacao_sc;
-        status_sync = getLogin.status_sync;
+      request.onerror = function (event) {
+        alert("Erro ao criar o banco (cod 01)");
+      };
 
-        if (logou == "S") {
-          var getEmpree = jsontext[1];
-          var objEmpree = JSON.parse(getEmpree);
-
-          var db;
-          var request = window.indexedDB.open("db_sigmacivil", "1");
-
-          request.onerror = function (event) {
-            alert("Erro ao criar o banco (cod 01)");
-          };
-
-          var clientes = [
-            {
-              id_cliente: qual_id_cliente,
-              e_construtora: q_e_construtora,
-              text1: login,
-              text2: senha
-            }
-          ];
-
-          var emprees = [
-            {
-              id_empree: num_empree,
-              nome_empree: nome_empree,
-              status_sync: status_sync,
-              data_implantacao_sc: data_implantacao_sc
-            },
-          ];
-
-          var configs = [
-            {
-              id_config: qual_id_cliente,
-              editar_fotos: false,
-              upload_automatico: true,
-              tutorial: false,
-              notificacao: true,
-            }
-          ];
-
-          localStorage.setItem('sl2', 'selected');
-          localStorage.setItem('sl3', 'selected');
-
-          var manuts = [];
-
-          for (i = 0; i < objEmpree.dados_empreendimento.length; i++) {
-            manuts.push(objEmpree.dados_empreendimento[i]);
-          }
-
-          request.onsuccess = function (event) {
-            db = request.result;
-
-            executarRemoverAdicionarDados(db, clientes, emprees, manuts, configs);
-
-            db.onerror = function (event) {
-              alert("Database error: " + event.target.error);
-            }
-          };
-
-          var num = 0;
-
-          function executarRemoverAdicionarDados(db, clientes, emprees, manuts, configs) {
-            var tx = db.transaction(['mtab_cliente'], 'readwrite');
-            var store = tx.objectStore('mtab_cliente');
-
-            var objectStoreRequest = store.clear();
-            objectStoreRequest.onsuccess = function (event) {
-              num += 1;
-            }
-
-            clientes.map(function (cliente) {
-              store.add(cliente);
-            });
-
-            tx.oncomplete = function () {
-              removerAdicionarDadosEmpree(db, emprees, manuts, configs);
-            }
-
-            tx.onerror = function (event) {
-              alert('error storing note ' + event.target.error);
-            }
-          }
-
-          function removerAdicionarDadosEmpree(db, emprees, manuts, configs) {
-            var tx = db.transaction(['mtab_empree'], 'readwrite');
-            var store = tx.objectStore('mtab_empree');
-
-            var objectStoreRequest = store.clear();
-            objectStoreRequest.onsuccess = function (event) {
-              num += 1;
-            }
-
-            emprees.map(function (empree) {
-              store.add(empree);
-            });
-
-            tx.oncomplete = function () {
-              removerAdicionarDadosManuts(db, manuts, configs);
-            }
-
-            tx.onerror = function (event) {
-              alert('error storing empree note ' + event.target.error);
-            }
-          }
-
-          function removerAdicionarDadosManuts(db, manuts, configs) {
-            var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
-            var store = tx.objectStore('mtab_prog_manut');
-
-            var objectStoreRequest = store.clear();
-            objectStoreRequest.onsuccess = function (event) {
-              num += 1;
-            }
-
-            manuts.map(function (manut) {
-              store.add(manut);
-            });
-
-            tx.oncomplete = function () {
-              removerAdicionarDadosConfigs(db, configs);
-              console.log(num);
-            }
-
-            tx.onerror = function (event) {
-              alert('error storing manut note ' + event.target.error);
-            }
-          }
-
-          function removerAdicionarDadosConfigs(db, configs) {
-            var tx = db.transaction(['mtab_config'], 'readwrite');
-            var store = tx.objectStore('mtab_config');
-
-            var objectStoreRequest = store.clear();
-            objectStoreRequest.onsuccess = function (event) {
-              num += 1;
-            }
-
-            configs.map(function (config) {
-              store.add(config);
-            });
-
-            tx.oncomplete = function () {
-              removerDadosProgManutEvento(db);
-              console.log(num);
-            }
-
-            tx.onerror = function (event) {
-              alert('error storing manut note ' + event.target.error);
-            }
-          }
-
-          function removerDadosProgManutEvento(db) {
-            var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
-            var store = tx.objectStore('mtab_prog_manut_evento');
-
-            var objectStoreRequest = store.clear();
-            objectStoreRequest.onsuccess = function (event) {
-              removerDadosMtabCheckpoint(db);
-            }
-          }
-
-          function removerDadosMtabCheckpoint(db) {
-            var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
-            var store = tx.objectStore('mtab_checkpoint');
-
-            var objectStoreRequest = store.clear();
-            objectStoreRequest.onsuccess = function (event) {
-              go_to();
-            }
-          }
-
-          ///////////////  FIM tabela programa_manutenção //////////////	  
-
-        } else {  //nao logou
-          navigator.notification.alert(
-            'Login ou senha incorretos!',
-            function () {
-              window.location.assign("login.htm");
-            },
-            'Alerta',
-            'OK'
-          );
+      var clientes = [
+        {
+          id_cliente: qual_id_cliente,
+          e_construtora: q_e_construtora,
+          text1: login,
+          text2: senha
         }
-      });
+      ];
 
-      ajax.send();
+      var emprees = [
+        {
+          id_empree: num_empree,
+          nome_empree: nome_empree,
+          status_sync: status_sync,
+          data_implantacao_sc: data_implantacao_sc
+        },
+      ];
+
+      var configs = [
+        {
+          id_config: qual_id_cliente,
+          editar_fotos: false,
+          upload_automatico: true,
+          tutorial: false,
+          notificacao: true,
+        }
+      ];
+
+      localStorage.setItem('sl2', 'selected');
+      localStorage.setItem('sl3', 'selected');
+
+      var manuts = [];
+
+      for (i = 0; i < objEmpree.dados_empreendimento.length; i++) {
+        manuts.push(objEmpree.dados_empreendimento[i]);
+      }
+
+      request.onsuccess = function (event) {
+        db = request.result;
+
+        executarRemoverAdicionarDados(db, clientes, emprees, manuts, configs);
+
+        db.onerror = function (event) {
+          alert("Database error: " + event.target.error);
+        }
+      };
+
+      var num = 0;
+
+      function executarRemoverAdicionarDados(db, clientes, emprees, manuts, configs) {
+        var tx = db.transaction(['mtab_cliente'], 'readwrite');
+        var store = tx.objectStore('mtab_cliente');
+
+        var objectStoreRequest = store.clear();
+        objectStoreRequest.onsuccess = function (event) {
+          num += 1;
+        }
+
+        clientes.map(function (cliente) {
+          store.add(cliente);
+        });
+
+        tx.oncomplete = function () {
+          removerAdicionarDadosEmpree(db, emprees, manuts, configs);
+        }
+
+        tx.onerror = function (event) {
+          alert('error storing note ' + event.target.error);
+        }
+      }
+
+      function removerAdicionarDadosEmpree(db, emprees, manuts, configs) {
+        var tx = db.transaction(['mtab_empree'], 'readwrite');
+        var store = tx.objectStore('mtab_empree');
+
+        var objectStoreRequest = store.clear();
+        objectStoreRequest.onsuccess = function (event) {
+          num += 1;
+        }
+
+        emprees.map(function (empree) {
+          store.add(empree);
+        });
+
+        tx.oncomplete = function () {
+          removerAdicionarDadosManuts(db, manuts, configs);
+        }
+
+        tx.onerror = function (event) {
+          alert('error storing empree note ' + event.target.error);
+        }
+      }
+
+      function removerAdicionarDadosManuts(db, manuts, configs) {
+        var tx = db.transaction(['mtab_prog_manut'], 'readwrite');
+        var store = tx.objectStore('mtab_prog_manut');
+
+        var objectStoreRequest = store.clear();
+        objectStoreRequest.onsuccess = function (event) {
+          num += 1;
+        }
+
+        manuts.map(function (manut) {
+          store.add(manut);
+        });
+
+        tx.oncomplete = function () {
+          removerAdicionarDadosConfigs(db, configs);
+          console.log(num);
+        }
+
+        tx.onerror = function (event) {
+          alert('error storing manut note ' + event.target.error);
+        }
+      }
+
+      function removerAdicionarDadosConfigs(db, configs) {
+        var tx = db.transaction(['mtab_config'], 'readwrite');
+        var store = tx.objectStore('mtab_config');
+
+        var objectStoreRequest = store.clear();
+        objectStoreRequest.onsuccess = function (event) {
+          num += 1;
+        }
+
+        configs.map(function (config) {
+          store.add(config);
+        });
+
+        tx.oncomplete = function () {
+          removerDadosProgManutEvento(db);
+          console.log(num);
+        }
+
+        tx.onerror = function (event) {
+          alert('error storing manut note ' + event.target.error);
+        }
+      }
+
+      function removerDadosProgManutEvento(db) {
+        var tx = db.transaction(['mtab_prog_manut_evento'], 'readwrite');
+        var store = tx.objectStore('mtab_prog_manut_evento');
+
+        var objectStoreRequest = store.clear();
+        objectStoreRequest.onsuccess = function (event) {
+          removerDadosMtabCheckpoint(db);
+        }
+      }
+
+      function removerDadosMtabCheckpoint(db) {
+        var tx = db.transaction(['mtab_checkpoint'], 'readwrite');
+        var store = tx.objectStore('mtab_checkpoint');
+
+        var objectStoreRequest = store.clear();
+        objectStoreRequest.onsuccess = function (event) {
+          go_to();
+        }
+      }
+
+      ///////////////  FIM tabela programa_manutenção //////////////	  
     }
 
     function validar(sta) {
