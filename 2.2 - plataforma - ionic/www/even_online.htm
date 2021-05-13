@@ -555,7 +555,7 @@
                                 '</div>',
                                 '</table>',
                                 '</li>'
-                            ].join('');
+                            ].join('');                            
                         }
                     } else {
                         if (getMobileOperatingSystem() == "iOS") {
@@ -583,7 +583,7 @@
                                 '<th style="padding: 0">',
                                 '<div class="input-responsive">',
                                 '<label for="">Data realização:</label>',
-                                '<input maxlength="10" style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao date_ios" id="in_data_realizacao" disabled="" readonly="readonly" required="" value="' + aux_data_preench + '" />',
+                                '<input maxlength="10" style="height: 36px; width: 100%; border-radius: 4px; text-align: left; background: rgba(200,0,0,.5); color: #fff !important; text-shadow: none !important; font-weight: normal !important; font-size: 13px !important;" placeholder="Data realização" class="textbox-n date-size text-date data_formato ui-btn ui-icon-calendar ui-btn-icon-right data_realizacao" id="in_data_realizacao" disabled="" readonly="readonly" required="" value="' + aux_data_preench + '" />',
                                 '<img src="images/calendar-alt.png" width="16" style="position: relative; float: right; bottom: 35px; right: 10px;" />',
                                 '</div>',
                                 '</th>',
@@ -770,6 +770,10 @@
                     document.getElementById('audios_bco_constr').innerHTML = trecho_imagens_constr_audios
                     document.getElementById('textos_bco_constr').innerHTML = trecho_imagens_constr_textos
                     $('#q_empree').listview();
+
+                    if (e_construtora == '0' && getMobileOperatingSystem() == "iOS") {
+                        document.querySelector('.date_ios').click();
+                    }
 
                     eval(variavelx);
                     eval(variavelx2);
@@ -3971,8 +3975,6 @@
 
     function scrollDate() {
         if (getMobileOperatingSystem() == "iOS") {
-            document.querySelector('.date_ios').click();
-
             new Rolldate({
                 el: '.date_ios',
                 format: 'DD/MM/YYYY',
