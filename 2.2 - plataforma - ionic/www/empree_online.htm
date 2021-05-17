@@ -845,7 +845,7 @@
                                     aux_dias2 = datadiff(Date.now(), data_maxima_alteracao)
 
                                     if (aux_dias1 > 0) {
-                                        imagem1 = '<img src="images/hand-paper.svg" width="24" height="26" class="is-opacity">'
+                                        imagem1 = '<img src="images/danger.svg" width="25" class="is-opacity">'
                                         color1 = "#cccccc"
                                     } else if (aux_dias1 <= 0 && aux_dias_ev > 0) {
                                         imagem1 = '<img src="images/danger.svg" width="25" />'
@@ -858,7 +858,7 @@
                                         color1 = "#FF0000"
                                     }
 
-                                    if (ev == 0 && imagem1 == '<img src="images/danger.svg" width="25" />') {
+                                    if (ev == 0 && aux_dias1 <= 0 && aux_dias_ev > 0) {
                                         qtdEv += 1
                                     }
 
