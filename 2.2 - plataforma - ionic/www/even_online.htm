@@ -555,7 +555,7 @@
                                 '</div>',
                                 '</table>',
                                 '</li>'
-                            ].join('');                            
+                            ].join('');
                         }
                     } else {
                         if (getMobileOperatingSystem() == "iOS") {
@@ -1935,6 +1935,7 @@
 
         function videocaptureError(error) {
             var msg = 'Ocorreu um erro durante a captura do vídeo: ' + error.code;
+            alert(msg);
         }
 
         // DELETAR VIDEO
@@ -2652,6 +2653,9 @@
                     <div align="center">
                         <img src="images/tail-spin.svg" width="35" height="35">
                         <span class="quad_text">Aguarde o envio</span>
+
+                        <!-- <button style="width: 100px; text-shadow: none; font-size: 12px; background: #b10b0b; border-color: #b10b0b; color: #fff; margin-top: 100px;"
+                            type="button" onclick="closeLoading()">Cancelar</button> -->
                     </div>
                 </td>
             </tr>

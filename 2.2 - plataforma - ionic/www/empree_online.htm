@@ -859,7 +859,9 @@
                                     }
 
                                     if (ev == 0 && aux_dias1 <= 0 && aux_dias_ev > 0) {
-                                        qtdEv += 1
+                                        qtdEv += 1;
+                                    } else if (ev == 0 && aux_dias_ev <= 0 && aux_dias2 >= 0) {
+                                        qtdEv += 1;
                                     }
 
                                     if (qtdEv > 0) {
@@ -1522,15 +1524,9 @@
         }
 
         function openBrowser() {
-            var options = "location=no,fullscreen=no,zoom=no,toolbar=no,hideurlbar=yes,hidenavigationbuttons=yes";
+            var options = "location=yes,lefttoright=yes,toolbarcolor=#b10b0b,hideurlbar=yes,closebuttoncaption=<  SigmaCivil,closebuttoncolor=#ffffff";
 
-            var inAppBrowserRef = cordova.InAppBrowser.open('https://www.google.com.br', '_self', options);
-
-            inAppBrowserRef.addEventListener('loadstart', loadStartCallBack);
-        }
-
-        function loadStartCallBack() {
-            alert('Abriu em nova aba!');
+            cordova.InAppBrowser.open('https://www.google.com.br', '_blank', options);
         }
 
         function closeApp() {
