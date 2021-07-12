@@ -164,7 +164,7 @@
       }, 5000);
 
       var db;
-      var request = window.indexedDB.open("db_sigmacivil", "1");
+      var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
       request.onerror = function (event) {
         alert("Erro ao criar o banco (cod 01)");
@@ -465,7 +465,7 @@
                   var qaltura_checkpoint = position.coords.altitude;
 
                   var db;
-                  var request = window.indexedDB.open("db_sigmacivil", "1");
+                  var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
                   request.onerror = function (event) {
                     alert("Erro ao criar o banco (cod 02)");
@@ -512,7 +512,7 @@
                 },
                 function (error) {
                   var db;
-                  var request = window.indexedDB.open("db_sigmacivil", "1");
+                  var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
                   request.onerror = function (event) {
                     alert("Erro ao criar o banco (cod 03)");
@@ -681,7 +681,7 @@
         var resposta_total = this.responseText;
         if (resposta_total == 'sim') {
           var db;
-          var request = window.indexedDB.open("db_sigmacivil", "1");
+          var request = window.indexedDB.open("db_sigmacivil_v2", "1");
           request.onerror = function (event) {
             alert("Erro ao criar o banco (cod 04)");
           };

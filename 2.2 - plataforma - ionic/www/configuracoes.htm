@@ -201,7 +201,7 @@
     xhr.send();
 
     var db;
-    var request = window.indexedDB.open("db_sigmacivil", "1");
+    var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
     request.onerror = function (event) {
       alert("Erro ao criar o banco (cod 03)");
@@ -733,7 +733,7 @@
               }
 
               var db;
-              var request = window.indexedDB.open("db_sigmacivil", "1");
+              var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
               request.onerror = function (event) {
                 alert("Erro ao criar o banco (cod 01)");
@@ -1053,7 +1053,7 @@
     }
 
     var db;
-    var request = window.indexedDB.open("db_sigmacivil", "1");
+    var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
     request.onerror = function (event) {
       alert("Erro ao criar o banco (cod 01)");
@@ -1187,7 +1187,7 @@
       var aux_1 = "";
 
       var db;
-      var request = window.indexedDB.open("db_sigmacivil", "1");
+      var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
       request.onerror = function (event) {
         alert("Erro ao criar o banco (cod 04)");
@@ -1304,7 +1304,7 @@
 
   var win_up = function (id_prog_manut, dia_ev, mes_ev, ano_ev, aux_1_status, r) {
     var db;
-    var request = window.indexedDB.open("db_sigmacivil", "1");
+    var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
     request.onerror = function (event) {
       alert("Erro ao criar o banco (cod 05)");
@@ -1368,7 +1368,7 @@
     if (tem_conexao()) {
 
       var db;
-      var request = window.indexedDB.open("db_sigmacivil", "1");
+      var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
       request.onerror = function (event) {
         alert("Erro ao criar o banco (cod 08)");
@@ -1452,7 +1452,7 @@
 
   var win_up_v = function (id_prog_manut, dia_ev, mes_ev, ano_ev, r) {
     var db;
-    var request = window.indexedDB.open("db_sigmacivil", "1");
+    var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
     request.onerror = function (event) {
       alert("Erro ao criar o banco (cod 09)");
@@ -1510,7 +1510,7 @@
     if (tem_conexao()) {
 
       var db;
-      var request = window.indexedDB.open("db_sigmacivil", "1");
+      var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
       request.onerror = function (event) {
         alert("Erro ao criar o banco (cod 12)");
@@ -1593,7 +1593,7 @@
 
   var win_up_a = function (id_prog_manut, dia_ev, mes_ev, ano_ev, r) {
     var db;
-    var request = window.indexedDB.open("db_sigmacivil", "1");
+    var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
     request.onerror = function (event) {
       alert("Erro ao criar o banco (cod 13)");
@@ -1650,7 +1650,7 @@
 
     if (tem_conexao()) {
       var db;
-      var request = window.indexedDB.open("db_sigmacivil", "1");
+      var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
       request.onerror = function (event) {
         alert("Erro ao criar o banco (cod 14)");
@@ -1722,7 +1722,7 @@
         var resposta_total = this.responseText;
         if (resposta_total == "grav_ok") {
           var db;
-          var request = window.indexedDB.open("db_sigmacivil", "1");
+          var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
           request.onerror = function (event) {
             alert("Erro ao criar o banco (cod 15)");
@@ -1799,7 +1799,7 @@
 
   function editaImagem() {
     var db;
-    var request = window.indexedDB.open("db_sigmacivil", "1");
+    var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
     request.onerror = function (event) {
       alert("Erro ao criar o banco (cod 01)");
@@ -1953,7 +1953,7 @@
                   var qaltura_checkpoint = position.coords.altitude;
 
                   var db;
-                  var request = window.indexedDB.open("db_sigmacivil", "1");
+                  var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
                   request.onerror = function (event) {
                     alert("Erro ao criar o banco (cod 02)");
@@ -2000,7 +2000,7 @@
                 },
                 function (error) {
                   var db;
-                  var request = window.indexedDB.open("db_sigmacivil", "1");
+                  var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
                   request.onerror = function (event) {
                     alert("Erro ao criar o banco (cod 03)");
@@ -2253,7 +2253,7 @@
 
   function showTour() {
     var db;
-    var request = window.indexedDB.open("db_sigmacivil", "1");
+    var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
     request.onerror = function (event) {
       alert("Erro ao criar o banco (cod 03)");

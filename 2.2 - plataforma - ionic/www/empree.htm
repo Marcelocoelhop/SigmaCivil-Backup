@@ -301,7 +301,7 @@
             if (status_sync_serv != "nada") {
 
               var db;
-              var request = window.indexedDB.open("db_sigmacivil", "1");
+              var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
               request.onerror = function (event) {
                 alert("Erro ao criar o banco (cod 02)");
@@ -426,7 +426,7 @@
       var data_final_p_busca = new Date(data2_aux)
 
       var db;
-      var request = window.indexedDB.open("db_sigmacivil", "1");
+      var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
       request.onerror = function (event) {
         alert("Erro ao criar o banco (cod 01)");
@@ -608,8 +608,6 @@
                   temp1 = new_data_evento.getDate() + "/" + (new_data_evento.getMonth() + 1) + "/" + new_data_evento.getFullYear() + "<br>"
                   aux1 = "0" + (new_data_evento.getMonth() + 1)
                   aux2 = "0" + (new_data_evento.getDate())
-
-                  //var db = window.openDatabase("DB_SigmaCivil", "1.0", "DB_SigmaCivil", 200000); 
 
                   meio_empree += "<li class='last_btn_off'><a href='' onClick='ir_para(" + String.fromCharCode(34) + "?ipm=" + data['id_prog_manut'] + "&dia_ev=" + aux2.substring(aux2.length - 2, aux2.length) + "&mes_ev=" + aux1.substring(aux1.length - 2, aux1.length) + "&ano_ev=" + new_data_evento.getFullYear() + "" + String.fromCharCode(34) + ")'><table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td><font size='3' face='Arial' color='#000000'>" + colocarAcento(data['nome_sistema']) + "</font></td></tr></table><table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td> <font size='2' face='Arial' color='#0033CC'>" + data['nome_atividade'] + "</font></td></tr></table>"
                   meio_empree += "<table height='3' border='0' cellpadding='0' cellspacing='0'><tr><td><font size='2' face='Arial'> (" + data['nome_periodicidade'] + ")</font></td></tr></table>"
@@ -831,7 +829,7 @@
                   var qaltura_checkpoint = position.coords.altitude;
 
                   var db;
-                  var request = window.indexedDB.open("db_sigmacivil", "1");
+                  var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
                   request.onerror = function (event) {
                     alert("Erro ao criar o banco (cod 02)");
@@ -878,7 +876,7 @@
                 },
                 function (error) {
                   var db;
-                  var request = window.indexedDB.open("db_sigmacivil", "1");
+                  var request = window.indexedDB.open("db_sigmacivil_v2", "1");
 
                   request.onerror = function (event) {
                     alert("Erro ao criar o banco (cod 03)");
